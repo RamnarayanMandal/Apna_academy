@@ -13,37 +13,41 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
-@AllArgsConstructor // Use constructor injection
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    // Create a new user
-    @PostMapping("/create")
+
+    @PostMapping("/register")
     public ResponseEntity<User> save(@RequestBody User user) {
         User createdUser = userService.sighup(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    // Get all users
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        System.out.println(user);
+        return userService.verify(user);
+    }
+
+
     @GetMapping
     public List<User> findAll() {
         return userService.getAllUsers();
     }
 
-    // Get user by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<User> findOne(@PathVariable String id) {
-        // Find user by ID, if not found, throw exception
         Optional<User> user = userService.getUserById(id);
         return user.map(u -> new ResponseEntity<>(u, HttpStatus.OK))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    // Delete user by ID
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
-        // Check if user exists, if not found, throw exception
         Optional<User> user = userService.getUserById(id);
         if (!user.isPresent()) {
             throw new ResourceNotFoundException("User not found with id: " + id);
@@ -52,10 +56,9 @@ public class UserController {
         return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
     }
 
-    // Update user by ID
+
     @PutMapping("/update/{id}")
     public ResponseEntity<User> update(@PathVariable String id, @RequestBody User user) {
-        // Attempt to update, if user not found, throw exception
         User updatedUser = userService.updateUser(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
