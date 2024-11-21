@@ -13,11 +13,12 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Student extends BaseUser {
     private String phone;
     private String address;
 
-
+    // Constructor to initialize Student with the required fields
     public Student(String id, String name, String password, String email, String phone, String address) {
         super(id, name, password, email);
         this.phone = phone;
