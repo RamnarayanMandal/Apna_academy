@@ -20,7 +20,7 @@ public class Student extends BaseUser {
     public Student(String id, String name, String password, String email, String about) {
         super(id, name, password, email);
         this.about = about;
-    }
+    } 
 
     
 }
