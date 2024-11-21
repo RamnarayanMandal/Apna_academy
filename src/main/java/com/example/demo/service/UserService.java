@@ -56,7 +56,7 @@ public class UserService {
         	
         	
         	
-            return jwtService.generateToken(email+","+" role : "+role);
+            return jwtService.generateToken(email);
         } else {
             throw new RuntimeException("Invalid credentials");
         }

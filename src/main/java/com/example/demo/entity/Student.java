@@ -9,18 +9,18 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Document(collection = "student")
+@Document(collection = "students")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Student extends BaseUser {
-    private String about;
+    private String phone;
+    private String address;
 
-    // Constructor
-    public Student(String id, String name, String password, String email, String about) {
+
+    public Student(String id, String name, String password, String email, String phone, String address) {
         super(id, name, password, email);
-        this.about = about;
+        this.phone = phone;
+        this.address = address;
     }
-
-    
 }
