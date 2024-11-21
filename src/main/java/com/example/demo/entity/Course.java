@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,6 +17,8 @@ import java.util.List;
 @Document(collection = "courses")
 public class Course {
 
+    @Id
+    private String id;
     private String courseName;
     private String courseCode;
     private String description;
@@ -24,8 +28,8 @@ public class Course {
     
     @DateTimeFormat
     private String endDate;
-    
-    private List<Student> students; // Many students can enroll in a course
+    @DBRef
+    private List<Student> students;
     
     private List<NoteBook> notebook;
     
@@ -34,17 +38,19 @@ public class Course {
     private List<Review> review;
     
     
-    
-    private Teacher teacher; // A course is taught by one teacher
-    
-   
+    private Teacher teacher;
 
-    // Constructor
-    public Course(String courseName, String courseCode, String description, Teacher teacher, List<Student> students) {
+    public Course(String id, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students, List<NoteBook> notebook, List<Video> video, List<Review> review, Teacher teacher) {
+        this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.description = description;
-        this.teacher = teacher;
+        this.startingDate = startingDate;
+        this.endDate = endDate;
         this.students = students;
+        this.notebook = notebook;
+        this.video = video;
+        this.review = review;
+        this.teacher = teacher;
     }
 }

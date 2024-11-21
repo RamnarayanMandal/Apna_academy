@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +23,6 @@ public class Student extends BaseUser {
         super(id, name, password, email);
         this.phone = phone;
         this.address = address;
+
     }
 }
