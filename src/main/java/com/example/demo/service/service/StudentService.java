@@ -29,10 +29,10 @@ public class StudentService {
         Student existingStudent = studentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
 
-        existingStudent.setName(student.getName());
+        existingStudent.setPhone(student.getName());
         existingStudent.setAddress(student.getAddress());
         existingStudent.setEmail(student.getEmail());
-        existingStudent.setPhone(student.getPhone());
+        existingStudent.setPhone(student.getName());
 
         return studentRepo.save(existingStudent);
     }
