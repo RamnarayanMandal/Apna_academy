@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setShowModal }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,9 @@ const Login = ({ setShowModal }) => {
   });
 
   const [loading, setLoading] = useState(false);
-
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate()
+  const [error, setError] = useState(''); 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
@@ -41,7 +44,7 @@ const Login = ({ setShowModal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     console.log(formData)
+    
     const validationError = validateForm();
     if (validationError) {
       Swal.fire({
@@ -62,25 +65,62 @@ const Login = ({ setShowModal }) => {
         }
       );
   
+     await fetchUserProfile();
+
       Swal.fire({
         icon: 'success',
         title: 'Login Successful',
         text: `Welcome back, ${formData.email}!`,
       });
-  
-      console.log('Login successful:', response.data);
+       localStorage.setItem("token", response.data);
+
+       if (formData.type === 'student') {
+        navigate('/Student-Dashbord');
+      } else if (formData.type === 'teacher') {
+        navigate('/Teacher-Dashbord');
+      } else if (formData.type === 'admin') {
+        navigate('/');
+      }
+      
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
         text: 'Please check your credentials.',
       });
-      console.error('Login error:', error);
+     
     } finally {
       setLoading(false);
     }
   };
   
+
+
+
+  
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('token'); 
+      if (!token) {        
+        navigate('/login'); 
+        return;
+      }
+      try {
+       
+        const response = await axios.get(`${BASE_URL}/api/auth/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+       localStorage.setItem("CurrentUserId", response.data.id)
+       setUser(response.data);
+      } catch (error) {
+       
+        setError('Failed to fetch profile. Please login again.');
+        //console.error(error);
+      }
+    };
+
+    
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">

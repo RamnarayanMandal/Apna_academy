@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.BaseUser;
 import com.example.demo.service.UserService;
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -33,9 +33,9 @@ public class AuthController {
         return authService.login(user.getEmail(), user.getPassword(), role);
     }
 
-    @GetMapping("/profile")
-    public String getUserProfile(@AuthenticationPrincipal UserPrincipal userDetails) {
 
-        return "User profile for " + userDetails.getUser();
+    @GetMapping("/profile")
+    public BaseUser getUserProfile(@AuthenticationPrincipal UserPrincipal userDetails) {
+        return  userDetails.getUser();
     }
 }

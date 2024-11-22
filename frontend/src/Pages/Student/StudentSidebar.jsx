@@ -8,7 +8,7 @@ export const StudentSideBar = () => {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);  // State to control "My Courses" collapse/expand
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate(); // For navigation
-
+  const StudentId = localStorage.getItem('CurrentUserId');
   const handleLogout = () => {
     // Clear any session or authentication data here, if applicable
     localStorage.removeItem('authToken'); // Example for clearing authToken
@@ -125,7 +125,7 @@ export const StudentSideBar = () => {
         {/* Profile / Account Settings */}
         <li>
           <a
-            href="#profile-settings"
+            href={`/Student-profile/${StudentId}`}
             className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
           >
             <FaUserAlt className="mr-4" />

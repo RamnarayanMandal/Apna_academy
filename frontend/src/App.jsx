@@ -8,6 +8,8 @@ import Login from './Pages/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { TeacherDashboard } from './Pages/Teacher/TeacherDashbord'
 import StudentDashboard from './Pages/Student/StudentDashboard'
+import Profile from './Pages/Student/Profile'
+import UpdateStudent from './Pages/Student/UpdateStudent'
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path='/Teacher-Dashbord' element={<TeacherDashboard />} />
             <Route path='/Student-Dashbord' element={<StudentDashboard/>} />
+            <Route path='/Student-profile/:id' element={<Profile/>} />
+            <Route path='/Update-Student/:id' element={<UpdateStudent/>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
