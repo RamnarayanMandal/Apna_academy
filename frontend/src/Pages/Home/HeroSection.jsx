@@ -7,7 +7,7 @@ export const HeroSection = () => {
 
     return (
         <div
-            className={`min-h-screen pt-40 flex flex-col lg:flex-row md:flex-row items-center justify-center px-6 ${isDarkMode ? 'bg-[#0F172A] text-white' : 'bg-white text-gray-900'
+            className={`min-h-screen lg:px-[5%] gap-10 pt-40 flex flex-col lg:flex-row md:flex-row items-center justify-center px-6 ${isDarkMode ? 'bg-[#0F172A] text-white' : 'bg-[#FFFFFF] text-gray-900'
                 }`}
         >
             {/* Left Image Section */}

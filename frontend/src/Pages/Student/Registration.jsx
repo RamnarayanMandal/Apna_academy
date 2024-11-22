@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { IoMdCloseCircle } from 'react-icons/io';
 
-const Registration = () => {
+const Registration = ({setShowModal}) => {
   // State to hold form data
   const [formData, setFormData] = useState({
     type: "student",
@@ -57,11 +58,19 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <div className="min-h-screen  flex items-center justify-center ">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg relative">
+      <button
+          onClick={() => setShowModal(false)}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
+          aria-label="Close modal"
+        >
+          <IoMdCloseCircle className="text-2xl" />
+        </button>
         <h2 className="text-2xl font-semibold text-center mb-6">Student Registration</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Field */}
+        <form onSubmit={handleSubmit} className="space-y-6 ">
+           
+        
           <div className="form-group">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
