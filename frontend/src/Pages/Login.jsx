@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { IoMdCloseCircle } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setShowModal }) => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const Login = ({ setShowModal }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate()
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -67,6 +70,16 @@ const Login = ({ setShowModal }) => {
         title: 'Login Successful',
         text: `Welcome back, ${formData.email}!`,
       });
+
+      if(formData.type ==="student"){
+        navigate( '/student-dashboard');
+      }
+      else if(formData.type ==="teacher"){
+        navigate( '/teacher-dashboard');
+      }
+      else {
+        navigate( '/admin-dashboard');
+      }
   
       console.log('Login successful:', response.data);
     } catch (error) {

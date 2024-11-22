@@ -26,4 +26,6 @@ public class Student extends BaseUser {
         this.address = address;
 
     }
+
+	
 }
