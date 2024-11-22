@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.BaseUser;
 import com.example.demo.service.UserService;
-
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

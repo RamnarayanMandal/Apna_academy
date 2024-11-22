@@ -22,7 +22,7 @@ public class Course {
     private String courseName;
     private String courseCode;
     private String description;
-  
+    
     @DateTimeFormat
     private String startingDate;
     

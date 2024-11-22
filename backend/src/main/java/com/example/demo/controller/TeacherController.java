@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.Teacher;
 import com.example.demo.service.service.TeacherService;
 
-
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/teacher")
 public class TeacherController {

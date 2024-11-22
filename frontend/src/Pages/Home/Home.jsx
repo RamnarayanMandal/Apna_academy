@@ -3,6 +3,7 @@ import { NavBar } from '../../Component/NavBar'
 
 export const Home = () => {
   return (
-    <NavBar/>
+    //<NavBar/>
+    <></>
   )
 }
