@@ -17,12 +17,16 @@ export const NavBar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full text-xl font-semibold ${
+      className={`fixed top-0 left-0 font-serif w-full text-xl font-semibold ${
         isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
       } shadow-md z-50`}
     >
       <nav className="flex items-center justify-between p-4 max-w-7xl mx-auto">
-        <img src={Logo} alt="Logo" className="h-20" />
+       <div className='text-center'>
+        <p className='text-xl'>Apna</p>
+        <p  className='text-xl font-serif text-blue-600' >academy</p>
+        
+       </div>
 
         {/* Links Section for Desktop */}
         <div
@@ -36,7 +40,7 @@ export const NavBar = () => {
           <a href="#contact" className="hover:text-gray-500">Contact</a>
          
         </div>
-       <div className='flex justify-center gap-5 text-base'>
+       <div className='`hidden lg:flex justify-center gap-5 text-base hidden '>
        <button >
           Login
           </button>
