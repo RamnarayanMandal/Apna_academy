@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.AuthDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(BaseUser user) {
         this.user = user;
+
     }
 
     @Override
@@ -57,4 +59,10 @@ public class UserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public BaseUser getUser() {
+        return user;
+    }
+
+
 }
