@@ -8,6 +8,7 @@ import Login from './Pages/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { TeacherDashboard } from './Pages/Teacher/TeacherDashbord'
 import AdminDashbord from './Pages/Admin/AdminDashbord'
+import StudentDashboard from './Pages/Student/StudentDashboard'
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
             <Route path='/admin-dashboard' element={<AdminDashbord />} />
+            <Route path='/teacher-Dashbord' element={<TeacherDashboard />} />
+            <Route path='/student-dashboard' element={<StudentDashboard/>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
