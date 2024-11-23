@@ -11,6 +11,7 @@ import AdminDashbord from './Pages/Admin/AdminDashbord'
 import StudentDashboard from './Pages/Student/StudentDashboard'
 import Profile from './Pages/Student/Profile'
 import UpdateStudent from './Pages/Student/UpdateStudent'
+import { AdminCourseHomePage } from './Pages/Admin/AdminCourseHomePage'
 
 
 function App() {
@@ -29,9 +30,9 @@ function App() {
             <Route path='/Student-Dashbord' element={<StudentDashboard/>} />
             <Route path='/Student-profile/:id' element={<Profile/>} />
             <Route path='/Update-Student/:id' element={<UpdateStudent/>} />
-            <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
             <Route path='/admin-dashboard' element={<AdminDashbord />} />
-            <Route path='/teacher-Dashbord' element={<TeacherDashboard />} />
+            <Route path='/admin-add-course' element={<AdminCourseHomePage />} />
+           
           
           </Routes>
         </BrowserRouter>

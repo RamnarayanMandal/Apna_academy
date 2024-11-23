@@ -15,6 +15,7 @@ const Login = ({ setShowModal }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate()
   const [error, setError] = useState(''); 
+  const [token, setToken] = useState(null);
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
@@ -64,7 +65,10 @@ const Login = ({ setShowModal }) => {
           params: { role: formData.type }, 
         }
       );
-  
+      
+      await localStorage.setItem("token", response.data);
+      
+
      await fetchUserProfile();
 
       Swal.fire({
@@ -72,14 +76,14 @@ const Login = ({ setShowModal }) => {
         title: 'Login Successful',
         text: `Welcome back, ${formData.email}!`,
       });
-       localStorage.setItem("token", response.data);
+       
 
        if (formData.type === 'student') {
         navigate('/Student-Dashbord');
       } else if (formData.type === 'teacher') {
         navigate('/Teacher-Dashbord');
       } else if (formData.type === 'admin') {
-        navigate('/');
+        navigate('/admin-dashboard');
       }
       
     } catch (error) {
@@ -111,7 +115,7 @@ const Login = ({ setShowModal }) => {
             Authorization: `Bearer ${token}`, 
           },
         });
-        window.location.reload();
+        
 
        localStorage.setItem("CurrentUserId", response.data.id)
        setUser(response.data);
