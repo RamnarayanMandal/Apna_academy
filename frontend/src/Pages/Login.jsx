@@ -64,7 +64,7 @@ const Login = ({ setShowModal }) => {
           params: { role: formData.type }, 
         }
       );
-  
+      localStorage.setItem("token", response.data);
      await fetchUserProfile();
 
       Swal.fire({
@@ -72,7 +72,7 @@ const Login = ({ setShowModal }) => {
         title: 'Login Successful',
         text: `Welcome back, ${formData.email}!`,
       });
-       localStorage.setItem("token", response.data);
+       
 
        if (formData.type === 'student') {
         navigate('/Student-Dashbord');
@@ -111,7 +111,7 @@ const Login = ({ setShowModal }) => {
             Authorization: `Bearer ${token}`, 
           },
         });
-        window.location.reload();
+     
 
        localStorage.setItem("CurrentUserId", response.data.id)
        setUser(response.data);
