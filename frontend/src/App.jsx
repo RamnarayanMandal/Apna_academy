@@ -7,6 +7,7 @@ import Registration from './Pages/Teacher/Registration'
 import Login from './Pages/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { TeacherDashboard } from './Pages/Teacher/TeacherDashbord'
+import AdminDashbord from './Pages/Admin/AdminDashbord'
 import StudentDashboard from './Pages/Student/StudentDashboard'
 import Profile from './Pages/Student/Profile'
 import UpdateStudent from './Pages/Student/UpdateStudent'
@@ -28,6 +29,10 @@ function App() {
             <Route path='/Student-Dashbord' element={<StudentDashboard/>} />
             <Route path='/Student-profile/:id' element={<Profile/>} />
             <Route path='/Update-Student/:id' element={<UpdateStudent/>} />
+            <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
+            <Route path='/admin-dashboard' element={<AdminDashbord />} />
+            <Route path='/teacher-Dashbord' element={<TeacherDashboard />} />
+          
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

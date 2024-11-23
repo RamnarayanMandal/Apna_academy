@@ -34,4 +34,6 @@ public class Student extends BaseUser {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
     }
+
+	
 }

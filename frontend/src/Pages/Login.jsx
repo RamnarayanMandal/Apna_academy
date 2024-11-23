@@ -111,6 +111,8 @@ const Login = ({ setShowModal }) => {
             Authorization: `Bearer ${token}`, 
           },
         });
+        window.location.reload();
+
        localStorage.setItem("CurrentUserId", response.data.id)
        setUser(response.data);
       } catch (error) {
