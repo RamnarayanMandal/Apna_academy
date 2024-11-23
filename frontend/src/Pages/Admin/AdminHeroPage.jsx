@@ -7,7 +7,7 @@ const AdminHeroPage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
    
   return (
-    <div className={`p-6 min-h-screen w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+    <div className={`p-6 min-h-screen  lg:mx-20 ml-20  w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
       {/* Hero Section */}
       <header className="mb-8 flex justify-between items-center">
         <div>

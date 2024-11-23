@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fa';
 
 const AdminSidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
@@ -43,16 +43,14 @@ const AdminSidebar = () => {
 
   return (
     <div
-      className={`min-h-screen shadow-lg flex flex-col transition-all ${
-        isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
-      } ${isOpen ? 'w-64' : 'w-20'}`}
+      className={`min-h-screen fixed z-40 shadow-lg flex flex-col transition-all ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+        } ${isOpen ? 'w-64' : 'w-20'}`}
     >
       {/* Sidebar Header */}
       <div className="flex justify-between items-center p-4">
         <h2
-          className={`text-xl font-extrabold ${
-            isOpen ? 'block' : 'hidden'
-          } font-sans tracking-wide`}
+          className={`text-xl font-extrabold ${isOpen ? 'block' : 'hidden'
+            } font-sans tracking-wide`}
         >
           Admin Dashboard
         </h2>
@@ -70,7 +68,7 @@ const AdminSidebar = () => {
         {/* Dashboard */}
         <li>
           <a
-            href="#dashboard"
+            href="/admin-dashboard"
             className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
             title="Dashboard"
           >
@@ -122,7 +120,7 @@ const AdminSidebar = () => {
           {menuState.courses && isOpen && (
             <ul className="pl-8 space-y-2">
               <li>
-                <a href="#add-course" className="hover:text-blue-500">
+                <a href="/admin-add-course" className="hover:text-blue-500">
                   Add New Course
                 </a>
               </li>
@@ -269,14 +267,19 @@ const AdminSidebar = () => {
           {isDarkMode ? '🌞' : '🌙'}
         </button>
         {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center  p-4 hover:bg-gray-600 rounded text-red-500"
-          title="Logout"
-        >
-          <FaSignOutAlt />
-          {isOpen && 'Logout'}
-        </button>
+        {
+          isOpen && (
+            <button
+              onClick={handleLogout}
+              className="p-2 px-4 rounded-full bg-red-500 text-white hover:bg-red-600 flex items-center"
+              title="Logout"
+            >
+              <FaSignOutAlt className="mr-2" />
+              Logout
+            </button>
+          )
+        }
+
       </div>
     </div>
   );
