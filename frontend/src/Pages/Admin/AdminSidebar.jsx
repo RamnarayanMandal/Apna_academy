@@ -1,109 +1,285 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../ThemeProvider';
+import {
+  FaTachometerAlt,
+  FaUsers,
+  FaBook,
+  FaChalkboardTeacher,
+  FaCalendarAlt,
+  FaChartBar,
+  FaBell,
+  FaCogs,
+  FaSignOutAlt,
+  FaUserGraduate,
+} from 'react-icons/fa';
 
 const AdminSidebar = () => {
-    const [isOpen, setIsOpen] = useState(true);
-    const { isDarkMode, toggleTheme } = useTheme();
-    const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(true);
+  const { isDarkMode, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+
+  // Menu toggle states
+  const [menuState, setMenuState] = useState({
+    manageUsers: false,
+    courses: false,
+    classes: false,
+    reports: false,
+    notifications: false,
+    settings: false,
+  });
+
+  const handleMenuToggle = (menu) => {
+    setMenuState((prevState) => ({
+      ...prevState,
+      [menu]: !prevState[menu],
+    }));
+  };
+
+  const handleLogout = () => {
+    console.log('Logged out');
+    navigate('/login');
+  };
 
   return (
-    <div className={`min-h-screen shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
-    <div className="flex justify-between items-center p-4">
-      <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>
-        Admin Dashboard
-      </h2>
-      <button
-        className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} p-2 rounded`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? '←' : '→'}
-      </button>
-    </div>
-    <div className="px-4 py-6">
-      <div className="flex items-center space-x-4">
-        {/* Profile section */}
-        <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
-          <span className="text-white">A</span> {/* Replace with profile picture or name */}
-        </div>
-        {isOpen && <span className="text-lg font-semibold">Admin</span>}
+    <div
+      className={`min-h-screen shadow-lg flex flex-col transition-all ${
+        isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+      } ${isOpen ? 'w-64' : 'w-20'}`}
+    >
+      {/* Sidebar Header */}
+      <div className="flex justify-between items-center p-4">
+        <h2
+          className={`text-xl font-extrabold ${
+            isOpen ? 'block' : 'hidden'
+          } font-sans tracking-wide`}
+        >
+          Admin Dashboard
+        </h2>
+        <button
+          className="p-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+          onClick={() => setIsOpen(!isOpen)}
+          title="Toggle Sidebar"
+        >
+          {isOpen ? '←' : '→'}
+        </button>
+      </div>
+
+      {/* Sidebar Menu */}
+      <ul className="space-y-4">
+        {/* Dashboard */}
+        <li>
+          <a
+            href="#dashboard"
+            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            title="Dashboard"
+          >
+            <FaTachometerAlt className="mr-4" />
+            {isOpen && 'Dashboard'}
+          </a>
+        </li>
+
+        {/* Manage Users */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('manageUsers')}
+          >
+            <div className="flex items-center">
+              <FaUsers className="mr-4" />
+              {isOpen && 'Manage Users'}
+            </div>
+            {isOpen && <span>{menuState.manageUsers ? '-' : '+'}</span>}
+          </div>
+          {menuState.manageUsers && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#teachers" className="hover:text-blue-500">
+                  Teachers
+                </a>
+              </li>
+              <li>
+                <a href="#students" className="hover:text-blue-500">
+                  Students
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Courses */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('courses')}
+          >
+            <div className="flex items-center">
+              <FaBook className="mr-4" />
+              {isOpen && 'Courses'}
+            </div>
+            {isOpen && <span>{menuState.courses ? '-' : '+'}</span>}
+          </div>
+          {menuState.courses && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#add-course" className="hover:text-blue-500">
+                  Add New Course
+                </a>
+              </li>
+              <li>
+                <a href="#edit-course" className="hover:text-blue-500">
+                  Edit/Delete Course
+                </a>
+              </li>
+              <li>
+                <a href="#assign-teachers" className="hover:text-blue-500">
+                  Assign Teachers
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Classes */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('classes')}
+          >
+            <div className="flex items-center">
+              <FaChalkboardTeacher className="mr-4" />
+              {isOpen && 'Classes'}
+            </div>
+            {isOpen && <span>{menuState.classes ? '-' : '+'}</span>}
+          </div>
+          {menuState.classes && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#schedule-classes" className="hover:text-blue-500">
+                  Schedule Classes
+                </a>
+              </li>
+              <li>
+                <a href="#monitor-attendance" className="hover:text-blue-500">
+                  Monitor Attendance
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Reports */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('reports')}
+          >
+            <div className="flex items-center">
+              <FaChartBar className="mr-4" />
+              {isOpen && 'Reports'}
+            </div>
+            {isOpen && <span>{menuState.reports ? '-' : '+'}</span>}
+          </div>
+          {menuState.reports && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#student-performance" className="hover:text-blue-500">
+                  Student Performance
+                </a>
+              </li>
+              <li>
+                <a href="#teacher-reports" className="hover:text-blue-500">
+                  Teacher Reports
+                </a>
+              </li>
+              <li>
+                <a href="#course-progress" className="hover:text-blue-500">
+                  Course Progress
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Notifications */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('notifications')}
+          >
+            <div className="flex items-center">
+              <FaBell className="mr-4" />
+              {isOpen && 'Notifications'}
+            </div>
+            {isOpen && <span>{menuState.notifications ? '-' : '+'}</span>}
+          </div>
+          {menuState.notifications && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#send-announcements" className="hover:text-blue-500">
+                  Send Announcements
+                </a>
+              </li>
+              <li>
+                <a href="#view-notifications" className="hover:text-blue-500">
+                  View Notifications
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Settings */}
+        <li>
+          <div
+            className="flex items-center justify-between p-4 hover:bg-gray-600 rounded font-semibold text-lg cursor-pointer"
+            onClick={() => handleMenuToggle('settings')}
+          >
+            <div className="flex items-center">
+              <FaCogs className="mr-4" />
+              {isOpen && 'Settings'}
+            </div>
+            {isOpen && <span>{menuState.settings ? '-' : '+'}</span>}
+          </div>
+          {menuState.settings && isOpen && (
+            <ul className="pl-8 space-y-2">
+              <li>
+                <a href="#app-config" className="hover:text-blue-500">
+                  App Configuration
+                </a>
+              </li>
+              <li>
+                <a href="#permissions" className="hover:text-blue-500">
+                  Permissions
+                </a>
+              </li>
+            </ul>
+          )}
+        </li>
+      </ul>
+
+      {/* Footer Section */}
+      <div className="mt-auto p-4 flex  items-center gap-4">
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full  bg-blue-500 text-white hover:bg-blue-600"
+          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {isDarkMode ? '🌞' : '🌙'}
+        </button>
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="flex items-center  p-4 hover:bg-gray-600 rounded text-red-500"
+          title="Logout"
+        >
+          <FaSignOutAlt />
+          {isOpen && 'Logout'}
+        </button>
       </div>
     </div>
-    <ul className="space-y-4">
-      <li>
-        <a href="#make-notes" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaBook className="mr-4" />
-          {isOpen && 'Create & Manage Courses'}
-        </a>
-      </li>
-      <li>
-        <a href="#courses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaClipboardList className="mr-4" />
-          {isOpen && 'Assignments'}
-        </a>
-      </li>
-      <li>
-        <a href="#add-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaClipboardList className="mr-4" />
-          {isOpen && 'Grade Assignments'}
-        </a>
-      </li>
-      <li>
-        <a href="#assign" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaUserCog className="mr-4" />
-          {isOpen && 'Manage Students'}
-        </a>
-      </li>
-      <li>
-        <a href="#check-results" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaChartLine className="mr-4" />
-          {isOpen && 'View Analytics'}
-        </a>
-      </li>
-      <li>
-        <a href="#feedback" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaVideo className="mr-4" />
-          {isOpen && 'Live Classes'}
-        </a>
-      </li>
-      <li>
-        <a href="#inquiry" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaQuestionCircle className="mr-4" />
-          {isOpen && 'Discussions & Feedback'}
-        </a>
-      </li>
-      <li>
-        <a href="#admin" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaUpload className="mr-4" />
-          {isOpen && 'Upload Resources'}
-        </a>
-      </li>
-      <li>
-        <a href="#administration" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-          <FaCogs className="mr-4" />
-          {isOpen && 'Administration'}
-        </a>
-      </li>
-    </ul>
-    {/* Logout button */}
-    <div className="mt-auto p-4 flex justify-between gap-4 ">
-    <button
-      onClick={toggleTheme}
-      className=" bg-blue-500 text-white p-2 rounded-full"
-    >
-      {isDarkMode ? '🌞' : '🌙'}
-    </button>
-      <button
-        onClick={handleLogout}
-        className="flex items-center w-full p-4 hover:bg-gray-600 rounded font-semibold text-lg text-red-500"
-      >
-        <FaSignOutAlt className="mr-4" />
-        {isOpen && 'Logout'}
-      </button>
-    </div>
-    
-  </div>
-  )
-}
+  );
+};
 
-export default AdminSidebar
+export default AdminSidebar;
