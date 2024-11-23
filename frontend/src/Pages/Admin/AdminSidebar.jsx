@@ -125,12 +125,7 @@ const AdminSidebar = () => {
                 </a>
               </li>
               <li>
-                <a href="#edit-course" className="hover:text-blue-500">
-                  Edit/Delete Course
-                </a>
-              </li>
-              <li>
-                <a href="#assign-teachers" className="hover:text-blue-500">
+                <a href="/admin-assign-teacher" className="hover:text-blue-500">
                   Assign Teachers
                 </a>
               </li>
