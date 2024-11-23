@@ -34,6 +34,8 @@ function App() {
             <Route path='/admin-dashboard' element={<AdminDashbord />} />
             <Route path='/admin-add-course' element={<AdminCourseHomePage />} />
             <Route path='/admin-assign-teacher' element={<AssignTeacherInCourse />} />
+            <Route path='/admin-teacher' element={<AssignTeacherInCourse />} />
+            <Route path='/admin-student' element={<AssignTeacherInCourse />} />
            
           
           </Routes>

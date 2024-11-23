@@ -1,58 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useTheme } from '../../ThemeProvider';
 import AdminSidebar from '../Admin/AdminSidebar';
 
-const AssignTeacherInCourse = () => {
-  const { isDarkMode } = useTheme();
-  const [courses, setCourses] = useState([]);
-  const [teachers, setTeachers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const token = localStorage.getItem('token');
-  const BASE_URL = import.meta.env.VITE_API_URL;
+export const GetAllStdent = () => {
+    const { isDarkMode } = useTheme();
+    const [courses, setCourses] = useState([]);
+    const [teachers, setTeachers] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+  
+    const token = localStorage.getItem('token');
+    const BASE_URL = import.meta.env.VITE_API_URL;
+  
+    const fetchAllCourses = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/course`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCourses(response.data || []);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+  
+    const fetchAllTeacher = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/teacher`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTeachers(response.data || []);
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchAllCourses();
+      fetchAllTeacher();
+    }, []);
+  
+    // Filter courses by search query
+    const filteredCourses = courses.filter((course) =>
+      course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  
+    const formatDate = (date) => {
+      if (!date) return 'N/A';
+      return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      }).format(new Date(date));
+    };
 
-  const fetchAllCourses = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/course`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCourses(response.data || []);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-    }
-  };
-
-  const fetchAllTeacher = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/teacher`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setTeachers(response.data || []);
-    } catch (error) {
-      console.error('Error fetching teachers:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllCourses();
-    fetchAllTeacher();
-  }, []);
-
-  // Filter courses by search query
-  const filteredCourses = courses.filter((course) =>
-    course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const formatDate = (date) => {
-    if (!date) return 'N/A';
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-    }).format(new Date(date));
-  };
-
+  
   return (
     <div
       className={`min-h-screen flex flex-col lg:flex-row ${
@@ -135,7 +136,5 @@ const AssignTeacherInCourse = () => {
         </table>
       </div>
     </div>
-  );
-};
-
-export default AssignTeacherInCourse;
+  )
+}
