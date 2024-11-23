@@ -62,4 +62,23 @@ public class Course {
         this.review = review;
         this.teacher = teacher;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id='" + id + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", description='" + description + '\'' +
+                ", startingDate='" + startingDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", students=" + students +
+                ", notebook=" + notebook +
+                ", video=" + video +
+                ", review=" + review +
+                ", teacher=" + teacher +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

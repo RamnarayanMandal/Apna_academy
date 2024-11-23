@@ -35,5 +35,14 @@ public class Student extends BaseUser {
         this.gender = gender;
     }
 
-	
+    @Override
+    public String toString() {
+        return "Student{" +
+                "phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
 }

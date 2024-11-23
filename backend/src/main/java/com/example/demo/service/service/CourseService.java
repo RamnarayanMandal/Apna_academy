@@ -7,6 +7,7 @@ import com.example.demo.repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,17 +74,34 @@ public class CourseService {
     }
 
 
-    public Course addStudentToCourse(String courseId, String studentId) {
+    public Course addStudentToCourse(String studentId, String courseId) {
         Course course = courseRepo.findById(courseId).orElseThrow(() ->
-                new RuntimeException("Course not found with ID: " + courseId));
+                new RuntimeException("Course with ID " + courseId + " not found"));
         Student student = studentRepo.findById(studentId).orElseThrow(() ->
-                new RuntimeException("Student not found with ID: " + studentId));
+                new RuntimeException("Student with ID " + studentId + " not found"));
 
+        List<Student> students = course.getStudents();
 
-        if (!course.getStudents().contains(student)) {
-            course.getStudents().add(student);
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+
+        boolean studentExists = students.stream().anyMatch(s -> s.getEmail().equals(student.getEmail()));
+        if (!studentExists) {
+            students.add(student);
+            course.setStudents(students);
         }
 
         return courseRepo.save(course);
     }
+
+    public List<Course> getCoursesByStudentId(String studentId) {
+               Student student = studentRepo.findById(studentId).orElseThrow(() ->
+                new RuntimeException("Student with ID " + studentId + " not found"));
+
+        List<Course> AllCourses = courseRepo.findByStudentsId(studentId);
+
+        return AllCourses;
+    }
+
 }

@@ -64,12 +64,22 @@ public class CourseController {
     @PutMapping("/{studentId}/{courseId}")
     public ResponseEntity<Course> addStudentToCourse(@PathVariable String studentId, @PathVariable String courseId) {
         try {
-            Course updatedCourse = courseService.addStudentToCourse(courseId, studentId);
+            Course updatedCourse = courseService.addStudentToCourse(studentId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
+    @GetMapping("/getAllCourses/{studentId}")
+    public ResponseEntity<List<Course>> getStudentCourses(@PathVariable String studentId) {
+        List<Course> courses = courseRepo.findByStudentsId(studentId);
+
+        if (courses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(courses);
+    }
 
 }
