@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const AddCourse = ({ selectCourse }) => {
@@ -16,7 +17,8 @@ const AddCourse = ({ selectCourse }) => {
   });
 
 
-  console.log(selectCourse);
+  const BASE_URL = import.meta.env.VITE_API_URL; console.log(selectCourse);
+  const token = localStorage.getItem('token');
 
  
   useEffect(() => {
@@ -65,6 +67,17 @@ const AddCourse = ({ selectCourse }) => {
     } else {
       console.log("Adding New Course:", course);
       // Logic for adding a new course, e.g., axios.post('/api/courses', formData)
+
+      const resp = axios.post(`${BASE_URL}/api/courses`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+
     }
   };
 

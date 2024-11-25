@@ -41,7 +41,7 @@ const AssignTeacherInCourse = () => {
 
   // Filter courses by search query
   const filteredCourses = courses.filter((course) =>
-    course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+    course.courseName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (date) => {

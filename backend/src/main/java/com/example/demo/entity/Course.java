@@ -43,13 +43,15 @@ public class Course {
 
     private Teacher teacher;
 
+    private String image;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Course(String id, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students, List<NoteBook> notebook, List<Video> video, List<Review> review, Teacher teacher) {
+    public Course(String id, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students, List<NoteBook> notebook, List<Video> video, List<Review> review, Teacher teacher, String image) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -61,5 +63,26 @@ public class Course {
         this.video = video;
         this.review = review;
         this.teacher = teacher;
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id='" + id + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", description='" + description + '\'' +
+                ", startingDate='" + startingDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", students=" + students +
+                ", notebook=" + notebook +
+                ", video=" + video +
+                ", review=" + review +
+                ", teacher=" + teacher +
+                ", image='" + image + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

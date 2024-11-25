@@ -65,7 +65,7 @@ const GetAllCourse = () => {
 
   // Filter Courses Based on Search Term
   const filteredCourses = courses.filter((course) =>
-    course.courseName.toLowerCase().includes(searchTerm.toLowerCase())
+    course.courseName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const GetAllCourse = () => {
               }`}
           >
             <img
-              src={"https://cdn.pixabay.com/photo/2023/11/29/12/29/kid-8419485_1280.jpg"}
+              src={course.image}
               alt={`${course.courseName}`}
               className="w-full h-72 object-cover rounded-md mb-4"
             />

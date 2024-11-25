@@ -2,12 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Course;
 import com.example.demo.repo.CourseRepo;
+import com.example.demo.service.CloudinaryService;
 import com.example.demo.service.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -16,8 +19,12 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
     @Autowired
-    private CourseRepo courseRepo;
+    private CloudinaryService cloudinaryService;
+
+
+
 
     // Get all courses
     @GetMapping
@@ -41,10 +48,24 @@ public class CourseController {
 
     // Add a new course
     @PostMapping
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> addCourse(
+            @ModelAttribute Course course, // Bind other fields in Course
+            @RequestParam("image") MultipartFile image) throws IOException {
+
+        // Upload image to Cloudinary and get the image path (URL)
+        String imagePath = cloudinaryService.uploadFile(image);
+
+        // Set the image path to the course object (store the URL as a string)
+        course.setImage(imagePath);
+
+        // Save the course to the database
         Course createdCourse = courseService.addCourse(course);
+
+        // Return the created course with HTTP status 201 (Created)
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
+
+
 
     // Update an existing course
     @PutMapping("/{id}")
