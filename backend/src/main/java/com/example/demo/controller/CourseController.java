@@ -2,12 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Course;
 import com.example.demo.repo.CourseRepo;
+import com.example.demo.service.CloudinaryService;
 import com.example.demo.service.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,6 +23,8 @@ public class CourseController {
     @Autowired
     private CourseRepo courseRepo;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
     // Get all courses
     @GetMapping
     public List<Course> getAllCourses() {
@@ -41,12 +47,28 @@ public class CourseController {
 
     // Add a new course
     @PostMapping
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> addCourse(  @RequestParam("courseName") String courseName,
+                                              @RequestParam("courseCode") String courseCode,
+                                              @RequestParam("description") String description,
+                                              @RequestParam("startingDate") String startingDate,
+                                              @RequestParam("endDate") String endDate,
+                                            @RequestParam("image") MultipartFile image) throws IOException {
+
+        String imageUrl = cloudinaryService.uploadFile(image);
+        Course course = new Course();
+        course.setCourseCode(courseCode);
+        course.setDescription(description);
+        course.setCourseName(courseName);
+        course.setStartingDate(startingDate);
+        course.setEndDate(endDate);
+        course.setImage(imageUrl);
+
+
         Course createdCourse = courseService.addCourse(course);
+
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 
-    // Update an existing course
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestBody Course course) {
         course.setId(id); // Ensure the ID is set before updating
@@ -54,7 +76,7 @@ public class CourseController {
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
 
-    // Delete a course
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable String id) {
         String response = courseService.deleteCourse(id);

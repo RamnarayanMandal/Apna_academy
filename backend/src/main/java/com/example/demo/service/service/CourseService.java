@@ -4,8 +4,10 @@ import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
 import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.StudentRepo;
+import com.example.demo.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,9 @@ public class CourseService {
 
     @Autowired
     private StudentRepo studentRepo;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     public Course getCourseById(String id) {
         Optional<Course> course = courseRepo.findById(id);
@@ -35,8 +40,10 @@ public class CourseService {
     }
 
     public Course addCourse(Course course) {
-        return courseRepo.save(course);
+      return courseRepo.save(course);
     }
+
+
     public Course updateCourse(String id, Course course) {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Course ID cannot be null or empty for updating");
