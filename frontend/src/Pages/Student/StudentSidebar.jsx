@@ -17,6 +17,7 @@ export const StudentSideBar = () => {
 
   return (
     <div className={`h-screen shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
+      {/* <StudentSideBar/> */}
       <div className="flex justify-between items-center p-4">
         <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>
           Student Dashboard
@@ -57,7 +58,7 @@ export const StudentSideBar = () => {
             <ul className="pl-8 space-y-2">
               <li>
                 <a
-                  href="#enrolled-courses"
+                  href="/student-mycourse"
                   className="flex items-center p-3 hover:bg-gray-500 rounded font-semibold text-lg"
                 >
                   {/* Icon for Enrolled Courses */}
@@ -92,7 +93,7 @@ export const StudentSideBar = () => {
         {/* Assignments & Exams */}
         <li>
           <a
-            href="#assignments-exams"
+            href="/student-exam"
             className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
           >
             <FaTasks className="mr-4" />

@@ -27,7 +27,7 @@ public class Course {
     private String courseName;
     private String courseCode;
     private String description;
-    
+
     private String image;
     @DateTimeFormat
     private String startingDate;
