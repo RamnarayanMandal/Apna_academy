@@ -31,9 +31,9 @@ const GetExamByCourse = () => {
 
       // Log the response from the PUT request (optional)
       console.log(response.data);
-
+      const examId =exam.id
       // After the API call is successful, navigate to the exam questions page
-      navigate(`/student-questions/${courseId}`);  // Navigate to /student-questions/:courseId
+      navigate(`/student-questions/${courseId}/${examId}`);  // Navigate to /student-questions/:courseId
 
     } catch (error) {
       setError("An error occurred while adding the student to the exam.");
@@ -52,7 +52,9 @@ const GetExamByCourse = () => {
           `${BASE_URL}/api/exams/course/${courseId}`,
           { headers }
         );
-        setExam(response.data);  // Update state with the fetched exam data
+        setExam(response.data); 
+        localStorage.setItem("examId",response.data.id);
+        // Update state with the fetched exam data
       } catch (err) {
         setError('Failed to fetch exam details.');
         console.error(err);

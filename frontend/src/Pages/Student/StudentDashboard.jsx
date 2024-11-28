@@ -9,10 +9,12 @@ const StudentDashboard = () => {
 
   return (
     <div className={`min-h-screen flex  lg:gap-20 w-full  ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'} transition-colors`}>
-       <div>
+       <div className='fixed'>
       <StudentSideBar  />
       </div>
-      <GetAllCourse/>
+      <div className="ml-[260px] w-full"> {/* Adjust ml value as per sidebar width */}
+        <GetAllCourse />
+      </div>
       </div>
     
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaChalkboardTeacher, FaTasks, FaRegGrinStars, FaBookOpen, FaUserAlt, FaSignOutAlt, FaCog, FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
-import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 
 export const StudentSideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -30,14 +30,22 @@ export const StudentSideBar = () => {
         </button>
       </div>
       <div className="px-4 py-6">
-        <div className="flex items-center space-x-4">
-          {/* Profile section */}
-          <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
-            <span className="text-white">T</span> {/* Replace with profile picture or name */}
-          </div>
-          {isOpen && <span className="text-lg font-semibold">Student</span>}
+      <div className="flex items-center space-x-4">
+        {/* Profile section */}
+        <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
+          <span className="text-white">T</span> {/* Replace with profile picture or name */}
         </div>
+
+        {/* Conditionally render "Student" text and make it clickable */}
+        {isOpen && (
+          <Link to="/Student-Dashbord">
+            <span className="text-lg font-semibold cursor-pointer text-blue-500 hover:underline">
+              Student
+            </span>
+          </Link>
+        )}
       </div>
+    </div>
       <ul className="space-y-4">
         {/* My Courses (collapsible) */}
         <li>

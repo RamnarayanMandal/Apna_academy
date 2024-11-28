@@ -41,7 +41,7 @@ function App() {
             <Route path='/admin-teacher' element={<AssignTeacherInCourse />} />
             <Route path='/admin-student' element={<AssignTeacherInCourse />} />
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
-            <Route path='/student-questions/:courseId' element={<Question/>} />
+            <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
             <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
            

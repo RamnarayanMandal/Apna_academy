@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Exam;
+import com.example.demo.entity.StudentExamResult;
 import com.example.demo.service.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,13 +50,13 @@ public class ExamController {
 
     // Endpoint to submit answers for an exam
     @PostMapping("/submit/{examId}")
-    public ResponseEntity<String> submitAnswers(
+    public ResponseEntity<StudentExamResult> submitAnswers(
             @PathVariable String examId,
             @RequestBody Map<String, String> submittedAnswers,
             @RequestParam String studentId) {
 
         // Submit the answers and calculate the score
-        String result = ""; //examService.submitAnswers(examId, submittedAnswers, studentId);
+        StudentExamResult result = examService.submitAnswers(examId, submittedAnswers, studentId);
         return ResponseEntity.ok(result);
     }
 

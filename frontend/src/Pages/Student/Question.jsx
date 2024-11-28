@@ -6,11 +6,11 @@ import { StudentSideBar } from './StudentSidebar';
 const Question = () => {
     const [questions, setQuestions] = useState([]);  // Store questions for the current course
     const [selectedAnswers, setSelectedAnswers] = useState({});  // Store selected answers
-    const { courseId } = useParams();  // Retrieve courseId from URL
+    const { courseId, examId } = useParams();  // Retrieve courseId and examId from URL
     const BASE_URL = import.meta.env.VITE_API_URL; 
     const token = localStorage.getItem('token');
     const navigate = useNavigate(); // Initialize useNavigate
-    const studentId = localStorage.getItem('studentId');  // Assuming student ID is stored in localStorage
+    const studentId = localStorage.getItem('CurrentUserId');  // Assuming student ID is stored in localStorage
 
     // Fetch questions for the selected course ID
     const fetchQuestions = async () => {
@@ -44,14 +44,21 @@ const Question = () => {
                 }
             });
 
-            const examId = "674577e380d6b443949d279b";  // Assuming courseId is the exam ID
-            const response = await axios.post(`${BASE_URL}/api/submit/${examId}`, submittedAnswers, {
+            // If no answers were selected, prevent submission
+            if (Object.keys(submittedAnswers).length === 0) {
+                alert('Please answer at least one question before submitting.');
+                return;
+            }
+
+            // Send answers to the backend
+            const response = await axios.post(`${BASE_URL}/api/exams/submit/${examId}`, submittedAnswers, {
                 params: { studentId },  // Include studentId as a query parameter
                 headers: { Authorization: `Bearer ${token}` },
             });
 
             console.log('Answers submitted successfully', response.data);
             alert('Your answers have been submitted!');
+            navigate('/Student-Dashbord');  // Redirect to dashboard or result page after submission
         } catch (error) {
             console.error('Error submitting answers:', error);
             alert('There was an error submitting your answers. Please try again.');

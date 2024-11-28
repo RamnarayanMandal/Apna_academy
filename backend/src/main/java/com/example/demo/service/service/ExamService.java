@@ -1,17 +1,15 @@
 package com.example.demo.service.service;
 
 import com.example.demo.entity.*;
-import com.example.demo.repo.CourseRepo;
-import com.example.demo.repo.ExamRepo;
-import com.example.demo.repo.QuestionRepo;
-import com.example.demo.repo.StudentRepo;
+import com.example.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+
 
 @Service
 public class ExamService {
@@ -25,52 +23,93 @@ public class ExamService {
     @Autowired
     private QuestionRepo questionRepo;
 
+    @Autowired
+    private StudentExamResultRepository studentExamResultRepository;
+
+    @Autowired
     private CourseRepo courseRepo;
 
     public Exam createExam(Exam exam) {
-
         return examRepo.save(exam);
     }
 
 
-//    public String submitAnswers(String examId, Map<String, String> submittedAnswers, String studentId) {
-//
-//        Optional<Exam> examOpt = examRepo.findById(examId);
-//        if (!examOpt.isPresent()) {
-//            throw new IllegalArgumentException("Exam not found");
-//        }
-//        Exam exam = examOpt.get();
-//
-//
-//        if (exam.getStudentId() != null && !exam.getStudentId().equals(studentId)) {
-//            throw new IllegalArgumentException("This exam does not belong to the given student.");
-//        }
-//
-//
-//        List<Question> questions = exam.getQuestions();
-//        int correctAnswers = 0;
-//        int totalQuestions = questions.size();
-//
-//        for (Question question : questions) {
-//            String correctAnswer = question.getCorrectAnswer();
-//            String userAnswer = submittedAnswers.get(question.getId());
-//
-//            if (correctAnswer != null && correctAnswer.equals(userAnswer)) {
-//                correctAnswers++;
-//            }
-//        }
-//
-//
-//        double score = (double) correctAnswers / totalQuestions * 100;
-//
-//
-//        exam.setScore(score);  // Store the score in the exam
-//        exam.setDone(true);    // Mark the exam as completed
-//        examRepo.save(exam);   // Save the updated exam record
-//
-//        return "Your score is: " + score + "%";
-//    }
 
+
+    public StudentExamResult submitAnswers(String examId, Map<String, String> submittedAnswers, String studentId) {
+
+        // Fetch the exam from the repository
+        Optional<Exam> examOpt = examRepo.findById(examId);
+        if (!examOpt.isPresent()) {
+            throw new IllegalArgumentException("Exam not found");
+        }
+        Exam exam = examOpt.get();
+
+        // Check if the exam belongs to the student
+        boolean examBelongsToStudent = exam.getStudentExamResults().stream()
+                .anyMatch(result -> result.getStudentId().equals(studentId));
+
+        if (!examBelongsToStudent) {
+            throw new IllegalArgumentException("This exam does not belong to the given student.");
+        }
+
+        // Fetch the questions related to the exam's courseId using the QuestionRepo
+        List<Question> questions = questionRepo.findByCourseId(exam.getCourseId());  // Fetch questions by courseId
+        if (questions.isEmpty()) {
+            throw new IllegalArgumentException("No questions found for this course.");
+        }
+
+        int correctAnswers = 0;
+        int totalQuestions = questions.size();
+
+        // Calculate the score based on submitted answers
+        for (Question question : questions) {
+            String correctAnswer = question.getCorrectAnswer();
+            String userAnswer = submittedAnswers.get(question.getId());
+
+            if (correctAnswer != null && correctAnswer.equals(userAnswer)) {
+                correctAnswers++;
+            }
+        }
+
+        // Calculate the percentage score
+        double score = (double) correctAnswers / totalQuestions * 100;
+
+        // Determine if the student passed
+        boolean isPassed = score >= exam.getPassingScore();
+
+        // Check if the student has already completed the exam
+        Optional<StudentExamResult> existingResultOpt = exam.getStudentExamResults().stream()
+                .filter(result -> result.getStudentId().equals(studentId))
+                .findFirst();
+
+        StudentExamResult studentExamResult;
+
+        if (existingResultOpt.isPresent()) {
+            // If the student has an existing result, update it
+            studentExamResult = existingResultOpt.get();
+            studentExamResult.setTotalMarks(score);
+            studentExamResult.setIsPassed(isPassed);
+            studentExamResult.setDone(true);  // Mark the exam as completed
+        } else {
+            // If no result exists, create a new one
+            studentExamResult = new StudentExamResult();
+            studentExamResult.setStudentId(studentId);
+            studentExamResult.setCourseId(exam.getCourseId());
+            studentExamResult.setExamId(examId);
+            studentExamResult.setTotalMarks(score);
+            studentExamResult.setIsPassed(isPassed);
+            studentExamResult.setDone(true);  // Mark the exam as completed
+        }
+
+        // Save the student exam result
+        studentExamResultRepository.save(studentExamResult);
+
+        // Optionally, save the updated exam if you need to persist changes to the exam document
+        examRepo.save(exam);  // Only needed if you update any part of the exam itself
+
+        return studentExamResult; //"Your score is: " + score + "%";
+    }
 
     public Exam getExamById(String examId) {
         return examRepo.findById(examId).orElseThrow(() -> new IllegalArgumentException("Exam not found"));

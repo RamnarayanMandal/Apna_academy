@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { IoMdCloseCircle } from 'react-icons/io';
 
 const GetAllCourse = () => {
   const { isDarkMode } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [courses, setCourses] = useState([]);
+  const [myCourses, setMyCourses] = useState([]); 
   const BASE_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem('token');
-  const [showModel, setShowModal] = useState(false);
-
   const studentId = localStorage.getItem('CurrentUserId');
-  // Fetch Courses
+
+  
   const fetchAllCourses = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/course`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(response.data || []);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
     }
   };
 
-  // Delete Course
+ 
+  const fetchMyCourses = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/course/getAllCourses/${studentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMyCourses(response.data || []);
+    } catch (error) {
+      console.error('Error fetching student courses:', error);
+    }
+  };
 
-
-  // Sorting Functions
+  
   const handleSortByAlphabet = () => {
-    const sortedCourses = [...courses].sort((a, b) =>
-      a.courseName.localeCompare(b.courseName)
-    );
+    const sortedCourses = [...courses].sort((a, b) => a.courseName.localeCompare(b.courseName));
     setCourses(sortedCourses);
   };
 
@@ -45,27 +49,34 @@ const GetAllCourse = () => {
     setCourses(sortedCourses);
   };
 
-  // Filter Courses Based on Search Term
+  
   const filteredCourses = courses.filter((course) =>
     course.courseName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  useEffect(() => {
-    fetchAllCourses();
-  }, []);
+  
+  const isEnrolled = (courseId) => myCourses.some((course) => course.id === courseId);
+
+
   const handleEnrollNow = async (courseId) => {
+    if (isEnrolled(courseId)) {
+      alert('You are already enrolled in this course!');
+      return; 
+    }
+
     try {
-      // Make the PUT request to add the student to the course
       const response = await axios.put(
         `${BASE_URL}/api/course/${studentId}/${courseId}`,
         {},
         {
-          headers: { Authorization: `Bearer ${token}` }, // Pass the token for authentication
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       if (response.status === 200) {
         alert(`You have successfully enrolled in the course: ${response.data.courseName}`);
+       
+        setMyCourses([...myCourses, response.data]);
       } else {
         alert('Enrollment failed. Please try again later.');
       }
@@ -75,13 +86,17 @@ const GetAllCourse = () => {
     }
   };
 
+ 
+  useEffect(() => {
+    fetchAllCourses();
+    fetchMyCourses();
+  }, []);
+
   return (
     <div
       id="Courses"
-      className={`p-6 w-full lg:mx-40 ml-20 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'
-        }`}
+      className={`p-6 w-full lg:mx-40 ml-20 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
     >
-     
       <div className="flex justify-between flex-wrap gap-4 items-center w-full mb-6">
         <div className="flex items-center bg-white shadow-md rounded-md p-2 w-auto">
           <FaSearch className="text-gray-500 mr-2" />
@@ -95,7 +110,7 @@ const GetAllCourse = () => {
         </div>
       </div>
 
-      {/* Sort Buttons */}
+      
       <div className="flex justify-start gap-4 mb-4">
         <button
           className={`px-4 py-2 rounded-md font-semibold ${isDarkMode
@@ -117,7 +132,7 @@ const GetAllCourse = () => {
         </button>
       </div>
 
-      {/* Course List */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredCourses.map((course) => (
           <div
@@ -138,48 +153,30 @@ const GetAllCourse = () => {
             </p>
             <div className="text-sm flex justify-between mb-4">
               <p>
-                <span className="font-semibold">Start Date:</span>{' '}
-                {course.startingDate}
+                <span className="font-semibold">Start Date:</span> {course.startingDate}
               </p>
               <p>
                 <span className="font-semibold">End Date:</span> {course.endDate}
               </p>
             </div>
 
-            {/* Enroll Now Button */}
+           
             <div className="flex justify-center mb-4 mt-4 flex-wrap gap-4">
               <button
                 className={`flex items-center px-4 py-2 rounded-md font-semibold ${isDarkMode
                   ? 'bg-blue-500 text-white hover:bg-blue-400'
                   : 'bg-blue-600 text-white hover:bg-blue-500'
-                  }`}
+                  } ${isEnrolled(course.id) ? 'bg-green-500 cursor-not-allowed' : ''}`}
                 onClick={() => handleEnrollNow(course.id)}
+                disabled={isEnrolled(course.id)} 
               >
-                Enroll Now
+                {isEnrolled(course.id) ? 'Enrolled' : 'Enroll Now'}
               </button>
-
-             
             </div>
           </div>
         ))}
       </div>
 
-      {showModel && (
-        <div className="fixed top-0 left-0 w-full h-screen z-50 bg-black opacity-90 flex items-center justify-center">
-          <div className="p-4 w-full max-w-sm mx-auto bg-white rounded-md shadow-md relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
-            >
-              <IoMdCloseCircle className="text-2xl" />
-            </button>
-
-           
-          </div>
-        </div>
-      )}
-
-     
       {filteredCourses.length === 0 && (
         <p className="text-center text-gray-500 mt-6">No courses found.</p>
       )}
