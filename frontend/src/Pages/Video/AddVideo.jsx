@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const CreateVideo = () => {
+const AddVideo = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const teacherId = localStorage.getItem('CurrentUserId'); // Retrieve teacherId from localStorage
   const token = localStorage.getItem('token');
@@ -33,10 +33,10 @@ const CreateVideo = () => {
     e.preventDefault();
     const { title, description, thumbnail, videoFile, courseId, isPublished } = formData;
 
-    if (!title || !description || !thumbnail || !videoFile || !courseId) {
-      setErrorMessage('All fields are required');
-      return;
-    }
+    // if (!title || !description || !thumbnail || !videoFile || !courseId) {
+    //   setErrorMessage('All fields are required');
+    //   return;
+    // }
 
     setLoading(true);
     setErrorMessage(''); // Reset any previous error messages
@@ -150,4 +150,4 @@ const CreateVideo = () => {
   );
 };
 
-export default CreateVideo;
+export default AddVideo;

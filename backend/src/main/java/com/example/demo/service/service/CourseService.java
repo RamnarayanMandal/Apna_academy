@@ -2,8 +2,10 @@ package com.example.demo.service.service;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
 import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.StudentRepo;
+import com.example.demo.repo.TeacherRepo;
 import com.example.demo.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class CourseService {
 
     @Autowired
     private StudentRepo studentRepo;
+
+    @Autowired
+    private TeacherRepo teacherRepo;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -52,11 +57,9 @@ public class CourseService {
         Optional<Course> existingCourseOpt = courseRepo.findById(id);
 
         if (!existingCourseOpt.isPresent()) {
-            throw new RuntimeException("Course not found with ID: " + id);
-        }
+            throw new RuntimeException("Course not found with ID: " + id);       }
 
         Course existingCourse = existingCourseOpt.get();
-
         existingCourse.setCourseName(course.getCourseName());
         existingCourse.setCourseCode(course.getCourseCode());
         existingCourse.setDescription(course.getDescription());
@@ -111,8 +114,29 @@ public class CourseService {
         return AllCourses;
     }
 
+    public Course addTeacherToCourse(String teacherId, String courseId) {
+        // Find course by ID
+        Course course = courseRepo.findById(courseId).orElseThrow(() ->
+                new RuntimeException("Course with ID " + courseId + " not found"));
 
-    public List<Course> getCourseByTeacherId(String teacherId){
+        // Find teacher by ID
+        Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
+                new RuntimeException("Teacher with ID " + teacherId + " not found"));
+
+        // Ensure only one teacher is assigned to the course
+        if (course.getTeacherId() != null) {
+            throw new RuntimeException("Course already has a teacher assigned.");
+        }
+
+        if(teacher != null) {
+            course.setTeacherId(teacherId);
+        } // Assuming Course has a 'teacher' field, not a list
+
+        // Save the updated course
+        return courseRepo.save(course);
+    }
+
+    public List<Course> getCoursesByTeacherId(String teacherId){
         return courseRepo.findByTeacherId(teacherId);
     }
 

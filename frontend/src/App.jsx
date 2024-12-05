@@ -11,15 +11,13 @@ import AdminDashbord from './Pages/Admin/AdminDashbord'
 import StudentDashboard from './Pages/Student/StudentDashboard'
 import Profile from './Pages/Student/Profile'
 import UpdateStudent from './Pages/Student/UpdateStudent'
-import { AdminCourseHomePage } from './Pages/Admin/AdminCourseHomePage'
-import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourse'
+import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourseTable'
 import StudentMyCourses from './Pages/Student/MyCourses'
 import Question from './Pages/Student/Question'
 import Exams from './Pages/Student/Exams'
 import GetExamByCourse from './Pages/Exam/GetExamByCourse'
-import CreateVideo from './Pages/Teacher/CreateVideo'
-import GetAllCourse from './Pages/Courses/GetAllCourse'
-
+import { CourseHomePage } from './Pages/Courses/CourseHomePage'
+import { VideoHomePage } from './Pages/Video/VideoHomePage'
 
 
 function App() {
@@ -40,15 +38,10 @@ function App() {
             <Route path='/Student-profile/:id' element={<Profile/>} />
             <Route path='/Update-Student/:id' element={<UpdateStudent/>} />
             <Route path='/admin-dashboard' element={<AdminDashbord />} />
-            <Route path='/admin-add-course' element={<AdminCourseHomePage />} />
+            <Route path='/admin-teacher-add-course' element={<CourseHomePage />} />      
             <Route path='/admin-assign-teacher' element={<AssignTeacherInCourse />} />
+            <Route path='/admin-teacher-add-video' element={<VideoHomePage />} />
             <Route path='/admin-teacher' element={<AssignTeacherInCourse />} />
-            <Route path='/create-video' element={<CreateVideo />} />
-            <Route path='/getAllCourses' element={<GetAllCourse />} />
-            
-
-           
-           
             <Route path='/admin-student' element={<AssignTeacherInCourse />} />
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />

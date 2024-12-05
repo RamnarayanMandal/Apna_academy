@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +24,6 @@ public class Course {
     private String courseName;
     private String courseCode;
     private String description;
-    private String image;
     @DateTimeFormat
     private String startingDate;
     @DateTimeFormat
@@ -36,20 +33,22 @@ public class Course {
     private List<NoteBook> notebook;
     private List<Video> video;
     private List<Review> review;
+    private String adminId;
     private String teacherId;
+
+    private String image;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Course(String id, String courseName, String courseCode, String description, String image,
-                  String startingDate, String endDate, List<Student> students, List<NoteBook> notebook, List<Video> video,
-                  List<Review> review, String teacherId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(String id,String adminId, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students,
+                  List<NoteBook> notebook, List<Video> video, List<Review> review, String teacherId, String image) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.description = description;
-        this.image = image;
         this.startingDate = startingDate;
         this.endDate = endDate;
         this.students = students;
@@ -57,8 +56,8 @@ public class Course {
         this.video = video;
         this.review = review;
         this.teacherId = teacherId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.image = image;
+        this.adminId = adminId;
     }
 
     @Override
@@ -68,14 +67,15 @@ public class Course {
                 ", courseName='" + courseName + '\'' +
                 ", courseCode='" + courseCode + '\'' +
                 ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
                 ", startingDate='" + startingDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", students=" + students +
                 ", notebook=" + notebook +
                 ", video=" + video +
                 ", review=" + review +
+                ", adminId='" + adminId + '\'' +
                 ", teacherId=" + teacherId +
+                ", image='" + image + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

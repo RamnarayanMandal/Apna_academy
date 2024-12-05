@@ -120,7 +120,7 @@ const AdminSidebar = () => {
           {menuState.courses && isOpen && (
             <ul className="pl-8 space-y-2">
               <li>
-                <a href="/admin-add-course" className="hover:text-blue-500">
+                <a href="/admin-teacher-add-course" className="hover:text-blue-500">
                   Add New Course
                 </a>
               </li>

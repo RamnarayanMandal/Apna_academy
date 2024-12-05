@@ -28,8 +28,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http.csrf(customizer -> customizer.disable()).
                 authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/login" ,"/api/auth/register"
-                        ).permitAll()
+              .requestMatchers("/api/v1/files/upload","/api/auth/login","/api/course" ,"/api/auth/register",
+                                "/api/course/{courseId}/{studentId}","/api/questions/**","/api/questions","/api/exams"
+                                ).permitAll()
+
                         .anyRequest().authenticated()).
                 httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

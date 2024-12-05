@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of us
 
 export const TeacherSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCoursesOpen, setIsCoursesOpen] = useState(false); // State to toggle "Create & Manage Courses"
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate(); // For navigation
 
@@ -15,7 +16,7 @@ export const TeacherSideBar = () => {
   };
 
   return (
-    <div className={`min-h-screen shadow-lg  fixed z-40 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
+    <div className={`min-h-screen shadow-lg fixed z-40 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
       <div className="flex justify-between items-center p-4">
         <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>
           Teacher Dashboard
@@ -38,10 +39,29 @@ export const TeacherSideBar = () => {
       </div>
       <ul className="space-y-4">
         <li>
-          <a href="/getAllCourses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a
+            href="#create-manage-courses"
+            onClick={() => setIsCoursesOpen(!isCoursesOpen)} // Toggle course management
+            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+          >
             <FaBook className="mr-4" />
             {isOpen && 'Create & Manage Courses'}
           </a>
+          {isCoursesOpen && (
+            <ul className="ml-6 space-y-2"> {/* Nested list for "Create & Manage Courses" */}
+              <li>
+                <a href="/admin-teacher-add-course" className="hover:text-blue-500">
+                  Add New Course
+                </a>
+              </li>
+              {/* New child item: Add Video */}
+              <li>
+                <a href="/admin-teacher-add-video" className="hover:text-blue-500">
+                  Add Video
+                </a>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <a href="#courses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
@@ -85,16 +105,15 @@ export const TeacherSideBar = () => {
             {isOpen && 'Upload Resources'}
           </a>
         </li>
-        
       </ul>
       {/* Logout button */}
-      <div className="mt-auto p-4 flex justify-between gap-4 ">
-      <button
-        onClick={toggleTheme}
-        className=" bg-blue-500 text-white p-2 rounded-full"
-      >
-        {isDarkMode ? '🌞' : '🌙'}
-      </button>
+      <div className="mt-auto p-4 flex justify-between gap-4">
+        <button
+          onClick={toggleTheme}
+          className=" bg-blue-500 text-white p-2 rounded-full"
+        >
+          {isDarkMode ? '🌞' : '🌙'}
+        </button>
         <button
           onClick={handleLogout}
           className="flex items-center w-full p-4 hover:bg-gray-600 rounded font-semibold text-lg text-red-500"
@@ -103,7 +122,6 @@ export const TeacherSideBar = () => {
           {isOpen && 'Logout'}
         </button>
       </div>
-      
     </div>
   );
 };

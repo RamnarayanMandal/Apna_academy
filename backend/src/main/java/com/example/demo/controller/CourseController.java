@@ -20,11 +20,13 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
-    @Autowired
-    private CourseRepo courseRepo;
 
     @Autowired
     private CloudinaryService cloudinaryService;
+
+    @Autowired
+    private CourseRepo courseRepo;
+
     // Get all courses
     @GetMapping
     public List<Course> getAllCourses() {
@@ -50,6 +52,7 @@ public class CourseController {
     public ResponseEntity<Course> addCourse(  @RequestParam("courseName") String courseName,
                                               @RequestParam("courseCode") String courseCode,
                                               @RequestParam("description") String description,
+                                              @RequestParam("teacherId") String teacherId,
                                               @RequestParam("startingDate") String startingDate,
                                               @RequestParam("endDate") String endDate,
                                               @RequestParam("image") MultipartFile image) throws IOException {
@@ -61,14 +64,14 @@ public class CourseController {
         course.setStartingDate(startingDate);
         course.setEndDate(endDate);
         course.setImage(imageUrl);
+        course.setTeacherId(teacherId);
         Course createdCourse = courseService.addCourse(course);
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestBody Course course) {
-        course.setId(id); // Ensure the ID is set before updating
-        Course updatedCourse = courseService.updateCourse(id,course);
+               Course updatedCourse = courseService.updateCourse(id,course);
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
 
@@ -98,12 +101,24 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-    @GetMapping("/getCourses/{teacherId}")
+    @PutMapping("/teacher/{teacherId}/{courseId}")
+    public ResponseEntity<Course> addTeacherToCourse(@PathVariable String teacherId, @PathVariable String courseId) {
+        try {
+            Course updatedCourse = courseService.addTeacherToCourse(teacherId,courseId);
+            return ResponseEntity.ok(updatedCourse);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/teacher/getAllCourses/{teacherId}")
     public ResponseEntity<List<Course>> getTeacherCourses(@PathVariable String teacherId) {
-        List<Course> courses = courseService.getCourseByTeacherId(teacherId);
+        List<Course> courses = courseService.getCoursesByTeacherId(teacherId);
         if (courses.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(courses);
     }
+
 }

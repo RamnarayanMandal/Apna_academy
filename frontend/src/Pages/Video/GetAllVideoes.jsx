@@ -3,104 +3,103 @@ import { FaSearch } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import AddCourse from './AddCourse';
+import AddVideo from './AddVideo'; // Assuming you have a component for adding videos
 import { IoMdCloseCircle } from 'react-icons/io';
 
-const GetAllCourse = () => {
+const GetAllVideos = () => {
   const { isDarkMode } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
-  const [courses, setCourses] = useState([]);
+  const [videos, setVideos] = useState([]);
   const location = useLocation();
   const BASE_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem('token');
-  const [showModel, setShowModal] = useState(false);
-  const [selectCourse, setSelectCourse] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const teacherId = localStorage.getItem("CurrentUserId");
   const role = localStorage.getItem('role'); // Get the user's role
 
-  // Fetch all courses (for Admin)
-  const fetchAllCourses = async () => {
+  // Fetch all videos (for Admin)
+  const fetchAllVideos = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/course`, {
+      const response = await axios.get(`${BASE_URL}/api/videos`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCourses(response.data || []);
+      setVideos(response.data || []);
       console.log(response.data);
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error('Error fetching videos:', error);
     }
   };
 
-  // Fetch courses of a specific teacher
-  const fetchAllCoursesOfTeacher = async () => {
+  // Fetch videos of a specific teacher
+  const fetchAllVideosOfTeacher = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/course/teacher/getAllCourses/${teacherId}`, {
+      const response = await axios.get(`${BASE_URL}/api/video/teacher/getAllVideos/${teacherId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCourses(response.data || []);
+      setVideos(response.data || []);
       console.log(response.data);
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error('Error fetching videos:', error);
     }
   };
 
-  // Delete course
-  const handleDeleteCourse = async (id) => {
+  // Delete video
+  const handleDeleteVideo = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/api/course/${id}`, {
+      await axios.delete(`${BASE_URL}/api/video/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCourses(courses.filter((course) => course.id !== id));
-      alert('Course deleted successfully');
+      setVideos(videos.filter((video) => video.id !== id));
+      alert('Video deleted successfully');
     } catch (error) {
-      console.error('Error deleting course:', error);
+      console.error('Error deleting video:', error);
     }
   };
 
   // Sorting functions
-  const handleSortByAlphabet = () => {
-    const sortedCourses = [...courses].sort((a, b) =>
-      a.courseName.localeCompare(b.courseName)
+  const handleSortByTitle = () => {
+    const sortedVideos = [...videos].sort((a, b) =>
+      a.title.localeCompare(b.title)
     );
-    setCourses(sortedCourses);
+    setVideos(sortedVideos);
   };
 
   const handleSortByDate = () => {
-    const sortedCourses = [...courses].sort(
-      (a, b) => new Date(a.startingDate) - new Date(b.startingDate)
+    const sortedVideos = [...videos].sort(
+      (a, b) => new Date(a.uploadDate) - new Date(b.uploadDate)
     );
-    setCourses(sortedCourses);
+    setVideos(sortedVideos);
   };
 
-  // Filter courses based on search term
-  const filteredCourses = courses.filter((course) =>
-    course.courseName?.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter videos based on search term
+  const filteredVideos = videos.filter((video) =>
+    video.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
     if (role === 'teacher') {
-      fetchAllCoursesOfTeacher(); // Fetch teacher's courses
+      fetchAllVideosOfTeacher(); // Fetch teacher's videos
     } else if (role === 'admin') {
-      fetchAllCourses(); // Fetch all courses for admin
+      fetchAllVideos(); // Fetch all videos for admin
     }
   }, [role]);
 
-  // Handle adding course
-  const handleAddCourse = () => {
+  // Handle adding video
+  const handleAddVideo = () => {
     setShowModal(true);
   };
 
-  // Handle editing course
-  const handleEditCourse = (course) => {
+  // Handle editing video
+  const handleEditVideo = (video) => {
     setShowModal(true);
-    setSelectCourse(course);
+    setSelectedVideo(video);
   };
 
   return (
     <div
-      id="Courses"
-      className={`p-6 w-full lg:mx-40 ml-20 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'
-        }`}
+      id="Videos"
+      className={`p-6 w-full lg:mx-40 ml-20 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
     >
       {/* Search and Add Button */}
       <div className="flex justify-between flex-wrap gap-4 items-center w-full mb-6">
@@ -108,21 +107,21 @@ const GetAllCourse = () => {
           <FaSearch className="text-gray-500 mr-2" />
           <input
             type="text"
-            placeholder="Search Courses..."
+            placeholder="Search Videos..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="outline-none bg-transparent w-full"
           />
         </div>
-        { location.pathname === '/admin-teacher-add-course' && (
+        {location.pathname === '/admin-teacher-add-video' && (
           <button
             className={`flex items-center px-4 py-2 rounded-md font-semibold border ${isDarkMode
               ? 'border-white text-white'
               : 'border-gray-500 text-gray-900'
               }`}
-            onClick={handleAddCourse}
+            onClick={handleAddVideo}
           >
-            Add New Course
+            Add New Video
           </button>
         )}
       </div>
@@ -134,9 +133,9 @@ const GetAllCourse = () => {
             ? 'bg-blue-500 text-white hover:bg-blue-400'
             : 'bg-gray-900 text-white hover:bg-gray-700'
             }`}
-          onClick={handleSortByAlphabet}
+          onClick={handleSortByTitle}
         >
-          Sort by Alphabet
+          Sort by Title
         </button>
         <button
           className={`px-4 py-2 rounded-md font-semibold ${isDarkMode
@@ -149,32 +148,28 @@ const GetAllCourse = () => {
         </button>
       </div>
 
-      {/* Course List */}
+      {/* Video List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filteredCourses.map((course) => (
+        {filteredVideos.map((video) => (
           <div
-            key={course.id}
+            key={video.id}
             className={`p-4 font-serif shadow-lg rounded-md transform transition duration-300 hover:scale-105 ${isDarkMode
               ? 'bg-gray-800 hover:bg-gray-700 text-white'
               : 'bg-white hover:bg-blue-100 text-gray-900'
               }`}
           >
             <img
-              src={course.image}
-              alt={`${course.courseName}`}
+              src={video.thumbnail}
+              alt={video.title}
               className="w-full h-72 object-cover rounded-md mb-4"
             />
-            <h2 className="text-xl font-bold mb-2">{course.courseName}</h2>
+            <h2 className="text-xl font-bold mb-2">{video.title}</h2>
             <p className="text-sm mb-4">
-              {isDarkMode ? '📘' : '📗'} {course.description}
+              {isDarkMode ? '🎬' : '📺'} {video.description}
             </p>
             <div className="text-sm flex justify-between mb-4">
               <p>
-                <span className="font-semibold">Start Date:</span>{' '}
-                {course.startingDate}
-              </p>
-              <p>
-                <span className="font-semibold">End Date:</span> {course.endDate}
+                <span className="font-semibold">Upload Date:</span> {video.uploadDate}
               </p>
             </div>
             <div className="flex justify-center mb-4 mt-4 flex-wrap gap-4">
@@ -184,39 +179,39 @@ const GetAllCourse = () => {
                   ? 'border-white text-white hover:bg-white hover:text-gray-900'
                   : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'
                   }`}
-                onClick={() => handleEditCourse(course)}
+                onClick={() => handleEditVideo(video)}
               >
                 Update
               </button>
 
-              { location.pathname === "/admin-teacher-add-course" && (
+              {location.pathname === "/admin-teacher-add-video" && (
                 <button
                   className={`flex items-center px-4 py-2 rounded-md font-semibold border ${isDarkMode
                     ? 'border-red-500 text-red-500 hover:bg-red-500 hover:text-white'
                     : 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
                     }`}
-                  onClick={() => handleDeleteCourse(course.id)}
+                  onClick={() => handleDeleteVideo(video.id)}
                 >
                   Delete
                 </button>
               )}
 
-              {/* Explore Now Button */}
+              {/* Watch Now Button */}
               <button
                 className={`flex items-center px-4 py-2 rounded-md font-semibold ${isDarkMode
                   ? 'bg-blue-500 text-white hover:bg-blue-400'
                   : 'bg-blue-600 text-white hover:bg-blue-500'
                   }`}
-                onClick={() => alert(`Explore ${course.courseName}`)}
+                onClick={() => alert(`Watch ${video.title}`)}
               >
-                Explore Now
+                Watch Now
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {showModel && (
+      {showModal && (
         <div className="fixed top-0 left-0 w-full h-screen z-50 bg-black opacity-90 flex items-center justify-center">
           <div className="p-4 w-full max-w-sm mx-auto bg-white rounded-md shadow-md relative">
             <button
@@ -225,17 +220,17 @@ const GetAllCourse = () => {
             >
               <IoMdCloseCircle className="text-2xl" />
             </button>
-            <AddCourse selectCourse={selectCourse} setShowModal={setShowModal} />
+            <AddVideo selectedVideo={selectedVideo} setShowModal={setShowModal} />
           </div>
         </div>
       )}
 
-      {/* No Courses Found */}
-      {filteredCourses.length === 0 && (
-        <p className="text-center text-gray-500 mt-6">No courses found.</p>
+      {/* No Videos Found */}
+      {filteredVideos.length === 0 && (
+        <p className="text-center text-gray-500 mt-6">No videos found.</p>
       )}
     </div>
   );
 };
 
-export default GetAllCourse;
+export default GetAllVideos;
