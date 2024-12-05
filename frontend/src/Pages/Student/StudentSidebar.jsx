@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaChalkboardTeacher, FaTasks, FaRegGrinStars, FaBookOpen, FaUserAlt, FaSignOutAlt, FaCog, FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
-import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 
 export const StudentSideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -17,6 +17,7 @@ export const StudentSideBar = () => {
 
   return (
     <div className={`h-screen shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
+      {/* <StudentSideBar/> */}
       <div className="flex justify-between items-center p-4">
         <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>
           Student Dashboard
@@ -29,14 +30,22 @@ export const StudentSideBar = () => {
         </button>
       </div>
       <div className="px-4 py-6">
-        <div className="flex items-center space-x-4">
-          {/* Profile section */}
-          <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
-            <span className="text-white">T</span> {/* Replace with profile picture or name */}
-          </div>
-          {isOpen && <span className="text-lg font-semibold">Student</span>}
+      <div className="flex items-center space-x-4">
+        {/* Profile section */}
+        <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
+          <span className="text-white">T</span> {/* Replace with profile picture or name */}
         </div>
+
+        {/* Conditionally render "Student" text and make it clickable */}
+        {isOpen && (
+          <Link to="/Student-Dashbord">
+            <span className="text-lg font-semibold cursor-pointer text-blue-500 hover:underline">
+              Student
+            </span>
+          </Link>
+        )}
       </div>
+    </div>
       <ul className="space-y-4">
         {/* My Courses (collapsible) */}
         <li>
@@ -57,7 +66,7 @@ export const StudentSideBar = () => {
             <ul className="pl-8 space-y-2">
               <li>
                 <a
-                  href="#enrolled-courses"
+                  href="/student-mycourse"
                   className="flex items-center p-3 hover:bg-gray-500 rounded font-semibold text-lg"
                 >
                   {/* Icon for Enrolled Courses */}
@@ -92,7 +101,7 @@ export const StudentSideBar = () => {
         {/* Assignments & Exams */}
         <li>
           <a
-            href="#assignments-exams"
+            href="/student-exam"
             className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
           >
             <FaTasks className="mr-4" />

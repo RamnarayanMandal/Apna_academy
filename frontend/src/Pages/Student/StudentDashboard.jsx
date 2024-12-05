@@ -1,22 +1,24 @@
 import React from 'react'
 import { StudentSideBar } from './StudentSidebar';
 import { useTheme } from '../../ThemeProvider'; 
+import GetAllCourse from './GetAllCourses';
+
 
 const StudentDashboard = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
   return (
-    <div className={`h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors`}>
+    <div className={`min-h-screen flex  lg:gap-20 w-full  ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'} transition-colors`}>
+       <div className='fixed'>
       <StudentSideBar  />
-      <div className="p-8">
-       
-        <h1 className="text-3xl font-extrabold mb-6">
-          Welcome to the Student Dashboard
-        </h1>
-        
       </div>
-    </div>
+      <div className="ml-[260px] w-full"> {/* Adjust ml value as per sidebar width */}
+        <GetAllCourse />
+      </div>
+      </div>
+    
   );
 };
+
 
 export default StudentDashboard

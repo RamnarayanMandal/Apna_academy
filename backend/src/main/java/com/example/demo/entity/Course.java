@@ -26,6 +26,10 @@ public class Course {
     private String courseCode;
     private String description;
 
+<<<<<<< HEAD
+=======
+    private String image;
+>>>>>>> cfcbf40fec9017cf97a3e2832de44e14749b10de
     @DateTimeFormat
     private String startingDate;
 

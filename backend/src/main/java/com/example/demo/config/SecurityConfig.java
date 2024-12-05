@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +28,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http.csrf(customizer -> customizer.disable()).
                 authorizeHttpRequests(request -> request
+<<<<<<< HEAD
                         .requestMatchers("/api/v1/files/upload","/api/auth/login", "/api/auth/register","/api/course").permitAll()
+=======
+                        .requestMatchers("/api/v1/files/upload","/api/auth/login","/api/course" ,"/api/auth/register",
+                                "/api/course/{courseId}/{studentId}","/api/questions/**","/api/questions","/api/exams"
+                                ).permitAll()
+>>>>>>> cfcbf40fec9017cf97a3e2832de44e14749b10de
                         .anyRequest().authenticated()).
                 httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

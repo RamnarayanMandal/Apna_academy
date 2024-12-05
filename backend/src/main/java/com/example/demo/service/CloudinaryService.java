@@ -22,5 +22,11 @@ public class CloudinaryService {
         // Extract the image URL from the result and return it
         return (String) uploadResult.get("url");
     }
+
+    // Method to upload a video file
+    public String uploadVideo(MultipartFile file) throws IOException {
+        Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "video"));
+        return (String) uploadResult.get("url");
+    }
 }
 

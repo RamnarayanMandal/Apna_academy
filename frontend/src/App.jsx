@@ -12,7 +12,15 @@ import StudentDashboard from './Pages/Student/StudentDashboard'
 import Profile from './Pages/Student/Profile'
 import UpdateStudent from './Pages/Student/UpdateStudent'
 import { AdminCourseHomePage } from './Pages/Admin/AdminCourseHomePage'
+<<<<<<< HEAD
 import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourseTable'
+=======
+import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourse'
+import StudentMyCourses from './Pages/Student/MyCourses'
+import Question from './Pages/Student/Question'
+import Exams from './Pages/Student/Exams'
+import GetExamByCourse from './Pages/Exam/GetExamByCourse'
+>>>>>>> cfcbf40fec9017cf97a3e2832de44e14749b10de
 
 
 function App() {
@@ -36,6 +44,10 @@ function App() {
             <Route path='/admin-assign-teacher' element={<AssignTeacherInCourse />} />
             <Route path='/admin-teacher' element={<AssignTeacherInCourse />} />
             <Route path='/admin-student' element={<AssignTeacherInCourse />} />
+            <Route path='/student-mycourse' element={<StudentMyCourses/>} />
+            <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
+            <Route path='/student-exam' element={<Exams/>} />
+            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
            
           
           </Routes>
