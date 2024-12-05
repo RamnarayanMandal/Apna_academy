@@ -52,8 +52,7 @@ public class CourseController {
                                               @RequestParam("description") String description,
                                               @RequestParam("startingDate") String startingDate,
                                               @RequestParam("endDate") String endDate,
-                                            @RequestParam("image") MultipartFile image) throws IOException {
-
+                                              @RequestParam("image") MultipartFile image) throws IOException {
         String imageUrl = cloudinaryService.uploadFile(image);
         Course course = new Course();
         course.setCourseCode(courseCode);
@@ -62,10 +61,7 @@ public class CourseController {
         course.setStartingDate(startingDate);
         course.setEndDate(endDate);
         course.setImage(imageUrl);
-
-
         Course createdCourse = courseService.addCourse(course);
-
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 
@@ -95,13 +91,19 @@ public class CourseController {
 
     @GetMapping("/getAllCourses/{studentId}")
     public ResponseEntity<List<Course>> getStudentCourses(@PathVariable String studentId) {
-        List<Course> courses = courseRepo.findByStudentsId(studentId);
-
+        List<Course> courses = courseService.getCoursesByStudentId(studentId);
         if (courses.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(courses);
     }
 
+    @GetMapping("/getCourses/{teacherId}")
+    public ResponseEntity<List<Course>> getTeacherCourses(@PathVariable String teacherId) {
+        List<Course> courses = courseService.getCourseByTeacherId(teacherId);
+        if (courses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
 }

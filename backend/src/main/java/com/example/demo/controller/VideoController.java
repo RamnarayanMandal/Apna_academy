@@ -29,13 +29,15 @@ public class VideoController {
     public Video getVideoById(@PathVariable String videoId) {
         return videoService.getVideoById(videoId);
     }
+
+
     @PostMapping("/uploadVideo")
     public Video createVideo(@RequestParam String title,
                              @RequestParam String description,
                              @RequestParam("thumbnail") MultipartFile thumbnail,  // Handle thumbnail as MultipartFile (image)
                              @RequestParam Boolean isPublished,
                              @RequestParam("videoFile") MultipartFile videoFile,
-                             @RequestParam String teacherId) throws IOException {
+                             @RequestParam String teacherId ) throws IOException {
         // Upload video file to Cloudinary (or your preferred service)
         String videoUrl = cloudinaryService.uploadVideo(videoFile);
 
@@ -48,9 +50,8 @@ public class VideoController {
         video.setDescription(description);
         video.setThumbnail(thumbnailUrl);  // Set the URL of the uploaded thumbnail image
         video.setIsPublished(isPublished);
-        video.setVideoFile(videoUrl);  // Set the URL of the uploaded video file
+        video.setVideoFile(videoUrl);
 
-        // Save video details (using videoService or whatever service you have)
         return videoService.createVideo(video);
     }
 

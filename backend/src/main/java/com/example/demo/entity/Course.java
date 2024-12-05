@@ -21,40 +21,30 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "courses")
 public class Course {
-
     @Id
     private String id;
     private String courseName;
     private String courseCode;
     private String description;
-
     private String image;
     @DateTimeFormat
     private String startingDate;
-
     @DateTimeFormat
     private String endDate;
-
     @DBRef
     private List<Student> students;
-
     private List<NoteBook> notebook;
-
     private List<Video> video;
-
     private List<Review> review;
-
-    private Teacher teacher;
-
+    private String teacherId;
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     public Course(String id, String courseName, String courseCode, String description, String image,
                   String startingDate, String endDate, List<Student> students, List<NoteBook> notebook, List<Video> video,
-                  List<Review> review, Teacher teacher, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                  List<Review> review, String teacherId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -66,7 +56,7 @@ public class Course {
         this.notebook = notebook;
         this.video = video;
         this.review = review;
-        this.teacher = teacher;
+        this.teacherId = teacherId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -85,7 +75,7 @@ public class Course {
                 ", notebook=" + notebook +
                 ", video=" + video +
                 ", review=" + review +
-                ", teacher=" + teacher +
+                ", teacherId=" + teacherId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

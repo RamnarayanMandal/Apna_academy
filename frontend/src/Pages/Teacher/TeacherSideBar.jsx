@@ -38,7 +38,7 @@ export const TeacherSideBar = () => {
       </div>
       <ul className="space-y-4">
         <li>
-          <a href="#Courses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/getAllCourses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaBook className="mr-4" />
             {isOpen && 'Create & Manage Courses'}
           </a>
@@ -68,7 +68,7 @@ export const TeacherSideBar = () => {
           </a>
         </li>
         <li>
-          <a href="#feedback" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/create-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaVideo className="mr-4" />
             {isOpen && 'Live Classes'}
           </a>

@@ -17,6 +17,9 @@ import StudentMyCourses from './Pages/Student/MyCourses'
 import Question from './Pages/Student/Question'
 import Exams from './Pages/Student/Exams'
 import GetExamByCourse from './Pages/Exam/GetExamByCourse'
+import CreateVideo from './Pages/Teacher/CreateVideo'
+import GetAllCourse from './Pages/Courses/GetAllCourse'
+
 
 
 function App() {
@@ -25,6 +28,7 @@ function App() {
   return (
     <>
       <ThemeProvider>
+        
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -39,12 +43,17 @@ function App() {
             <Route path='/admin-add-course' element={<AdminCourseHomePage />} />
             <Route path='/admin-assign-teacher' element={<AssignTeacherInCourse />} />
             <Route path='/admin-teacher' element={<AssignTeacherInCourse />} />
+            <Route path='/create-video' element={<CreateVideo />} />
+            <Route path='/getAllCourses' element={<GetAllCourse />} />
+            
+
+           
+           
             <Route path='/admin-student' element={<AssignTeacherInCourse />} />
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
-            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
-           
+            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />           
           
           </Routes>
         </BrowserRouter>

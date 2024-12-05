@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { IoMdCloseCircle } from 'react-icons/io';
-
+const BASE_URL = import.meta.env.VITE_API_URL;
 const Registration = ({setShowModal}) => {
   // State to hold form data
   const [formData, setFormData] = useState({
@@ -42,7 +42,7 @@ const Registration = ({setShowModal}) => {
     e.preventDefault();
     if (validateForm()) {
       // Sending data to the backend with role as a query parameter
-      axios.post('http://localhost:8081/api/auth/register', formData, {
+      axios.post(`${BASE_URL}/api/auth/register`, formData, {
         params: {
           role: 'student'  // Adding the query parameter 'role'
         }

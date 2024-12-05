@@ -12,10 +12,12 @@ const StudentDashboard = () => {
        <div className='fixed'>
       <StudentSideBar  />
       </div>
-      <div className="ml-[260px] w-full"> {/* Adjust ml value as per sidebar width */}
+      
+      <div className="ml-[100px] "> 
         <GetAllCourse />
       </div>
-      </div>
+    </div>
+      
     
   );
 };

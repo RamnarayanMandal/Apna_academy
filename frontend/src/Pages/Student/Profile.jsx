@@ -3,19 +3,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { StudentSideBar } from './StudentSidebar';
 import { useTheme } from '../../ThemeProvider';
-import { FaProductHunt } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa'; // Search icon from react-icons
 import UpdateStudent from './UpdateStudent'; // Import the UpdateStudent component
+
+// Import the image from the local assets folder
+import studentImage from '../../assets/heroPage.webp'; // Adjust the path as needed
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Profile = () => {
   const { id } = useParams();
-  const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+  const token = localStorage.getItem('token'); 
+  const studentId = localStorage.getItem('CurrentUserId'); 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showUpdateForm, setShowUpdateForm] = useState(false); // State to control showing the UpdateStudent form
+  const [showAllCarts, setShowAllCarts] = useState(false); // State for toggling cart visibility
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
+  const [myCourses, setMyCourses] = useState([]);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -36,6 +42,21 @@ const Profile = () => {
     fetchProfileData();
   }, [id]);
 
+  useEffect(() => {
+    const fetchMyCourses = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/course/getAllCourses/${studentId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('Fetched courses:', response.data);  // Log the courses data
+        setMyCourses(response.data || []);
+      } catch (error) {
+        console.error('Error fetching student courses:', error);
+      }
+    };
+    fetchMyCourses();
+  }, [studentId]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -44,106 +65,145 @@ const Profile = () => {
     return <div>No profile data found</div>;
   }
 
-  // Extracting profile data, and using dummy data where necessary
-  const { name, email, phone } = profileData;
+  const { name, email, phone, createdAt } = profileData;
+
+  // Format the createdAt date to a readable format (e.g., "Nov 29, 2024")
+  const creationDate = new Date(createdAt);
+  const formattedDate = creationDate.toLocaleDateString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 
   // Dummy data for missing fields
   const profilePicture = 'https://via.placeholder.com/150'; // Placeholder image
-  const address = '1234, Some Street, City, Country'; // Dummy address
-  const dateOfBirth = '1990-01-01'; // Dummy date of birth
-  const gender = 'Male'; // Dummy gender
-
-  // Dummy statistics for the grid section
-  const totalOrders = 50;
-  const confirmedOrders = 40;
-  const deliveredOrders = 30;
 
   const handleEditProfile = () => {
-    setShowUpdateForm(true); // Show the UpdateStudent form when the button is clicked
+    setShowUpdateForm(true); 
+  };
+
+  const handleViewCourse = (courseId) => {
+    // Implement navigation or course view functionality here
+    console.log('View course with ID:', courseId);
+    navigate(`/course/${courseId}`);  // Example to navigate to a course page
+  };
+
+  const handleSeeAllClick = () => {
+    setShowAllCarts(!showAllCarts); // Toggle visibility of all carts
   };
 
   return (
-    <div className={`min-h-screen flex  lg:gap-20 w-full font-sans ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-blue-100 text-gray-900'} min-h-screen`}>
-      <div >
+    <div className={`min-h-screen flex ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+      {/* Sidebar on the left */}
+      <div className="w-1/4 lg:w-1/5 xl:w-1/6 p-4">
         <StudentSideBar />
       </div>
-      
-      <div className="  flex justify-center items-center flex-col h-full px-5">
-        <div className="flex justify-center items-center content-center pt-10">
-          <div className="grid grid-cols-1 gap-4 p-5">
-            <div className="flex flex-col items-center mb-4">
+
+      {/* Main content area */}
+      <div className="flex-1 p-6">
+        {/* Flex container for the search bar and profile section */}
+        <div className="flex justify-between items-center mb-6">
+          {/* Search bar aligned to the left */}
+          <div className="flex items-center w-1/2 max-w-xs border rounded-full px-4 py-2 border-gray-300 bg-white">
+            <FaSearch className="text-gray-500 mr-2 w-5 h-5" /> {/* Reduced icon size */}
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full p-2 bg-transparent text-gray-900 focus:outline-none"
+            />
+          </div>
+
+          {/* Profile section aligned to the right */}
+          <div className="flex items-center ml-auto">
+            {/* Profile Text (Name, Email) on the right */}
+            <div className="text-left">
+              <h2 className="text-2xl font-bold">{name}</h2>
+
+              {/* Email in a single line */}
+              <p className="text-lg text-gray-700" style={{ whiteSpace: 'nowrap' }}>
+                {email}
+              </p>
+
+              {/* Phone */}
+              <p className="text-lg">{phone}</p>
+            </div>
+            <div className="flex-shrink-0">
               <img
-                className="w-44 h-44 rounded-full object-cover mb-4"
-                src={profilePicture} // Use actual profile picture here
+                className="w-16 h-16 rounded-full object-cover m-2"
+                src={profilePicture}
                 alt="Avatar"
               />
             </div>
+          </div>
+        </div>
 
-            {/* Grid with dummy statistics */}
-            <div className='lg:grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 mb-6'>
-              <div className="w-full rounded-lg h-32 bg-blue-800 p-5 mb-4">
-                <h1 className="text-white text-2xl text-center font-semibold">
-                  <p>Total Orders</p>
-                  <div className="flex justify-center content-center items-center px-2 py-2 text-4xl flex gap-2">
-                    <FaProductHunt /> <p className="text-3xl">{totalOrders}</p>
-                  </div>
-                </h1>
-              </div>
-              <div className="w-full rounded-lg h-32 bg-blue-800 p-5 mb-4">
-                <h1 className="text-white text-2xl text-center font-semibold">
-                  <p>Confirmed Orders</p>
-                  <div className="flex justify-center content-center items-center px-2 py-2 text-4xl flex gap-2">
-                    <FaProductHunt /> <p className="text-3xl">{confirmedOrders}</p>
-                  </div>
-                </h1>
-              </div>
-              <div className="w-full rounded-lg h-32 bg-blue-800 p-5 mb-4">
-                <h1 className="text-white text-2xl text-center font-semibold">
-                  <p>Delivered Orders</p>
-                  <div className="flex justify-center content-center items-center px-2 py-2 text-4xl flex gap-2">
-                    <FaProductHunt /> <p className="text-3xl">{deliveredOrders}</p>
-                  </div>
-                </h1>
-              </div>
-            </div>
+        {/* Edit Profile Button */}
+        <button
+          onClick={handleEditProfile}
+          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          Edit Profile
+        </button>
 
-            {/* Profile Info */}
-            <div className="flex flex-col justify-center">
-              <h2 className="text-xl font-bold mb-2 text-center my-4">Profile Details</h2>
-              <div className='grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-4 border-2 border-red-600 p-4 rounded-md my-4'>
-                <p><strong>Username:</strong> {name || 'John Doe'}</p>
-                <p><strong>Email:</strong> {email || 'johndoe@example.com'}</p>
-                <p><strong>Phone Number:</strong> {phone || '+1 234 567 890'}</p>
-                <p><strong>Address:</strong> {address}</p>
-                <p><strong>Date of Birth:</strong> {new Date(dateOfBirth).toLocaleDateString()}</p>
-                <p><strong>Gender:</strong> {gender}</p>
-              </div>
-            </div>
+        {/* Conditional Rendering for Update Form */}
+        {showUpdateForm && <UpdateStudent profileData={profileData} />}
 
-            {/* Edit Profile Button */}
-            <div className="flex justify-center mt-6">
-              <button
-                onClick={handleEditProfile}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-              >
-                Edit Profile
-              </button>
-            </div>
+        {/* Full-width Box below Edit Profile Button with Image on the Right */}
+        <div className="mt-8 p-12 bg-gray-100 rounded-lg flex items-center justify-between">
+          {/* Left-side content (optional) */}
+          <div className="w-2/3 pr-6">
+            {/* Display the creation date above the welcome message */}
+            <p className="text-xl text-black-500 pb-12">Account Created: {formattedDate}</p>
+            <h3 className="text-xl font-bold ">Welcome back, {name}!</h3>
+            <p className="text-lg text-gray-700 ">Always stay updated with your Student portal</p>
+          </div>
+
+          {/* Right-side Image with reduced size */}
+          <div className="flex-shrink-0 w-1/3 h-36"> {/* Adjusted height of container */}
+            <img
+              className="w-48 h-48 pb-2 object-cover rounded-lg" // Reduced the image size
+              src={studentImage} // Use the imported image
+              alt="Student Image"
+            />
+          </div>
+        </div>
+
+        {/* Carts Section - 3 carts in a row */}
+        <div className="mt-8">
+          {/* Title and See All Button */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold">Enrolled Courses</h3>
+            <button
+              onClick={handleSeeAllClick}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              {showAllCarts ? 'See Less' : 'See All'}
+            </button>
+          </div>
+
+          {/* Carts Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Display the first 3 carts if "See All" is not clicked */}
+            {myCourses.length > 0 ? (
+              myCourses.slice(0, showAllCarts ? myCourses.length : 3).map((course) => (
+                <div key={course.id} className="bg-white p-4 shadow rounded-lg">
+                  <h4 className="text-xl font-bold">{course.courseName}</h4>
+                  {/* <p className="mt-2">Course details go here.</p> */}
+                  <button
+                    onClick={() => handleViewCourse(course.id)}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    View
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="text-center col-span-3">No courses found</div>
+            )}
           </div>
         </div>
       </div>
-      {showUpdateForm && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
-    <div className="relative bg-white p-8 rounded-lg shadow-xl max-w-lg w-full sm:w-96">
-      <UpdateStudent
-        studentData={profileData} // Pass the profile data to the form
-        setShowModal={setShowUpdateForm} // Function to close the form
-      />
-    </div>
-  </div>
-)}
-
-
     </div>
   );
 };

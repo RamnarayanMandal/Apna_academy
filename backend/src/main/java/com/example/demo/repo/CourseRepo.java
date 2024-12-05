@@ -10,4 +10,5 @@ import java.util.List;
 public interface CourseRepo extends MongoRepository<Course, String> {
     public Course findByCourseName(String courseName);
     List<Course> findByStudentsId(String studentId);
+    List<Course> findByTeacherId(String teacherId);
 }

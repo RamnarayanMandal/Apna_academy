@@ -1,11 +1,15 @@
 package com.example.demo.entity;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,5 +26,9 @@ public class StudentExamResult {
     private Double totalMarks;
     private Boolean isPassed;
     private Boolean done;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
 }

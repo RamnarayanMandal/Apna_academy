@@ -66,7 +66,7 @@ public class CourseService {
         existingCourse.setNotebook(course.getNotebook());
         existingCourse.setVideo(course.getVideo());
         existingCourse.setReview(course.getReview());
-        existingCourse.setTeacher(course.getTeacher());
+        existingCourse.setTeacherId(course.getTeacherId());
 
         return courseRepo.save(existingCourse);
     }
@@ -109,6 +109,11 @@ public class CourseService {
         List<Course> AllCourses = courseRepo.findByStudentsId(studentId);
 
         return AllCourses;
+    }
+
+
+    public List<Course> getCourseByTeacherId(String teacherId){
+        return courseRepo.findByTeacherId(teacherId);
     }
 
 }

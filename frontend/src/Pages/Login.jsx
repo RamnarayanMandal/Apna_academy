@@ -67,7 +67,7 @@ const Login = ({ setShowModal }) => {
       );
       
       await localStorage.setItem("token", response.data);
-      
+      localStorage.setItem("role",formData.type)
 
      await fetchUserProfile();
 

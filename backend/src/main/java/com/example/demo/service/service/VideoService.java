@@ -31,5 +31,8 @@ public class VideoService {
         return "Video deleted successfully";
     }
 
+    public List<Video> getVideosByCourseId(String courseId){
+        return videoRepo.getAllVideoByCourseId(courseId);
+    }
 
 }

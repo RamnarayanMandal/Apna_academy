@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Document(collection = "students")
 @Getter
@@ -21,7 +24,11 @@ public class Student extends BaseUser {
     private String profilePicture;
     private String dateOfBirth;
     private String gender;
+    @CreatedDate
+    private LocalDateTime createdAt;  // Created timestamp
 
+    @LastModifiedDate
+    private LocalDateTime updatedAt;  // Last modified timestamp
 
     // Constructor to initialize Student with the required fields
 
