@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2"; // Import SweetAlert2 for success messages
 
-const AddCourse = ({ selectCourse }) => {
+const AddCourse = ({ selectCourse, setShowModal }) => {
   const [course, setCourse] = useState({
     courseName: "",
     courseCode: "",
@@ -15,12 +16,11 @@ const AddCourse = ({ selectCourse }) => {
     review: [],
     image: null, // To store the uploaded image file
   });
+  const [loading, setLoading] = useState(false); // Loading state
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
 
-  const BASE_URL = import.meta.env.VITE_API_URL; console.log(selectCourse);
-  const token = localStorage.getItem('token');
-
- 
   useEffect(() => {
     if (selectCourse) {
       setCourse({
@@ -48,36 +48,63 @@ const AddCourse = ({ selectCourse }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Prepare form data for submission
     const formData = new FormData();
     Object.keys(course).forEach((key) => {
       if (key === "image" && course[key]) {
-        formData.append(key, course[key]);
-      } else {
+        formData.append(key, course[key]); // Add image file to form data
+      } else if (Array.isArray(course[key])) {
+        // If the value is an array, you may want to handle it differently or serialize it
         formData.append(key, JSON.stringify(course[key]));
+      } else {
+        formData.append(key, course[key]);
       }
     });
 
-    if (selectCourse) {
-      console.log("Updating Course:", course);
-      // Logic for updating the course, e.g., axios.put(`/api/courses/${selectCourse.id}`, formData)
-    } else {
-      console.log("Adding New Course:", course);
-      // Logic for adding a new course, e.g., axios.post('/api/courses', formData)
+    setLoading(true); // Start loading
 
-      const resp = axios.post(`${BASE_URL}/api/courses`,
-        formData,
-        {
+    try {
+      if (selectCourse) {
+        console.log("Updating Course:", course);
+        // Logic for updating the course
+        await axios.put(`${BASE_URL}/api/courses/${selectCourse.id}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      )
-
-
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Course Updated!",
+          text: "The course was updated successfully.",
+        });
+      } else {
+        console.log("Adding New Course:", course);
+        // Logic for adding a new course
+        await axios.post(`${BASE_URL}/api/course`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":"multipart/form-data"
+          },
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Course Added!",
+          text: "The course was added successfully.",
+        });
+      }
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error during course submission:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "There was an error submitting the course.",
+      });
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -86,7 +113,7 @@ const AddCourse = ({ selectCourse }) => {
       <h1 className="text-2xl font-bold mb-4">
         {selectCourse ? "Update Course" : "Add Course"}
       </h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1" htmlFor="courseName">
             Course Name
@@ -155,7 +182,6 @@ const AddCourse = ({ selectCourse }) => {
             className="w-full px-3 py-2 border rounded"
           />
         </div>
-        
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1" htmlFor="image">
             Upload Course Image
@@ -172,8 +198,9 @@ const AddCourse = ({ selectCourse }) => {
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          disabled={loading} // Disable button during loading
         >
-          {selectCourse ? "Update Course" : "Add Course"}
+          {loading ? "Processing..." : selectCourse ? "Update Course" : "Add Course"}
         </button>
       </form>
     </div>

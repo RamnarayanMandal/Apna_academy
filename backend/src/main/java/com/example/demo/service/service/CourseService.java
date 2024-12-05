@@ -2,11 +2,16 @@ package com.example.demo.service.service;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
 import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.StudentRepo;
+import com.example.demo.repo.TeacherRepo;
+import com.example.demo.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +22,12 @@ public class CourseService {
 
     @Autowired
     private StudentRepo studentRepo;
+
+    @Autowired
+    private TeacherRepo teacherRepo;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     public Course getCourseById(String id) {
         Optional<Course> course = courseRepo.findById(id);
@@ -34,8 +45,10 @@ public class CourseService {
     }
 
     public Course addCourse(Course course) {
-        return courseRepo.save(course);
+      return courseRepo.save(course);
     }
+
+
     public Course updateCourse(String id, Course course) {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Course ID cannot be null or empty for updating");
@@ -73,17 +86,56 @@ public class CourseService {
     }
 
 
-    public Course addStudentToCourse(String courseId, String studentId) {
+    public Course addStudentToCourse(String studentId, String courseId) {
         Course course = courseRepo.findById(courseId).orElseThrow(() ->
-                new RuntimeException("Course not found with ID: " + courseId));
+                new RuntimeException("Course with ID " + courseId + " not found"));
         Student student = studentRepo.findById(studentId).orElseThrow(() ->
-                new RuntimeException("Student not found with ID: " + studentId));
+                new RuntimeException("Student with ID " + studentId + " not found"));
 
+        List<Student> students = course.getStudents();
 
-        if (!course.getStudents().contains(student)) {
-            course.getStudents().add(student);
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+
+        boolean studentExists = students.stream().anyMatch(s -> s.getEmail().equals(student.getEmail()));
+        if (!studentExists) {
+            students.add(student);
+            course.setStudents(students);
         }
 
         return courseRepo.save(course);
     }
+
+    public List<Course> getCoursesByStudentId(String studentId) {
+               Student student = studentRepo.findById(studentId).orElseThrow(() ->
+                new RuntimeException("Student with ID " + studentId + " not found"));
+
+        List<Course> AllCourses = courseRepo.findByStudentsId(studentId);
+
+        return AllCourses;
+    }
+
+    public Course addTeacherToCourse(String teacherId, String courseId) {
+        // Find course by ID
+        Course course = courseRepo.findById(courseId).orElseThrow(() ->
+                new RuntimeException("Course with ID " + courseId + " not found"));
+
+        // Find teacher by ID
+        Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
+                new RuntimeException("Teacher with ID " + teacherId + " not found"));
+
+        // Ensure only one teacher is assigned to the course
+        if (course.getTeacher() != null) {
+            throw new RuntimeException("Course already has a teacher assigned.");
+        }
+
+        // Assign the teacher to the course
+        course.setTeacher(teacher);  // Assuming Course has a 'teacher' field, not a list
+
+        // Save the updated course
+        return courseRepo.save(course);
+    }
+
+
 }

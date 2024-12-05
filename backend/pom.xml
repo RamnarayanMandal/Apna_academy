@@ -54,6 +54,7 @@
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -71,12 +72,6 @@
 			<version>0.12.5</version>
 		</dependency>
 
-
-		<!--		<dependency>-->
-<!--			<groupId>io.jsonwebtoken</groupId>-->
-<!--			<artifactId>jjwt</artifactId>-->
-<!--			<version>0.9.1</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -107,7 +102,14 @@
 			<artifactId>dotenv-java</artifactId>
 			<version>2.2.4</version>
 		</dependency>
-
+		<!-- Spring Test dependency for MockMultipartFile (only needed for testing) -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>6.1.13</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 

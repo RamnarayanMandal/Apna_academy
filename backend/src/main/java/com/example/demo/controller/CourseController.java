@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class CourseController {
 
     @Autowired
     private CloudinaryService cloudinaryService;
+
+    @Autowired
+    private CourseRepo courseRepo;
+
 
 
 
@@ -48,26 +53,28 @@ public class CourseController {
 
     // Add a new course
     @PostMapping
-    public ResponseEntity<Course> addCourse(
-            @ModelAttribute Course course, // Bind other fields in Course
-            @RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<Course> addCourse(  @RequestParam("courseName") String courseName,
+                                              @RequestParam("courseCode") String courseCode,
+                                              @RequestParam("description") String description,
+                                              @RequestParam("startingDate") String startingDate,
+                                              @RequestParam("endDate") String endDate,
+                                            @RequestParam("image") MultipartFile image) throws IOException {
 
-        // Upload image to Cloudinary and get the image path (URL)
-        String imagePath = cloudinaryService.uploadFile(image);
+        String imageUrl = cloudinaryService.uploadFile(image);
+        Course course = new Course();
+        course.setCourseCode(courseCode);
+        course.setDescription(description);
+        course.setCourseName(courseName);
+        course.setStartingDate(startingDate);
+        course.setEndDate(endDate);
+        course.setImage(imageUrl);
 
-        // Set the image path to the course object (store the URL as a string)
-        course.setImage(imagePath);
 
-        // Save the course to the database
         Course createdCourse = courseService.addCourse(course);
 
-        // Return the created course with HTTP status 201 (Created)
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 
-
-
-    // Update an existing course
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestBody Course course) {
         course.setId(id); // Ensure the ID is set before updating
@@ -75,7 +82,7 @@ public class CourseController {
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
 
-    // Delete a course
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable String id) {
         String response = courseService.deleteCourse(id);
@@ -85,12 +92,43 @@ public class CourseController {
     @PutMapping("/{studentId}/{courseId}")
     public ResponseEntity<Course> addStudentToCourse(@PathVariable String studentId, @PathVariable String courseId) {
         try {
-            Course updatedCourse = courseService.addStudentToCourse(courseId, studentId);
+            Course updatedCourse = courseService.addStudentToCourse(studentId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
+    @GetMapping("/getAllCourses/{studentId}")
+    public ResponseEntity<List<Course>> getStudentCourses(@PathVariable String studentId) {
+        List<Course> courses = courseRepo.findByStudentsId(studentId);
+
+        if (courses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(courses);
+    }
+
+    @PutMapping("/teacher/{techaerId}/{courseId}")
+    public ResponseEntity<Course> addTeacherToCourse(@PathVariable String techaerId, @PathVariable String courseId) {
+        try {
+            Course updatedCourse = courseService.addTeacherToCourse(techaerId,courseId);
+            return ResponseEntity.ok(updatedCourse);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/teacher/getAllCourses/{TeacherId}")
+    public ResponseEntity<List<Course>> getTeacherCourses(@PathVariable String teachertId) {
+        List<Course> courses = courseRepo.findByTeacherId(teachertId);
+
+        if (courses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(courses);
+    }
 
 }

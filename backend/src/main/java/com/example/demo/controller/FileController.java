@@ -13,13 +13,13 @@ public class FileController {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            String url = cloudinaryService.uploadFile(file);
-            return ResponseEntity.ok(url);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/upload")
+//    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+//        try {
+//            String url = cloudinaryService.uploadFile(file);
+//            return ResponseEntity.ok(url);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
+//        }
+//    }
 }

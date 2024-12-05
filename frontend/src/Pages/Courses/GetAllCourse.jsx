@@ -217,7 +217,7 @@ const GetAllCourse = () => {
                     <IoMdCloseCircle className="text-2xl" />
                   </button>
                  
-                  <AddCourse selectCourse={selectCourse} />
+                  <AddCourse selectCourse={selectCourse} setShowModal={setShowModal} />
                 </div>
               </div>
             )}

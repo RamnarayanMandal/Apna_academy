@@ -12,7 +12,7 @@ import StudentDashboard from './Pages/Student/StudentDashboard'
 import Profile from './Pages/Student/Profile'
 import UpdateStudent from './Pages/Student/UpdateStudent'
 import { AdminCourseHomePage } from './Pages/Admin/AdminCourseHomePage'
-import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourse'
+import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourseTable'
 
 
 function App() {
