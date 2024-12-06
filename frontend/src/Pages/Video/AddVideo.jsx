@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddVideo = () => {
+const AddVideo = ({ selectVideo, setShowModal }) => {
   const BASE_URL = import.meta.env.VITE_API_URL;
-  const teacherId = localStorage.getItem('CurrentUserId'); // Retrieve teacherId from localStorage
+  const teacherId = localStorage.getItem('CurrentUserId');
   const token = localStorage.getItem('token');
+  
   // State to manage form data
   const [formData, setFormData] = useState({
     title: '',
@@ -12,14 +13,42 @@ const AddVideo = () => {
     thumbnail: null,
     videoFile: null,
     isPublished: true,
-    courseId: '',
-    // You can also set a role if needed, or leave it for future use
+    courseId: '', // This will be the course ID
   });
+  
+  // State for courses
+  const [courses, setCourses] = useState([]);
   
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Handle input changes
+  // Fetch courses of a specific teacher
+  const fetchAllCoursesOfTeacher = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/course/teacher/getAllCourses/${teacherId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCourses(response.data || []);  // Set fetched courses
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllCoursesOfTeacher();  // Fetch courses when the component mounts
+
+    // If selectVideo is passed as a prop, set the courseId to it
+    if (selectVideo) {
+      setFormData({
+        ...formData,
+        title: selectVideo.title || '',
+        description: selectVideo.description || '',
+        courseId: selectVideo.courseId || '',
+        isPublished: selectVideo.isPublished || true,
+      });
+    }
+  }, [selectVideo]);
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setFormData((prevState) => ({
@@ -32,37 +61,41 @@ const AddVideo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { title, description, thumbnail, videoFile, courseId, isPublished } = formData;
-
-    // if (!title || !description || !thumbnail || !videoFile || !courseId) {
-    //   setErrorMessage('All fields are required');
-    //   return;
-    // }
-
     setLoading(true);
     setErrorMessage(''); // Reset any previous error messages
 
     const form = new FormData();
-    // Append the teacherId directly to the form data
     form.append('teacherId', teacherId);
     form.append('title', title);
     form.append('description', description);
     form.append('thumbnail', thumbnail);
     form.append('videoFile', videoFile);
-    form.append('courseId', courseId);
+    form.append('courseId', courseId);  // Send courseId
     form.append('isPublished', isPublished);
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/videos/uploadVideo`, form, {
-        headers: { 'Content-Type': 'multipart/form-data' , Authorization: `Bearer ${token}` },
-      });
-       setFormData({
+      let response;
+      if (selectVideo) {
+        // If we're updating an existing video or course, send a PUT request
+        response = await axios.put(`${BASE_URL}/api/videos/${selectVideo.id}`, form, {
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` },
+        });
+      } else {
+        // If we're adding a new video, send a POST request
+        response = await axios.post(`${BASE_URL}/api/videos/uploadVideo`, form, {
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` },
+        });
+      }
+      
+      setFormData({
         title: '',
         description: '',
         thumbnail: null,
         videoFile: null,
         isPublished: true,
-        courseId: '',
+        courseId: '', // Reset courseId
       });
+      setShowModal(false); // Close modal on success
     } catch (error) {
       setErrorMessage('Error uploading video');
       console.error('Error uploading video:', error);
@@ -73,7 +106,9 @@ const AddVideo = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-semibold text-center mb-6">Upload New Video</h1>
+      <h1 className="text-2xl font-semibold text-center mb-6">
+        {selectVideo ? 'Update Video' : 'Upload New Video'}
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title and description fields */}
         {['title', 'description'].map((field) => (
@@ -121,6 +156,26 @@ const AddVideo = () => {
           />
         </div>
 
+        {/* Course Selection Dropdown */}
+        <div className="flex flex-col">
+          <label htmlFor="courseId" className="font-medium text-lg mb-1">Select Course</label>
+          <select
+            id="courseId"
+            name="courseId"
+            value={formData.courseId}
+            onChange={handleChange}
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          >
+            <option value="">Select a Course</option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.courseName} {/* Display course name */}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Publish checkbox */}
         <div className="flex items-center space-x-2">
           <input
@@ -143,7 +198,7 @@ const AddVideo = () => {
           className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
           disabled={loading}
         >
-          {loading ? 'Uploading...' : 'Upload Video'}
+         {loading ? "Processing..." : selectVideo ? "Update Video" : "Add Video"}
         </button>
       </form>
     </div>

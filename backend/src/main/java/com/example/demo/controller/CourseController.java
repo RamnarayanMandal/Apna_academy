@@ -70,8 +70,23 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestBody Course course) {
-               Course updatedCourse = courseService.updateCourse(id,course);
+    public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestParam("courseName") String courseName,
+                                               @RequestParam("courseCode") String courseCode,
+                                               @RequestParam("description") String description,
+                                               @RequestParam("teacherId") String teacherId,
+                                               @RequestParam("startingDate") String startingDate,
+                                               @RequestParam("endDate") String endDate,
+                                               @RequestParam("image") MultipartFile image) throws IOException  {
+        String imageUrl = cloudinaryService.uploadFile(image);
+        Course course = new Course();
+        course.setCourseCode(courseCode);
+        course.setDescription(description);
+        course.setCourseName(courseName);
+        course.setStartingDate(startingDate);
+        course.setEndDate(endDate);
+        course.setImage(imageUrl);
+        course.setTeacherId(teacherId);
+        Course updatedCourse = courseService.updateCourse(id,course);
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
 

@@ -35,4 +35,18 @@ public class VideoService {
         return videoRepo.getAllVideoByCourseId(courseId);
     }
 
+    public Video updateVideo(String id, Video video) {
+               Video existVideo = videoRepo.findById(id).orElse(null);
+        if (existVideo != null) {
+
+            existVideo.setVideoFile(video.getVideoFile());
+            if (video.getTitle() != null) existVideo.setTitle(video.getTitle());
+            if (video.getDescription() != null) existVideo.setDescription(video.getDescription());
+            if (video.getThumbnail() != null) existVideo.setThumbnail(video.getThumbnail());
+
+            return videoRepo.save(existVideo);
+        }
+        return null;
+    }
+
 }

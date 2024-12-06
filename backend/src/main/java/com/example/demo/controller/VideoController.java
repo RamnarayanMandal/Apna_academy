@@ -34,33 +34,51 @@ public class VideoController {
     @PostMapping("/uploadVideo")
     public Video createVideo(@RequestParam String title,
                              @RequestParam String description,
-                             @RequestParam("thumbnail") MultipartFile thumbnail,  // Handle thumbnail as MultipartFile (image)
+                             @RequestParam String courseId,
+                             @RequestParam("thumbnail") MultipartFile thumbnail,
                              @RequestParam Boolean isPublished,
                              @RequestParam("videoFile") MultipartFile videoFile,
                              @RequestParam String teacherId ) throws IOException {
-        // Upload video file to Cloudinary (or your preferred service)
         String videoUrl = cloudinaryService.uploadVideo(videoFile);
-
-        // Upload thumbnail image to Cloudinary (or your preferred service)
         String thumbnailUrl = cloudinaryService.uploadFile(thumbnail);
-
-        // Create a new Video object
         Video video = new Video();
         video.setTitle(title);
         video.setDescription(description);
-        video.setThumbnail(thumbnailUrl);  // Set the URL of the uploaded thumbnail image
+        video.setThumbnail(thumbnailUrl);
         video.setIsPublished(isPublished);
         video.setVideoFile(videoUrl);
-
+        video.setCourseId(courseId);
+        video.setTeacherId(teacherId);
         return videoService.createVideo(video);
     }
-
-
 
     @DeleteMapping("/{videoId}")
     public String deleteVideo(@PathVariable String videoId) {
         return videoService.deleteVideo(videoId);
     }
+
+    @PutMapping("/{videoId}")
+    public Video updateVideo(@PathVariable String videoId , @RequestParam String title,
+                             @RequestParam String description,  @RequestParam String courseId,
+                             @RequestParam("thumbnail") MultipartFile thumbnail,
+                             @RequestParam Boolean isPublished,
+                             @RequestParam("videoFile") MultipartFile videoFile,
+                             @RequestParam String teacherId ) throws IOException{
+        String videoUrl = cloudinaryService.uploadVideo(videoFile);
+        String thumbnailUrl = cloudinaryService.uploadFile(thumbnail);
+        Video video = new Video();
+        video.setTitle(title);
+        video.setDescription(description);
+        video.setThumbnail(thumbnailUrl);
+        video.setIsPublished(isPublished);
+        video.setVideoFile(videoUrl);
+        video.setCourseId(courseId);
+        video.setTeacherId(teacherId);
+        return videoService.updateVideo(videoId,video);
+
+    }
+
+
 //Testing
 //    @PostMapping("/upload")
 //    public String uploadVideo(@RequestParam("videoFile") MultipartFile videoFile) throws IOException {
