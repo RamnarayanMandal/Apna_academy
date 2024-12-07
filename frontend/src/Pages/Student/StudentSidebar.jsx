@@ -16,7 +16,7 @@ export const StudentSideBar = () => {
   };
 
   return (
-    <div className={`h-screen shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
+    <div className={`h-screen shadow-lg  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
       {/* <StudentSideBar/> */}
       <div className="flex justify-between items-center p-4">
         <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>

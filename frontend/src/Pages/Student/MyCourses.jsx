@@ -117,9 +117,10 @@ const MyCourses = () => {
                 className="w-full h-72 object-cover rounded-md mb-4"
               />
               <h2 className="text-xl font-bold mb-2">{course.courseName}</h2>
-              <p className="text-sm mb-4">
-                {isDarkMode ? '📘' : '📗'} {course.description}
-              </p>
+              <div
+              className="text-sm mb-4 text-ellipsis overflow-hidden line-clamp-4"
+              dangerouslySetInnerHTML={{ __html: course.description }}
+            />
               <div className="text-sm flex justify-between mb-4">
                 <p>
                   <span className="font-semibold">Start Date:</span>{' '}

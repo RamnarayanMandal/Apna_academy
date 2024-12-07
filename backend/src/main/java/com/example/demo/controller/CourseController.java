@@ -70,26 +70,39 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestParam("courseName") String courseName,
+    public ResponseEntity<Course> updateCourse(@PathVariable String id,
+                                               @RequestParam("courseName") String courseName,
                                                @RequestParam("courseCode") String courseCode,
                                                @RequestParam("description") String description,
                                                @RequestParam("teacherId") String teacherId,
                                                @RequestParam("startingDate") String startingDate,
                                                @RequestParam("endDate") String endDate,
-                                               @RequestParam("image") MultipartFile image) throws IOException  {
-        String imageUrl = cloudinaryService.uploadFile(image);
-        Course course = new Course();
-        course.setCourseCode(courseCode);
-        course.setDescription(description);
-        course.setCourseName(courseName);
-        course.setStartingDate(startingDate);
-        course.setEndDate(endDate);
-        course.setImage(imageUrl);
-        course.setTeacherId(teacherId);
-        Course updatedCourse = courseService.updateCourse(id,course);
+                                               @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+        System.out.println(image);
+        // Fetch the existing course details from the database
+        Course existingCourse = courseService.getCourseById(id);
+        if (existingCourse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 if course doesn't exist
+        }
+
+        // Update fields from the request
+        existingCourse.setCourseCode(courseCode);
+        existingCourse.setDescription(description);
+        existingCourse.setCourseName(courseName);
+        existingCourse.setStartingDate(startingDate);
+        existingCourse.setEndDate(endDate);
+        existingCourse.setTeacherId(teacherId);
+
+        // Only update the image if a new one is provided
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadFile(image);
+            existingCourse.setImage(imageUrl);
+        }
+
+        // Save the updated course
+        Course updatedCourse = courseService.updateCourse(id, existingCourse);
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable String id) {
@@ -118,11 +131,16 @@ public class CourseController {
 
     @PutMapping("/teacher/{teacherId}/{courseId}")
     public ResponseEntity<Course> addTeacherToCourse(@PathVariable String teacherId, @PathVariable String courseId) {
+
+        System.out.println( teacherId + courseId);
+
         try {
             Course updatedCourse = courseService.addTeacherToCourse(teacherId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
+            
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
         }
     }
 

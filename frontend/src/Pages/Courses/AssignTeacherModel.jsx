@@ -104,7 +104,7 @@ export const AssignTeacherModel = ({ setShowModal, selectCourse }) => {
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Course: {selectCourse.courseName}</h2>
           <p className="text-gray-700">Course Code: {selectCourse.courseCode}</p>
-          <p className="text-gray-700">Description: {selectCourse.description}</p>
+          
         </div>
 
         {/* Teacher Search Bar */}
@@ -129,7 +129,7 @@ export const AssignTeacherModel = ({ setShowModal, selectCourse }) => {
                 <div>
                   <h3 className="font-semibold">{teacher.name}</h3>
                   <p className="text-sm text-gray-600">{teacher.subjectSpecialization}</p>
-                  <p className="text-sm text-gray-600">Qualification: {teacher.qualification}</p>
+                  
                 </div>
                 <button
                   onClick={() => handleAssignTeacher(teacher.id)}

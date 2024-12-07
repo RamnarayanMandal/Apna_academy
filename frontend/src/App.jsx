@@ -18,6 +18,7 @@ import Exams from './Pages/Student/Exams'
 import GetExamByCourse from './Pages/Exam/GetExamByCourse'
 import { CourseHomePage } from './Pages/Courses/CourseHomePage'
 import { VideoHomePage } from './Pages/Video/VideoHomePage'
+import GetCourseByID from './Pages/Courses/GetCourseByID'
 
 
 function App() {
@@ -46,7 +47,8 @@ function App() {
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
-            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />           
+            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
+            <Route path='/student/courses/:id' element={<GetCourseByID />} />           
           
           </Routes>
         </BrowserRouter>
