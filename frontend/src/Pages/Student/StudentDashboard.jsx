@@ -1,6 +1,6 @@
 import React from 'react'
 import { StudentSideBar } from './StudentSidebar';
-import { useTheme } from '../../ThemeProvider'; 
+import { useTheme } from '../../ThemeProvider';
 import GetAllCourse from './GetAllCourses';
 
 
@@ -9,16 +9,16 @@ const StudentDashboard = () => {
 
   return (
     <div className={`min-h-screen flex  lg:gap-20 w-full  ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'} transition-colors`}>
-       <div className='fixed'>
-      <StudentSideBar  />
+      <div className='fixed z-50 lg:w-60'>
+        <StudentSideBar />
       </div>
-      
-      <div className="ml-[100px] "> 
+
+      <div className="w-full ">
         <GetAllCourse />
       </div>
     </div>
-      
-    
+
+
   );
 };
 

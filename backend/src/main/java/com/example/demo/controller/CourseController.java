@@ -168,11 +168,16 @@ public class CourseController {
 
     @PutMapping("/teacher/{teacherId}/{courseId}")
     public ResponseEntity<Course> addTeacherToCourse(@PathVariable String teacherId, @PathVariable String courseId) {
+
+        System.out.println( teacherId + courseId);
+
         try {
             Course updatedCourse = courseService.addTeacherToCourse(teacherId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
+            
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
         }
     }
 

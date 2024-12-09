@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AddCourse from './AddCourse';
 import { IoMdCloseCircle } from 'react-icons/io';
+import Swal from 'sweetalert2';
 
 const GetAllCourse = () => {
   const { isDarkMode } = useTheme();
@@ -17,6 +18,7 @@ const GetAllCourse = () => {
   const [selectCourse, setSelectCourse] = useState(null);
   const teacherId = localStorage.getItem("CurrentUserId");
   const role = localStorage.getItem('role'); // Get the user's role
+  const navagate = useNavigate();
 
   // Fetch all courses (for Admin)
   const fetchAllCourses = async () => {
@@ -44,18 +46,50 @@ const GetAllCourse = () => {
     }
   };
 
-  // Delete course
   const handleDeleteCourse = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/api/course/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      // Show confirmation dialog
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'This action will permanently delete the course!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
       });
-      setCourses(courses.filter((course) => course.id !== id));
-      alert('Course deleted successfully');
+  
+      // Proceed if the user confirms
+      if (result.isConfirmed) {
+        await axios.delete(`${BASE_URL}/api/course/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        // Update courses state
+        setCourses(courses.filter((course) => course.id !== id));
+  
+        // Show success alert
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'The course has been deleted successfully.',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+        });
+      }
     } catch (error) {
       console.error('Error deleting course:', error);
+  
+      // Show error alert
+      Swal.fire({
+        title: 'Error!',
+        text: 'Something went wrong while deleting the course. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+      });
     }
   };
+  
 
   // Sorting functions
   const handleSortByAlphabet = () => {
@@ -95,6 +129,11 @@ const GetAllCourse = () => {
     setShowModal(true);
     setSelectCourse(course);
   };
+
+  const hanleOnclicked = async(id)=>{
+
+    navagate(`/student/courses/${id}`)
+  }
 
   return (
     <div
@@ -163,11 +202,13 @@ const GetAllCourse = () => {
               src={course.image}
               alt={`${course.courseName}`}
               className="w-full h-72 object-cover rounded-md mb-4"
+              onClick={()=>hanleOnclicked(course._id)}
             />
             <h2 className="text-xl font-bold mb-2">{course.courseName}</h2>
-            <p className="text-sm mb-4">
-              {isDarkMode ? '📘' : '📗'} {course.description}
-            </p>
+            <div
+              className="text-sm mb-4 text-ellipsis overflow-hidden line-clamp-4"
+              dangerouslySetInnerHTML={{ __html: course.description }}
+            />
             <div className="text-sm flex justify-between mb-4">
               <p>
                 <span className="font-semibold">Start Date:</span>{' '}
