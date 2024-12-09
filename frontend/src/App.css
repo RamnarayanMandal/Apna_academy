@@ -26,7 +26,18 @@
     font-family: Arial, Helvetica, sans-serif;
     transition: all 0.8ms ease;
     text-decoration: none;
+    
 
     
    
   }
+
+  /* Custom styles to hide scrollbar */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
