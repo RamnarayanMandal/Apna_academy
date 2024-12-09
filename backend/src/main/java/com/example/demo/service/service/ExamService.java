@@ -3,6 +3,7 @@ package com.example.demo.service.service;
 import com.example.demo.entity.*;
 import com.example.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,6 +169,9 @@ public class ExamService {
         return exam; // Return the updated exam
     }
 
+    public Long totalExams(){
+        return examRepo.count();
+    }
 
 //    public Exam getExamByStudentId(String studentId) {
 //        return

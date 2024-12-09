@@ -69,8 +69,7 @@ public class CourseService {
         existingCourse.setNotebook(course.getNotebook());
         existingCourse.setVideo(course.getVideo());
         existingCourse.setReview(course.getReview());
-//        existingCourse.setTeacherId(course.getTeacherId());
-
+        existingCourse.setImage(course.getImage());
         return courseRepo.save(existingCourse);
     }
 
@@ -138,6 +137,10 @@ public class CourseService {
 
     public List<Course> getCoursesByTeacherId(String teacherId){
         return courseRepo.findByTeacherId(teacherId);
+    }
+
+    public long totalCourses(){
+        return courseRepo.count();
     }
 
 }

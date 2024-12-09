@@ -15,10 +15,11 @@ import AssignTeacherInCourse from './Pages/Courses/AssignTeacherIncourseTable'
 import StudentMyCourses from './Pages/Student/MyCourses'
 import Question from './Pages/Student/Question'
 import Exams from './Pages/Student/Exams'
-import GetExamByCourse from './Pages/Exam/GetExamByCourse'
+import StudentExamPortal from './Pages/Exam/StudentExamPortal'
 import { CourseHomePage } from './Pages/Courses/CourseHomePage'
 import { VideoHomePage } from './Pages/Video/VideoHomePage'
 import GetCourseByID from './Pages/Courses/GetCourseByID'
+import AssignmentDashboard from './Pages/Exam/AssignmentDashboard'
 import MyCourseById from './Pages/Student/MyCourseById'
 
 
@@ -49,6 +50,9 @@ function App() {
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
             <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
+            <Route path='/student/courses/:id' element={<GetCourseByID />} />           
+            <Route path='/assignment-dashboard' element={<AssignmentDashboard/>} />
+            <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} />           
             <Route path='/student/courses/:id' element={<GetCourseByID />} /> 
             <Route path='/student/Mycourses/:id' element={<MyCourseById />} />
 
