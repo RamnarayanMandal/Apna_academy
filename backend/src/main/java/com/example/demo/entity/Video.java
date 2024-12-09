@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,7 @@ public class Video {
     private Integer views = 0;
     private Boolean isPublished = true;
     private String teacherId;
+    @Field("courseId")
     private String courseId;
     @CreatedDate
     private LocalDateTime createdAt;

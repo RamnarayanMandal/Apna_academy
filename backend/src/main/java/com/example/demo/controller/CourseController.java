@@ -64,7 +64,7 @@ public class CourseController {
         course.setStartingDate(startingDate);
         course.setEndDate(endDate);
         course.setImage(imageUrl);
-        course.setTeacherId(teacherId);
+//        course.setTeacherId(teacherId);
         Course createdCourse = courseService.addCourse(course);
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
@@ -91,7 +91,7 @@ public class CourseController {
         existingCourse.setCourseName(courseName);
         existingCourse.setStartingDate(startingDate);
         existingCourse.setEndDate(endDate);
-        existingCourse.setTeacherId(teacherId);
+//        existingCourse.setTeacherId(teacherId);
 
         // Only update the image if a new one is provided
         if (image != null && !image.isEmpty()) {
@@ -138,7 +138,7 @@ public class CourseController {
             Course updatedCourse = courseService.addTeacherToCourse(teacherId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
-            
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         }

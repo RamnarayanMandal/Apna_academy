@@ -69,7 +69,7 @@ public class CourseService {
         existingCourse.setNotebook(course.getNotebook());
         existingCourse.setVideo(course.getVideo());
         existingCourse.setReview(course.getReview());
-        existingCourse.setTeacherId(course.getTeacherId());
+//        existingCourse.setTeacherId(course.getTeacherId());
 
         return courseRepo.save(existingCourse);
     }
@@ -115,24 +115,24 @@ public class CourseService {
     }
 
     public Course addTeacherToCourse(String teacherId, String courseId) {
-        // Find course by ID
+
         Course course = courseRepo.findById(courseId).orElseThrow(() ->
                 new RuntimeException("Course with ID " + courseId + " not found"));
 
-        // Find teacher by ID
         Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
                 new RuntimeException("Teacher with ID " + teacherId + " not found"));
 
-        // Ensure only one teacher is assigned to the course
-        if (course.getTeacherId() != null) {
-            throw new RuntimeException("Course already has a teacher assigned.");
+        List<Teacher> teachers = course.getTeacher();
+        if (teachers == null) {
+            teachers = new ArrayList<>();
         }
 
-        if(teacher != null) {
-            course.setTeacherId(teacherId);
-        } // Assuming Course has a 'teacher' field, not a list
+        boolean teacherExists = teachers.stream().anyMatch(t->t.getEmail().equals(teacher.getEmail()));
+        if (!teacherExists) {
+            teachers.add(teacher);
+            course.setTeacher(teachers);
+        }
 
-        // Save the updated course
         return courseRepo.save(course);
     }
 

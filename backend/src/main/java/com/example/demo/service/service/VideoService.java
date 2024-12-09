@@ -30,10 +30,11 @@ public class VideoService {
         videoRepo.delete(video);
         return "Video deleted successfully";
     }
-
     public List<Video> getVideosByCourseId(String courseId){
+        System.out.println("Fetching videos for courseId: " + courseId); // Add a log to verify courseId
         return videoRepo.getAllVideoByCourseId(courseId);
     }
+
 
     public Video updateVideo(String id, Video video) {
                Video existVideo = videoRepo.findById(id).orElse(null);

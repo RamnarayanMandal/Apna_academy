@@ -128,12 +128,13 @@ const AddCourse = ({ selectCourse, setShowModal }) => {
   };
 
   return (
-    <div className="container mx-auto p-4 w-full max-h-screen overflow-y-auto m-5">
+    <div className="container  p-4 w-full max-h-screen overflow-y-auto m-5">
       <h1 className="text-2xl font-bold mb-4">
         {selectCourse ? "Update Course" : "Add Course"}
       </h1>
-      
-        <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="courseName">
               Course Name
@@ -162,28 +163,9 @@ const AddCourse = ({ selectCourse, setShowModal }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="description">
-              Description
-            </label>
-            <ReactQuill
-              value={course.description}
-              onChange={handleDescriptionChange}
-              className="w-full"
-              modules={{
-                toolbar: [
-                  [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                  ['bold', 'italic', 'underline'],
-                  ['link'],
-                  [{ 'align': [] }],
-                  ['image', 'video']
-                ],
-              }}
-              formats={['header', 'font', 'list', 'bold', 'italic', 'underline', 'link', 'align', 'image', 'video']}
-              placeholder="Enter course description..."
-            />
-          </div>
+
+
+
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="startingDate">
               Starting Date
@@ -210,7 +192,7 @@ const AddCourse = ({ selectCourse, setShowModal }) => {
               className="w-full px-3 py-2 border rounded"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label className="block text-sm font-medium mb-1" htmlFor="image">
               Upload Course Image
             </label>
@@ -223,16 +205,40 @@ const AddCourse = ({ selectCourse, setShowModal }) => {
               accept="image/*"
             />
           </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            disabled={loading} // Disable button during loading
-          >
-            {loading ? "Processing..." : selectCourse ? "Update Course" : "Add Course"}
-          </button>
-        </form>
-      </div>
-    
+
+        </div>
+        <div className="w-full">
+          <label className="block text-sm font-medium mb-1" htmlFor="courseName">
+            Description (Rich Text Editor)
+          </label>
+          <ReactQuill
+            value={course.description}
+            onChange={handleDescriptionChange}
+            className="w-full"
+            modules={{
+              toolbar: [
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['bold', 'italic', 'underline'],
+                ['link'],
+                [{ 'align': [] }],
+                ['image', 'video']
+              ],
+            }}
+            formats={['header', 'font', 'list', 'bold', 'italic', 'underline', 'link', 'align', 'image', 'video']}
+            placeholder="Enter course description..."
+          />
+        </div>
+        <button
+          type="submit"
+          className="px-4 py-2 my-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+          disabled={loading} // Disable button during loading
+        >
+          {loading ? "Processing..." : selectCourse ? "Update Course" : "Add Course"}
+        </button>
+      </form>
+    </div>
+
   );
 };
 
