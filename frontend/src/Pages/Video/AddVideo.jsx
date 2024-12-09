@@ -35,9 +35,7 @@ const AddVideo = ({ selectVideo, setShowModal }) => {
   };
 
   useEffect(() => {
-    fetchAllCoursesOfTeacher();  // Fetch courses when the component mounts
-
-    // If selectVideo is passed as a prop, set the courseId to it
+    fetchAllCoursesOfTeacher();
     if (selectVideo) {
       setFormData({
         ...formData,

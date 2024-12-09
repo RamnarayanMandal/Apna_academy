@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FaBook, FaVideo, FaClipboardList, FaChartLine, FaComments, FaQuestionCircle, FaUpload, FaUserCog, FaCogs, FaSignOutAlt } from 'react-icons/fa';
+import { FaBook, FaVideo, FaClipboardList, FaChartLine, FaComments, FaQuestionCircle, FaUpload, FaUserCog, FaCogs, FaSignOutAlt, FaPlus, FaMinus } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 
 export const TeacherSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false); // State to toggle "Create & Manage Courses"
+  const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // State to toggle "Assignments"
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate(); // For navigation
 
@@ -13,6 +14,14 @@ export const TeacherSideBar = () => {
     // Clear any session or authentication data here, if applicable
     localStorage.removeItem('authToken'); // Example for clearing authToken
     navigate('/login'); // Use navigate instead of history.push
+  };
+
+  const toggleCourses = () => {
+    setIsCoursesOpen(!isCoursesOpen);
+  };
+
+  const toggleAssignments = () => {
+    setIsAssignmentsOpen(!isAssignmentsOpen);
   };
 
   return (
@@ -41,22 +50,23 @@ export const TeacherSideBar = () => {
         <li>
           <a
             href="#create-manage-courses"
-            onClick={() => setIsCoursesOpen(!isCoursesOpen)} // Toggle course management
+            onClick={toggleCourses} // Toggle course management
             className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
           >
             <FaBook className="mr-4" />
             {isOpen && 'Create & Manage Courses'}
+            <span className="ml-auto">{isCoursesOpen ? <FaMinus /> : <FaPlus />}</span>
           </a>
           {isCoursesOpen && (
-            <ul className="ml-6 space-y-2"> {/* Nested list for "Create & Manage Courses" */}
+            <ul className="ml-10 space-y-2"> {/* Nested list for "Create & Manage Courses" */}
               <li>
-                <a href="/admin-teacher-add-course" className="hover:text-blue-500">
+                <a href="/admin-teacher-add-course" className="hover:text-blue-500 font-medium">
                   Add New Course
                 </a>
               </li>
               {/* New child item: Add Video */}
               <li>
-                <a href="/admin-teacher-add-video" className="hover:text-blue-500">
+                <a href="/admin-teacher-add-video" className="hover:text-blue-500 font-medium">
                   Add Video
                 </a>
               </li>
@@ -64,10 +74,35 @@ export const TeacherSideBar = () => {
           )}
         </li>
         <li>
-          <a href="#courses" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a
+            href="#courses"
+            onClick={toggleAssignments} // Toggle "Assignments"
+            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+          >
             <FaClipboardList className="mr-4" />
             {isOpen && 'Assignments'}
+            <span className="ml-auto">{isAssignmentsOpen ? <FaMinus /> : <FaPlus />}</span>
           </a>
+          {isAssignmentsOpen && (
+            <ul className="ml-6 space-y-2"> {/* Nested list for "Assignments" */}
+              <li>
+                <a
+                  href="/assignment-dashboard"
+                  className="flex items-center p-4 hover:bg-gray-500 rounded font-medium "
+                >
+                   Assignment Dashboard
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#add-assignment"
+                  className="flex items-center p-4 hover:bg-gray-500 rounded font-medium "
+                >
+                  Add Assignment
+                </a>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <a href="#add-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">

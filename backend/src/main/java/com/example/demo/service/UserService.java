@@ -51,9 +51,7 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password)
         );
-
         if (authentication.isAuthenticated()) {
-        	
         	
         	
             return jwtService.generateToken(email);

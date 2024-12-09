@@ -34,7 +34,7 @@ public class Course {
     private List<Video> video;
     private List<Review> review;
     private String adminId;
-    private String teacherId;
+    private List <Teacher> teacher ;
 
     private String image;
 
@@ -44,7 +44,7 @@ public class Course {
     private LocalDateTime updatedAt;
 
     public Course(String id,String adminId, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students,
-                  List<NoteBook> notebook, List<Video> video, List<Review> review, String teacherId, String image) {
+                  List<NoteBook> notebook, List<Video> video, List<Review> review,  List <Teacher> teacher, String image) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -55,7 +55,7 @@ public class Course {
         this.notebook = notebook;
         this.video = video;
         this.review = review;
-        this.teacherId = teacherId;
+        this.teacher = teacher;
         this.image = image;
         this.adminId = adminId;
     }
@@ -74,7 +74,7 @@ public class Course {
                 ", video=" + video +
                 ", review=" + review +
                 ", adminId='" + adminId + '\'' +
-                ", teacherId=" + teacherId +
+                ", teacher=" + teacher +
                 ", image='" + image + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

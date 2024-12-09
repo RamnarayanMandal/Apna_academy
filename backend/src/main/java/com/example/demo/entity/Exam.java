@@ -35,7 +35,7 @@ public class Exam {
     private Double passingScore;  // Minimum passing score
     private String instructions;  // Instructions for the exam
     private Double maximumMarks;  // Maximum possible marks for the exam
-
+    private List<Teacher> teacher;
     @CreatedDate
     private LocalDateTime createdAt;  // Created timestamp
 

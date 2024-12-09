@@ -69,4 +69,9 @@ public class TeacherController {
             return new ResponseEntity<>("Error while updating teacher: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/total-teachers")
+    public ResponseEntity<Long> getTotalTeachers(){
+        return ResponseEntity.ok(service.totalTeacher());
+    }
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';  // Use useParams for examId from URL
 import { StudentSideBar } from '../Student/StudentSidebar';  // Import StudentSidebar component
 
-const GetExamByCourse = () => {
+const StudentExamPortal = () => {
   const { courseId } = useParams();  // Get courseId from URL params
   const [exam, setExam] = useState(null);  // State to store exam data
   const [loading, setLoading] = useState(false);  // State to track loading
@@ -104,4 +104,4 @@ const GetExamByCourse = () => {
   );
 };
 
-export default GetExamByCourse;
+export default StudentExamPortal;

@@ -61,7 +61,9 @@ public class TeacherService {
 
 
 
-	
+	public long totalTeacher(){
+		return repo.count();
+	}
 	
 	
 
