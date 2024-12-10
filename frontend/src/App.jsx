@@ -48,7 +48,7 @@ function App() {
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
-            <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />
+            {/* <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} /> */}
             <Route path='/student/courses/:id' element={<GetCourseByID />} />           
             <Route path='/assignment-dashboard' element={<AssignmentDashboard/>} />
             <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} />           
