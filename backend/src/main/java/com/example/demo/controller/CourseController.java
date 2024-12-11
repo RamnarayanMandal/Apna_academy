@@ -175,7 +175,7 @@ public class CourseController {
             Course updatedCourse = courseService.addTeacherToCourse(teacherId,courseId);
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException ex) {
-            
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         }

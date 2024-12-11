@@ -92,7 +92,7 @@ const AssignTeacherInCourse = () => {
               <th className="border border-gray-400 px-4 py-2">#</th>
               <th className="border border-gray-400 px-4 py-2">Course Name</th>
               <th className="border border-gray-400 px-4 py-2">Course Code</th>
-            
+
               <th className="border border-gray-400 px-4 py-2">Students</th>
               <th className="border border-gray-400 px-4 py-2">Teachers</th>
               <th className="border border-gray-400 px-4 py-2">Start Date</th>
@@ -110,17 +110,18 @@ const AssignTeacherInCourse = () => {
                   <td className="border border-gray-400 px-4 py-2 text-center">{index + 1}</td>
                   <td className="border border-gray-400 px-4 py-2">{course.courseName}</td>
                   <td className="border border-gray-400 px-4 py-2">{course.courseCode}</td>
-                 
+
                   <td className="border border-gray-400 px-4 py-2">
                     {course.students?.length > 0
                       ? course.students.map((student) => student.name).join(', ')
                       : 'No Students'}
                   </td>
                   <td className="border border-gray-400 px-4 py-2">
-                    {course.teacher
-                      ? course.teacher.name
+                    {course.teacher && course.teacher.length > 0
+                      ? course.teacher.map(teacher => teacher.name).join(', ') // Join teacher names
                       : 'No Teacher'}
                   </td>
+
                   <td className="border border-gray-400 px-4 py-2">{course.startingDate}</td>
                   <td className="border border-gray-400 px-4 py-2">{course.endDate}</td>
                   <td className="border border-gray-400 px-4 py-2 text-center">

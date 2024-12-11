@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface VideoRepo extends MongoRepository<Video, String> {
-    public List<Video> getAllVideoByCourseId(String courseId);
+    List<Video> getAllVideoByCourseId(String courseId);
 }

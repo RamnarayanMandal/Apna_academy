@@ -20,6 +20,8 @@ import { CourseHomePage } from './Pages/Courses/CourseHomePage'
 import { VideoHomePage } from './Pages/Video/VideoHomePage'
 import GetCourseByID from './Pages/Courses/GetCourseByID'
 import AssignmentDashboard from './Pages/Exam/AssignmentDashboard'
+import MyCourseById from './Pages/Student/MyCourseById'
+import VideoDetails from './Pages/Video/VideoDetails'
 import GetAllQuestion from './Pages/Exam/GetAllQuestion'
 
 
@@ -28,9 +30,9 @@ function App() {
 
   return (
     <>
-      <ThemeProvider>
+      <ThemeProvider cla>
         
-        <BrowserRouter>
+        <BrowserRouter >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/student/registration" element={<SRegistration />} />
@@ -49,9 +51,16 @@ function App() {
             <Route path='/student-mycourse' element={<StudentMyCourses/>} />
             <Route path='/student-questions/:courseId/:examId' element={<Question/>} />
             <Route path='/student-exam' element={<Exams/>} />
+           {/* <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} />  */}
             {/* <Route path='/student-exam-portal/:courseId' element={<GetExamByCourse/>} /> */}
             <Route path='/student/courses/:id' element={<GetCourseByID />} />           
             <Route path='/assignment-dashboard' element={<AssignmentDashboard/>} />
+            <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} />           
+            <Route path='/student/courses/:id' element={<GetCourseByID />} /> 
+            <Route path='/student/Mycourses/:id' element={<MyCourseById />} />
+            <Route path='/video/:id' element={<VideoDetails />} />
+
+
             <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} /> 
             <Route path='/teacher-get-questions/:examId' element={<GetAllQuestion/>} /> 
 

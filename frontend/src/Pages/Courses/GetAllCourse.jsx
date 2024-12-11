@@ -202,7 +202,7 @@ const GetAllCourse = () => {
               src={course.image}
               alt={`${course.courseName}`}
               className="w-full h-72 object-cover rounded-md mb-4"
-              onClick={()=>hanleOnclicked(course._id)}
+              onClick={()=>hanleOnclicked(course.id)}
             />
             <h2 className="text-xl font-bold mb-2">{course.courseName}</h2>
             <div
