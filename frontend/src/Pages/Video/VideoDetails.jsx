@@ -6,6 +6,8 @@ import { StudentSideBar } from '../Student/StudentSidebar';
 import { FaShare } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa6";
 import { FcLike } from "react-icons/fc";
+import CommentComponent from '../../Component/CommentComponent';
+import CommentsSection from '../../Component/CommentsSection';
 
 const VideoDetails = () => {
     const { isDarkMode } = useTheme(); // Using dark mode state from context or provider
@@ -18,11 +20,27 @@ const VideoDetails = () => {
     const navigate = useNavigate();
     const { state } = useLocation();  // Accessing the state passed through Link
     const videos = state?.data || [];
+    const [likes, setLikes] = useState([]);
 
-    console.log(videos)
+    const userId = localStorage.getItem('CurrentUserId');
+
+
+    const fetchLikeByVideosId = async () => {
+        try {
+            const resp = await axios.get(`${BASE_URL}/api/like/viedo/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLikes(resp.data);
+        } catch (error) {
+            console.error('Error fetching like status:', error);
+        }
+
+    }
+
 
     useEffect(() => {
         fetchVideoById();
+        fetchLikeByVideosId();
     }, [id]);
 
     const fetchVideoById = async () => {
@@ -65,9 +83,73 @@ const VideoDetails = () => {
         );
     }
 
+
+
+
     const handleLink = async (id) => {
         navigate(`/video/${id}`, { state: { data: videos } });
     };
+
+    const postLike = async () => {
+        try {
+            await axios.post(`${BASE_URL}/api/like/`, {
+                videoId: id,
+                userId: userId,
+                liked: true,
+            }, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            fetchLikeByVideosId();
+
+        } catch (error) {
+            console.error('Error liking video:', error);
+
+        }
+    };
+
+    const handleShare = () => {
+        // If the browser supports the Share API (e.g., mobile browsers)
+        if (navigator.share) {
+            navigator.share({
+                title: video.title,
+                text: video.description,
+                url: video.videoFile, // You can share the video URL directly
+            })
+                .then(() => console.log('Video shared successfully'))
+                .catch((error) => console.error('Error sharing the video:', error));
+        } else {
+            // Fallback: Copy the URL to the clipboard for desktop users
+            navigator.clipboard.writeText(video.videoFile)
+                .then(() => alert('Video link copied to clipboard!'))
+                .catch((error) => console.error('Error copying link to clipboard:', error));
+        }
+    };
+
+
+    const handleDownload = () => {
+        // Check if the video URL exists
+        if (video && video.videoFile) {
+            // Create a temporary anchor element
+            const link = document.createElement('a');
+
+            // Set the href to the video file URL and set the download attribute to the video's title
+            link.href = video.videoFile; // This is the URL of the video file
+            link.download = video.title || 'downloaded_video'; // Use the video title as the filename, fallback to 'downloaded_video'
+
+            // Append the link to the body (it's necessary for triggering the download)
+            document.body.appendChild(link);
+
+            // Trigger the click event to initiate the download
+            link.click();
+
+            // Clean up by removing the link from the DOM
+            document.body.removeChild(link);
+        } else {
+            alert("Video file not available for download.");
+        }
+    };
+
 
     return (
         <div
@@ -105,12 +187,22 @@ const VideoDetails = () => {
                                 </div>
                             </div>
 
-                            {/* Right Section: Icons */}
-                            <div className="flex lg:justify-start justify-end items-center gap-8">
-                                <FaShare className="cursor-pointer text-2xl" />
-                                <FaDownload className="cursor-pointer text-2xl" />
-                                <FcLike className="cursor-pointer text-2xl" />
+
+                            <div className={`flex lg:justify-start justify-center my-4 items-center gap-8 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-300 text-gray-900'} rounded-full p-4`}>
+
+                                <FaShare className="cursor-pointer text-2xl" onClick={handleShare} />
+
+
+                                <FaDownload className="cursor-pointer text-2xl" onClick={handleDownload} />
+                                <div className='flex gap-2 justify-center items-center content-center'>
+                                    <FcLike className="cursor-pointer text-3xl" onClick={postLike} />
+                                    <p>{likes.length}</p>
+                                </div>
                             </div>
+
+                        </div>
+                        <div className='w-full'>
+                            <CommentsSection videoId={id} />
                         </div>
 
                     </div>
@@ -132,6 +224,7 @@ const VideoDetails = () => {
                                             </div>
                                             <p className='text-center'>{video.description}</p>
 
+
                                             {/* Hard-set Like and Comment Counts */}
                                             <div className="flex space-x-4 text-blue-600">
                                                 <button className="flex items-center space-x-2">
@@ -150,6 +243,7 @@ const VideoDetails = () => {
                                                     <span>Comment (10)</span> {/* Hard-set Comment count */}
                                                 </button>
                                             </div>
+
                                         </div>
                                     </div>
                                 ))}
