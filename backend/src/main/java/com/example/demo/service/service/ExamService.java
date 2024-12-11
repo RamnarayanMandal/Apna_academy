@@ -5,6 +5,8 @@ import com.example.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,8 @@ public class ExamService {
 
     @Autowired
     private CourseRepo courseRepo;
+
+
 
     public Exam createExam(Exam exam) {
         return examRepo.save(exam);
@@ -116,7 +120,7 @@ public class ExamService {
         return examRepo.findById(examId).orElseThrow(() -> new IllegalArgumentException("Exam not found"));
     }
 
-    public Exam getExamByCourseId(String courseId){
+    public List<Exam> getExamByCourseId(String courseId){
         return examRepo.findByCourseId(courseId);
     }
 
@@ -169,9 +173,64 @@ public class ExamService {
         return exam; // Return the updated exam
     }
 
+    public String deleteExam(String id){
+        examRepo.deleteById(id);
+        return "Exam deleted succesfully";
+    }
+
     public Long totalExams(){
         return examRepo.count();
     }
+
+
+    @Transactional
+    public Exam addQuestionsToExam(String examId, List<Question> newQuestions) {
+        // Save the list of questions to the Question collection
+        List<Question> savedQuestions = questionRepo.saveAll(newQuestions);
+
+        // Retrieve the exam by its ID
+        Exam exam = examRepo.findById(examId).orElseThrow(() -> new RuntimeException("Exam not found"));
+
+        // Add the new questions to the exam's questions list
+        List<Question> questions = exam.getQuestions();
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
+        questions.addAll(savedQuestions);
+
+        // Update the exam's questions list
+        exam.setQuestions(questions);
+
+        // Save the updated exam
+        return examRepo.save(exam);
+    }
+
+
+    @Transactional
+    public void removeQuestionFromExams(String questionId) {
+        List<Exam> exams = examRepo.findAll();  // Get all exams
+
+        for (Exam exam : exams) {
+            // Ensure the questions are fully initialized
+            List<Question> questions = exam.getQuestions();
+            if (questions != null) {
+                System.out.println("Exam contains " + questions.size() + " questions before removal.");
+
+                // Log all the questions before removal
+                questions.forEach(question -> System.out.println("Question ID: " + question.getId()));
+
+                // Remove the question with matching ID
+                questions.removeIf(question -> question.getId().equals(questionId));
+                System.out.println("Exam contains " + questions.size() + " questions after removal.");
+            }
+        }
+
+        // Persist the changes back to the repository
+        examRepo.saveAll(exams);  // Save the updated list of exams
+    }
+
+
+
 
 //    public Exam getExamByStudentId(String studentId) {
 //        return

@@ -16,9 +16,9 @@ public class QuestionController {
     private QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-        Question savedQuestion = questionService.saveQuestion(question);
-        return ResponseEntity.ok(savedQuestion);
+    public ResponseEntity<List<Question>> createQuestions(@RequestBody List<Question> questions) {
+        List<Question> savedQuestions = questionService.saveQuestion(questions);
+        return ResponseEntity.ok(savedQuestions);
     }
 
 
@@ -45,5 +45,7 @@ public class QuestionController {
         List<Question> questions = questionService.getQuestionsByCourseId(courseId);
         return ResponseEntity.ok(questions);
     }
+
+
 
 }

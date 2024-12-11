@@ -35,16 +35,15 @@ public class Course {
     private List<Review> review;
     private String adminId;
     private List <Teacher> teacher ;
-
     private String image;
-
+    private List<Exam> exam;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     public Course(String id,String adminId, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students,
-                  List<NoteBook> notebook, List<Video> video, List<Review> review,  List <Teacher> teacher, String image) {
+                  List<NoteBook> notebook, List<Video> video, List<Review> review,  List <Teacher> teacher, String image ,List<Exam> exam) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -58,6 +57,7 @@ public class Course {
         this.teacher = teacher;
         this.image = image;
         this.adminId = adminId;
+        this.exam = exam;
     }
 
     @Override
@@ -76,6 +76,7 @@ public class Course {
                 ", adminId='" + adminId + '\'' +
                 ", teacher=" + teacher +
                 ", image='" + image + '\'' +
+                ", exam=" + exam +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
