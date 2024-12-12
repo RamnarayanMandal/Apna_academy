@@ -5,6 +5,8 @@ import com.example.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,8 @@ public class ExamService {
 
     @Autowired
     private CourseRepo courseRepo;
+
+
 
     public Exam createExam(Exam exam) {
         return examRepo.save(exam);
@@ -116,7 +120,7 @@ public class ExamService {
         return examRepo.findById(examId).orElseThrow(() -> new IllegalArgumentException("Exam not found"));
     }
 
-    public Exam getExamByCourseId(String courseId){
+    public List<Exam> getExamByCourseId(String courseId){
         return examRepo.findByCourseId(courseId);
     }
 
@@ -169,9 +173,107 @@ public class ExamService {
         return exam; // Return the updated exam
     }
 
+    public String deleteExam(String id){
+        examRepo.deleteById(id);
+        return "Exam deleted succesfully";
+    }
+
     public Long totalExams(){
         return examRepo.count();
     }
+
+
+    @Transactional
+    public Exam addQuestionsToExam(String examId, List<Question> newQuestions) {
+        // Save the list of questions to the Question collection
+        List<Question> savedQuestions = questionRepo.saveAll(newQuestions);
+
+        // Retrieve the exam by its ID
+        Exam exam = examRepo.findById(examId).orElseThrow(() -> new RuntimeException("Exam not found"));
+
+        // Add the new questions to the exam's questions list
+        List<Question> questions = exam.getQuestions();
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
+        questions.addAll(savedQuestions);
+
+        // Update the exam's questions list
+        exam.setQuestions(questions);
+
+        // Save the updated exam
+        return examRepo.save(exam);
+    }
+
+
+    @Transactional
+    public void removeQuestionFromExams(String questionId) {
+        List<Exam> exams = examRepo.findAll();  // Get all exams
+
+        for (Exam exam : exams) {
+            // Ensure the questions are fully initialized
+            List<Question> questions = exam.getQuestions();
+            if (questions != null) {
+                System.out.println("Exam contains " + questions.size() + " questions before removal.");
+
+                // Log all the questions before removal
+                questions.forEach(question -> System.out.println("Question ID: " + question.getId()));
+
+                // Remove the question with matching ID
+                questions.removeIf(question -> question.getId().equals(questionId));
+                System.out.println("Exam contains " + questions.size() + " questions after removal.");
+            }
+        }
+
+        // Persist the changes back to the repository
+        examRepo.saveAll(exams);  // Save the updated list of exams
+    }
+
+    @Transactional
+    public Exam updateExam(String examId, Exam updatedExam) {
+        // Find the exam by ID
+        Optional<Exam> existingExamOpt = examRepo.findById(examId);
+        if (!existingExamOpt.isPresent()) {
+            throw new RuntimeException("Exam not found with id " + examId);
+        }
+
+        Exam existingExam = existingExamOpt.get();
+
+        // Update exam fields
+        existingExam.setExamName(updatedExam.getExamName());
+        existingExam.setCourseId(updatedExam.getCourseId());
+        existingExam.setStartTime(updatedExam.getStartTime());
+        existingExam.setEndTime(updatedExam.getEndTime());
+        existingExam.setDuration(updatedExam.getDuration());
+        existingExam.setExamType(updatedExam.getExamType());
+        existingExam.setPassingScore(updatedExam.getPassingScore());
+        existingExam.setInstructions(updatedExam.getInstructions());
+        existingExam.setMaximumMarks(updatedExam.getMaximumMarks());
+        existingExam.setFeedback(updatedExam.getFeedback());
+
+        // Save the updated exam
+        Exam savedExam = examRepo.save(existingExam);
+
+        // Update the associated course
+        if (updatedExam.getCourseId() != null) {
+            updateCourseWithExam(updatedExam.getCourseId(), savedExam);
+        }
+
+        return savedExam;
+    }
+
+    private void updateCourseWithExam(String courseId, Exam updatedExam) {
+        Optional<Course> courseOpt = courseRepo.findById(courseId);
+        if (courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+            // Update the course's list of exams
+            course.getExam().removeIf(exam -> exam.getId().equals(updatedExam.getId()));  // Remove old version
+            course.getExam().add(updatedExam);  // Add updated version
+
+            courseRepo.save(course);
+        }
+    }
+
 
 //    public Exam getExamByStudentId(String studentId) {
 //        return

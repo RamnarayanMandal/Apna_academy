@@ -93,14 +93,7 @@ export const TeacherSideBar = () => {
                    Assignment Dashboard
                 </a>
               </li>
-              <li>
-                <a
-                  href="#add-assignment"
-                  className="flex items-center p-4 hover:bg-gray-500 rounded font-medium "
-                >
-                  Add Assignment
-                </a>
-              </li>
+              
             </ul>
           )}
         </li>

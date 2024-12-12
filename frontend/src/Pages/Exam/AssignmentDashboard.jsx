@@ -127,11 +127,11 @@ const AssignmentDashboard = () => {
         </div>
 
         {/* Display Selected Course (Optional) */}
-        {selectedCourse && (
+        {/* {selectedCourse && (
           <div className="mt-4">
             <p className="text-lg">You selected course: {selectedCourseName}</p>
           </div>
-        )}
+        )} */}
 
         {/* Pass selectedCourse and selectedCourseName to GetAllExam Component */}
         <GetAllExam courseId={selectedCourse} courseName={selectedCourseName} />

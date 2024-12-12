@@ -31,5 +31,4 @@ public class Video {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-
 }
