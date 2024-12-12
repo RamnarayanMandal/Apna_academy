@@ -229,7 +229,50 @@ public class ExamService {
         examRepo.saveAll(exams);  // Save the updated list of exams
     }
 
+    @Transactional
+    public Exam updateExam(String examId, Exam updatedExam) {
+        // Find the exam by ID
+        Optional<Exam> existingExamOpt = examRepo.findById(examId);
+        if (!existingExamOpt.isPresent()) {
+            throw new RuntimeException("Exam not found with id " + examId);
+        }
 
+        Exam existingExam = existingExamOpt.get();
+
+        // Update exam fields
+        existingExam.setExamName(updatedExam.getExamName());
+        existingExam.setCourseId(updatedExam.getCourseId());
+        existingExam.setStartTime(updatedExam.getStartTime());
+        existingExam.setEndTime(updatedExam.getEndTime());
+        existingExam.setDuration(updatedExam.getDuration());
+        existingExam.setExamType(updatedExam.getExamType());
+        existingExam.setPassingScore(updatedExam.getPassingScore());
+        existingExam.setInstructions(updatedExam.getInstructions());
+        existingExam.setMaximumMarks(updatedExam.getMaximumMarks());
+        existingExam.setFeedback(updatedExam.getFeedback());
+
+        // Save the updated exam
+        Exam savedExam = examRepo.save(existingExam);
+
+        // Update the associated course
+        if (updatedExam.getCourseId() != null) {
+            updateCourseWithExam(updatedExam.getCourseId(), savedExam);
+        }
+
+        return savedExam;
+    }
+
+    private void updateCourseWithExam(String courseId, Exam updatedExam) {
+        Optional<Course> courseOpt = courseRepo.findById(courseId);
+        if (courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+            // Update the course's list of exams
+            course.getExam().removeIf(exam -> exam.getId().equals(updatedExam.getId()));  // Remove old version
+            course.getExam().add(updatedExam);  // Add updated version
+
+            courseRepo.save(course);
+        }
+    }
 
 
 //    public Exam getExamByStudentId(String studentId) {

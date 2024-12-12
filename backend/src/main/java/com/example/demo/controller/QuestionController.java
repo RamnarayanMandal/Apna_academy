@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.entity.Question;
 import com.example.demo.service.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,18 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Question> updateQuestion(@PathVariable("id") String questionId,
+                                                   @RequestBody @Valid Question updatedQuestion) {
+        try {
+            // Update the question and related exams
+            Question updated = questionService.updateQuestion(questionId, updatedQuestion);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            // Handle the case where the question is not found
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 
 }

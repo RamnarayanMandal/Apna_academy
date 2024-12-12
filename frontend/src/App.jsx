@@ -33,8 +33,7 @@ function App() {
 
   return (
     <>
-      <ThemeProvider cla>
-        
+      <ThemeProvider >        
         <BrowserRouter >
           <Routes>
             <Route path="/" element={<Home />} />
@@ -60,11 +59,7 @@ function App() {
             <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} />           
             <Route path='/student/courses/:id' element={<GetCourseByID />} /> 
             <Route path='/student/Mycourses/:id' element={<MyCourseById />} />
-            <Route path='/video/:id' element={<VideoDetails />} />
-
-
-
-          
+            <Route path='/video/:id' element={<VideoDetails />} />          
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

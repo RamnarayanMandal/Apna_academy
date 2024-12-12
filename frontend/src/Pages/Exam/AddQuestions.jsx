@@ -18,9 +18,11 @@ const AddQuestions = ({ examId, question, onClose }) => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const BASE_URL = import.meta.env.VITE_API_URL;
+
   // Effect to handle if the form is in edit mode or add mode
   useEffect(() => {
     if (question) {
+      // Pre-fill the form with the data from the 'question' prop when in edit mode
       setQuestions([
         {
           question: question.question,
@@ -34,6 +36,14 @@ const AddQuestions = ({ examId, question, onClose }) => {
       setIsEditMode(true); // Edit mode
     } else {
       setIsEditMode(false); // Add mode
+      setQuestions([{
+        question: '',
+        choice1: '',
+        choice2: '',
+        choice3: '',
+        choice4: '',
+        correctAnswer: '',
+      }]); // Reset the question fields
     }
   }, [question]);
 
@@ -70,16 +80,48 @@ const AddQuestions = ({ examId, question, onClose }) => {
         'Content-Type': 'application/json', // Make sure content-type is JSON
       };
 
-      // Add questions to the exam (whether in add or edit mode)
-      await axios.post(`${BASE_URL}/api/exams/${examId}/questions`, questions, { headers });
+      // If it's in Edit mode (i.e., a question exists), we make a PUT request to update the question
+      if (isEditMode) {
+        await axios.put(
+          `${BASE_URL}/api/questions/${question.id}`, // Use the specific question ID for updating
+          questions[0], // Only one question in the array since we're editing
+          { headers }
+        );
+      } else {
+        // If it's not in Edit mode, we make a POST request to add new questions
+        await axios.post(`${BASE_URL}/api/exams/${examId}/questions`, questions, { headers });
+      }
 
       Swal.fire({
         icon: 'success',
         title: isEditMode ? 'Updated!' : 'Added!',
         text: isEditMode
-          ? 'The questions were updated successfully.'
-          : 'The new questions were added successfully.',
+          ? 'The question was updated successfully.'
+          : 'The new question(s) were added successfully.',
       });
+
+      // After successfully adding or updating, you should refetch or reset the form state
+      // Option 1: Reset form after adding or updating
+      if (isEditMode) {
+        setQuestions([{
+          question: '',
+          choice1: '',
+          choice2: '',
+          choice3: '',
+          choice4: '',
+          correctAnswer: '',
+        }]);
+      } else {
+        // If it's add mode, we keep the newly added question in state to reflect the new question.
+        setQuestions([{
+          question: '',
+          choice1: '',
+          choice2: '',
+          choice3: '',
+          choice4: '',
+          correctAnswer: '',
+        }]);
+      }
 
       onClose(); // Close the modal form after successful submission
     } catch (error) {
@@ -186,7 +228,7 @@ const AddQuestions = ({ examId, question, onClose }) => {
               </div>
 
               {/* Remove this question */}
-              {questions.length > 1 && (
+              {questions.length > 1 && !isEditMode && (
                 <button
                   type="button"
                   onClick={() => setQuestions(questions.filter((_, i) => i !== index))}
@@ -201,18 +243,21 @@ const AddQuestions = ({ examId, question, onClose }) => {
           ))}
 
           <div className="flex justify-between items-center mb-4">
-            <button
-              type="button"
-              onClick={handleAddQuestion}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
-            >
-              Add Another Question
-            </button>
+            {/* Only show Add Another Question button if it's in Add mode */}
+            {!isEditMode && (
+              <button
+                type="button"
+                onClick={handleAddQuestion}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+              >
+                Add Another Question
+              </button>
+            )}
             <button
               type="submit"
               className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {isEditMode ? 'Update Questions' : 'Add Questions'}
+              {isEditMode ? 'Update Question' : 'Add Question'}
             </button>
           </div>
         </form>

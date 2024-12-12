@@ -4,16 +4,16 @@ import Swal from "sweetalert2"; // For success/error messages
 
 const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
   const [exam, setExam] = useState({
-    examName: courseName, // This will still exist for submitting the exam name
-    courseId: courseId || "",  // Set the courseId from props
-    startTime: 0,
-    endTime:0,
-    duration: 0,
-    examType: "",
-    passingScore: 0,
-    instructions: "",
-    maximumMarks: 0,
-    feedback: "",
+    examName: selectExam ? selectExam.examName : courseName, // Default to course name or selected exam name
+    courseId: courseId || "", // Set the courseId from props
+    startTime: selectExam ? selectExam.startTime : "",
+    endTime: selectExam ? selectExam.endTime : "",
+    duration: selectExam ? selectExam.duration : 0,
+    examType: selectExam ? selectExam.examType : "",
+    passingScore: selectExam ? selectExam.passingScore : 0,
+    instructions: selectExam ? selectExam.instructions : "",
+    maximumMarks: selectExam ? selectExam.maximumMarks : 0,
+    feedback: selectExam ? selectExam.feedback : "",
   });
 
   const [loading, setLoading] = useState(false); // Loading state
@@ -43,11 +43,11 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Convert startTime and endTime to milliseconds
+
+    // Convert startTime and endTime to milliseconds if they are valid dates
     const startTimeMillis = new Date(exam.startTime).getTime();
     const endTimeMillis = new Date(exam.endTime).getTime();
-  
+
     // Prepare form data for submission
     const formData = new FormData();
     Object.keys(exam).forEach((key) => {
@@ -57,18 +57,17 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
         formData.append(key, exam[key]);
       }
     });
-  
+
     // Override startTime and endTime with the correct data type
     formData.set("startTime", startTimeMillis);
     formData.set("endTime", endTimeMillis);
-  
+
     setLoading(true); // Start loading
-  
+
     try {
       if (selectExam) {
-        console.log("Updating Exam:", exam);
-        // Update existing exam with teacherId as a query parameter
-        await axios.put(`${BASE_URL}/api/exams?teacherId=${teacherId}`, formData, {
+        // Update existing exam
+        await axios.put(`${BASE_URL}/api/exams/${selectExam.id}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -80,8 +79,7 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
           text: "The exam was updated successfully.",
         });
       } else {
-        console.log("Adding New Exam:", exam);
-        // Add a new exam with teacherId as a query parameter
+        // Add a new exam
         await axios.post(`${BASE_URL}/api/exams?teacherId=${teacherId}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -94,7 +92,7 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
           text: "The exam was added successfully.",
         });
       }
-  
+
       setShowModal(false); // Close the modal after success
     } catch (error) {
       console.error("Error during exam submission:", error);
@@ -107,7 +105,6 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
       setLoading(false); // Stop loading
     }
   };
-  
 
   return (
     <div className="container mx-auto p-4 w-full">
@@ -115,7 +112,6 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
         {selectExam ? "Update Exam" : "Add Exam"}
       </h1>
       <form onSubmit={handleSubmit}>
-       
         {/* Exam Name (still required for exam submission) */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1" htmlFor="examName">
@@ -125,7 +121,7 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
             type="text"
             id="examName"
             name="examName"
-            value={courseName}
+            value={exam.examName}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
             required

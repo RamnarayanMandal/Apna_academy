@@ -16,5 +16,7 @@ public interface ExamRepo extends MongoRepository<Exam, String> {
     @Query("{'courseId': ?0, 'studentExamResults.studentId': ?1}")
     List<Exam> findByCourseIdAndStudentId(String courseId, String studentId);
 
+    List<Exam> findExamsByQuestions(Question question);
+
 
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -158,6 +158,39 @@ public class ExamController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Exam> updateExam(
+            @PathVariable String id,
+            @RequestParam String examName,
+            @RequestParam String courseId,
+            @RequestParam Long startTime,
+            @RequestParam Long endTime,
+            @RequestParam Long duration,
+            @RequestParam String examType,
+            @RequestParam Double passingScore,
+            @RequestParam String instructions,
+            @RequestParam Double maximumMarks,
+            @RequestParam(required = false) String feedback) {
 
-
+        try {
+            Exam updatedExam = new Exam();
+            updatedExam.setExamName(examName);
+            updatedExam.setCourseId(courseId);
+            updatedExam.setStartTime(startTime);
+            updatedExam.setEndTime(endTime);
+            updatedExam.setDuration(duration);
+            updatedExam.setExamType(examType);
+            updatedExam.setPassingScore(passingScore);
+            updatedExam.setInstructions(instructions);
+            updatedExam.setMaximumMarks(maximumMarks);
+            updatedExam.setFeedback(feedback);
+            Exam exam = examService.updateExam(id, updatedExam); // Call ExamService
+            return ResponseEntity.ok(exam);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
+
+
+

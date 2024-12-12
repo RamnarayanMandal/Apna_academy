@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { IoMdTrash, IoMdCreate } from 'react-icons/io'; // Importing icons for delete and edit
-import { useParams } from 'react-router-dom'; 
-import { useTheme } from '../../ThemeProvider';// Import useTheme to access the theme context
+import { IoMdTrash, IoMdCreate, IoIosArrowBack } from 'react-icons/io'; // Importing icons for delete, edit, and back arrow
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useTheme } from '../../ThemeProvider'; // Import useTheme to access the theme context
 import { TeacherSideBar } from '../Teacher/TeacherSideBar';
 import AddQuestions from './AddQuestions'; // Import AddQuestions component
 import Swal from 'sweetalert2';
-
+import { GoArrowLeft } from "react-icons/go";
 const GetAllQuestion = () => {
   const { examId } = useParams();
   const { isDarkMode } = useTheme(); // Get the current theme
@@ -17,6 +17,7 @@ const GetAllQuestion = () => {
   const [editingQuestion, setEditingQuestion] = useState(null); // Track the question being edited
   const [token] = useState(localStorage.getItem('token'));
   const BASE_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate(); // Initialize navigate
 
   // Fetch all questions when the component mounts or examId/token changes
   useEffect(() => {
@@ -70,23 +71,37 @@ const GetAllQuestion = () => {
     }
   };
 
+  // Back button handler (navigate to the previous page)
+  const handleBack = () => {
+    navigate(-1); // Navigate to the previous page
+  };
+
   return (
     <div className={`min-h-screen flex flex-col lg:flex-row ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
       {/* Sidebar */}
       <TeacherSideBar />
 
       {/* Main Content Area */}
-      <div
-        className={`flex-1 p-6 overflow-y-auto lg:ml-64 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-900'}`}
-      >
-        {/* Button to show the Add Questions form */}
-        <button
-          className={`px-4 py-2 rounded-md mb-4 ${isDarkMode ? 'bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
-          onClick={() => setShowAddQuestionForm(true)} // Show the Add Questions form
-        >
-          Add New Question
-        </button>
+      <div className={`flex-1 p-6 overflow-y-auto lg:ml-64 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-900'}`}>
+        {/* Back Button with Circular Arrow (left aligned) */}
+        <div className="flex justify-between mb-4">
+          <button
+            onClick={handleBack}
+            className={`p-1 rounded-full  ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-white text-black hover:bg-gray-200'}`}
+          >
+            <GoArrowLeft size={20} />
+          </button>
 
+
+
+          {/* Button to show the Add Questions form */}
+          <button
+            className={`px-4 py-2 rounded-md mb-4 ${isDarkMode ? 'bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
+            onClick={() => setShowAddQuestionForm(true)} // Show the Add Questions form
+          >
+            Add New Question
+          </button>
+        </div>
         {/* Questions Table */}
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white mb-6">
           <table className={`min-w-full table-auto border-collapse text-sm ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-900'}`}>
@@ -104,12 +119,7 @@ const GetAllQuestion = () => {
             </thead>
             <tbody>
               {currentQuestions.map((question, index) => (
-                <tr
-                  key={question.id}
-                  className={`${
-                    isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                  } transition duration-300 ease-in-out`}
-                >
+                <tr key={question.id} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition duration-300 ease-in-out`}>
                   <td className="px-6 py-4">{index + 1}</td> {/* Serial number */}
                   <td className="px-6 py-4">{question.question}</td>
                   <td className="px-6 py-4">{question.choice1}</td>
@@ -151,18 +161,14 @@ const GetAllQuestion = () => {
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`${
-                isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-900'
-              } px-4 py-2 border border-gray-300 rounded-l-md`}
+              className={`${isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-900'} px-4 py-2 border border-gray-300 rounded-l-md`}
             >
               Previous
             </button>
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={indexOfLastQuestion >= questions.length}
-              className={`${
-                isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-900'
-              } px-4 py-2 border border-gray-300 rounded-r-md`}
+              className={`${isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-900'} px-4 py-2 border border-gray-300 rounded-r-md`}
             >
               Next
             </button>
