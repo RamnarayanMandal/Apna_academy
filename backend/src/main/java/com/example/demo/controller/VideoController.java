@@ -83,29 +83,44 @@ public class VideoController {
 
     }
 
+           @GetMapping("/course/{courseId}")
+            public ResponseEntity<?> GetVideoByCourseId(@PathVariable String courseId) {
+                try {
+                    System.out.println("Received request for courseId: " + courseId);
 
-    @GetMapping("/getVideoByCourseId/{courseId}")
-    public ResponseEntity<?> GetVideoByCourseId(@PathVariable String courseId) {
-        try {
-            System.out.println("Received request for courseId: " + courseId); // Log received courseId
-            List<Video> videos = (List<Video>) videoService.getVideosByCourseId(courseId);
+                    // Fetch videos by courseId
+                    List<VideoService.VideoWithLikes> videos = videoService.getVideosByCourseId(courseId);
 
-            if (videos.isEmpty()) {
-                System.out.println("No videos found for courseId: " + courseId);
+
+
+                    if (videos.isEmpty()) {
+                        System.out.println("No videos found for courseId: " + courseId);
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(Map.of("message", "No videos found for the given courseId", "data", List.of()));
+                    }
+
+
+                    // Successful response
+                    return ResponseEntity.ok(Map.of(
+                            "message", "Videos fetched successfully",
+                            "data", videos
+                    ));
+                } catch (IllegalArgumentException e) {
+                    // Handle specific exceptions if needed
+                    return ResponseEntity.badRequest().body(Map.of(
+                            "message", "Invalid courseId: " + courseId,
+                            "error", e.getMessage()
+                    ));
+                } catch (Exception e) {
+                    // Handle generic errors
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                            "message", "Error fetching videos",
+                            "error", e.getMessage()
+                    ));
+                }
             }
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Videos fetched successfully");
-            response.put("data", videos);
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Error fetching video: " + e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
 
 
 
-}
+

@@ -42,7 +42,7 @@ const MyCourseById = () => {
   const fetchVideoByCourseId = async () => {
     setLoading(true);
     try {
-      const resp = await axios.get(`${BASE_URL}/api/videos/getVideoByCourseId/${id}`, {
+      const resp = await axios.get(`${BASE_URL}/api/videos/course/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVideos(resp.data.data);
@@ -77,7 +77,7 @@ const MyCourseById = () => {
   const handleLink = async (id) => {
     navigate(`/video/${id}`, { state: { data: videos } });
   };
-  
+
 
   return (
     <div
@@ -162,37 +162,39 @@ const MyCourseById = () => {
               {
                 videos && videos.length > 0 ? (
                   <div className="overflow-y-auto max-h-[500px] scrollbar-hidden">
-                    {videos.map((video) => (
-                      <div key={video.id} className="grid lg:grid-cols-2 mt-8 grid-cols-1 gap-6">
-                        <div 
-                          onClick={()=>handleLink(video.id)}>
-                          <video controls src={video.videoFile} className="w-full max-h-96 object-cover rounded-md cursor-pointer"></video>
-                        </div>
-                        <div className="flex flex-col justify-center content-center items-center space-y-2">
-                          <p className="text-2xl font-semibold">{video.title}</p>
-                          <p>{video.description}</p>
+                    {videos.map((item) => {
+                      const video = item.video; // Extract the video object from the item
+                      return (
+                        <div key={video.id} className="grid lg:grid-cols-2 mt-8 grid-cols-1 gap-6">
+                          <div onClick={() => handleLink(video.id)}>
+                            <video controls src={video.videoFile} className="w-full max-h-96 object-cover rounded-md cursor-pointer"></video>
+                          </div>
+                          <div className="flex flex-col justify-center content-center items-center space-y-2">
+                            <p className="text-2xl font-semibold">{video.title}</p>
+                            <p>{video.description}</p>
 
-                          {/* Hard-set Like and Comment Counts */}
-                          <div className="flex space-x-4 text-blue-600">
-                            <button className="flex items-center space-x-2">
-                              {/* Like Icon */}
-                              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                              </svg>
-                              <span>Like (50)</span> {/* Hard-set Like count */}
-                            </button>
+                            {/* Hard-set Like and Comment Counts */}
+                            <div className="flex space-x-4 text-blue-600">
+                              <button className="flex items-center space-x-2">
+                                {/* Like Icon */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                                </svg>
+                                <span>Like ({item.likeCount})</span> {/* Dynamic Like count */}
+                              </button>
 
-                            <button className="flex items-center space-x-2">
-                              {/* Comment Icon */}
-                              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                <path d="M21 12c0 5.523-4.477 10-10 10s-10-4.477-10-10S5.477 2 11 2s10 4.477 10 10zM11 4c-3.314 0-6 2.686-6 6 0 1.628.628 3.103 1.658 4.204l-1.229 3.692L8.825 14.9a7.978 7.978 0 0 1 2.174.846l3.329-.892c-.243-.782-.552-1.495-.939-2.122C12.368 10.956 12 9.67 12 8.5c0-1.104-.896-2-2-2s-2 .896-2 2c0 2.761 2.239 5 5 5s5-2.239 5-5c0-2.761-2.239-5-5-5z"></path>
-                              </svg>
-                              <span>Comment (10)</span> {/* Hard-set Comment count */}
-                            </button>
+                              <button className="flex items-center space-x-2">
+                                {/* Comment Icon */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                                  <path d="M21 12c0 5.523-4.477 10-10 10s-10-4.477-10-10S5.477 2 11 2s10 4.477 10 10zM11 4c-3.314 0-6 2.686-6 6 0 1.628.628 3.103 1.658 4.204l-1.229 3.692L8.825 14.9a7.978 7.978 0 0 1 2.174.846l3.329-.892c-.243-.782-.552-1.495-.939-2.122C12.368 10.956 12 9.67 12 8.5c0-1.104-.896-2-2-2s-2 .896-2 2c0 2.761 2.239 5 5 5s5-2.239 5-5c0-2.761-2.239-5-5-5z"></path>
+                                </svg>
+                                <span>Comment ({item.commentCount})</span> {/* Hard-set Comment count */}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className='flex justify-center items-center content-center mt-20'>
@@ -200,7 +202,6 @@ const MyCourseById = () => {
                   </div>
                 )
               }
-
 
 
             </div>

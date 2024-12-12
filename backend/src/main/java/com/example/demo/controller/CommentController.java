@@ -52,4 +52,37 @@ public class CommentController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletedCommentById(@PathVariable String id){
+        try {
+            Comment comment = service.deleteCommentById(id);
+
+            if(comment==null){
+                return new ResponseEntity<>("Comment is not found",HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>("Comment is deleted successfully"+comment,HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error is occuring deleting comment:"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCommentById(@PathVariable String id , @RequestBody Comment comment){
+        try {
+            Comment UpdateComment = service.UpdateCommentById( id , comment) ;
+
+            if(UpdateComment==null){
+                return new ResponseEntity<>("comment is not found ",HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>("comment is Updated successfully"+UpdateComment,HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something is Wrong While Updating the comment:"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

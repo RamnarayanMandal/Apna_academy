@@ -69,4 +69,32 @@ public class CommentService {
         // If user not found in any repository
         return null;
     }
+
+
+    public Comment deleteCommentById(String id) {
+        Optional<Comment> comment = repo.findById(id); // Fetch the comment
+        if (comment.isPresent()) {
+            repo.deleteById(id); // Delete the comment if it exists
+            return comment.get(); // Return the deleted comment
+        } else {
+            return null;
+        }
+    }
+
+    public Comment UpdateCommentById(String id, Comment updatedComment) {
+        Optional<Comment> existingCommentOptional = repo.findById(id);
+
+        if (existingCommentOptional.isPresent()) {
+            Comment existingComment = existingCommentOptional.get();
+
+            // Update the fields of the existing comment
+            existingComment.setComment(updatedComment.getComment());
+
+            // Save the updated comment
+            return repo.save(existingComment);
+        } else {
+            throw null;
+        }
+    }
 }
+
