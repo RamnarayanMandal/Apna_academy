@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,9 +136,6 @@ public class CourseController {
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
 
-
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable String id) {
         String response = courseService.deleteCourse(id);
@@ -157,6 +152,18 @@ public class CourseController {
         }
     }
 
+    @DeleteMapping("/{courseId}/removeStudent/{studentId}")
+    public ResponseEntity<String> removeStudentFromCourse(@PathVariable String courseId,
+                                                          @PathVariable String studentId) {
+        try {
+            Course updatedCourse = courseService.removeStudentFromCourse(studentId, courseId);
+            return ResponseEntity.ok("Student removed from course successfully.");
+        } catch (RuntimeException e) {
+            // Handle the error (e.g., course or student not found)
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/getAllCourses/{studentId}")
     public ResponseEntity<List<Course>> getStudentCourses(@PathVariable String studentId) {
         List<Course> courses = courseService.getCoursesByStudentId(studentId);
@@ -168,7 +175,6 @@ public class CourseController {
 
     @PutMapping("/teacher/{teacherId}/{courseId}")
     public ResponseEntity<Course> addTeacherToCourse(@PathVariable String teacherId, @PathVariable String courseId) {
-
         System.out.println( teacherId + courseId);
 
         try {
@@ -187,7 +193,6 @@ public class CourseController {
         if (courses.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(courses);
     }
 

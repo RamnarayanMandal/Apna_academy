@@ -34,10 +34,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody BaseUser user, @RequestParam String role) {
-    	System.out.println(user);
-    	System.out.println("role" +role);
+        System.out.println(user);
+        System.out.println("Role: " + role);
+
+        // Pass the email, password, and role to the authService for login processing
         return authService.login(user.getEmail(), user.getPassword(), role);
     }
+
 
 
     @GetMapping("/profile")

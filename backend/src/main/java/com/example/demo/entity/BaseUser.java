@@ -42,12 +42,15 @@ public abstract class BaseUser {
     @NotBlank
     private String email;
 
+	private Boolean block=false;
+
     // Constructor
-    public BaseUser(String id, String name, String password, String email) {
+    public BaseUser(String id, String name, String password, String email ,Boolean block) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
+		this.block = block;
     }
 
    
@@ -98,10 +101,22 @@ public abstract class BaseUser {
 		this.email = email;
 	}
 
+	public Boolean getBlock() {
+		return block;
+	}
 
+	public void setBlock(Boolean block) {
+		this.block = block;
+	}
 
 	@Override
 	public String toString() {
-		return "BaseUser [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + "]";
+		return "BaseUser{" +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", email='" + email + '\'' +
+				", block=" + block +
+				'}';
 	}
 }

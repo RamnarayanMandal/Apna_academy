@@ -104,19 +104,19 @@ export const TeacherSideBar = () => {
           </a>
         </li>
         <li>
-          <a href="#assign" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/manage-students" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaUserCog className="mr-4" />
             {isOpen && 'Manage Students'}
           </a>
         </li>
         <li>
-          <a href="#check-results" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/manage-notes" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaChartLine className="mr-4" />
-            {isOpen && 'View Analytics'}
+            {isOpen && 'Manage Notes'}
           </a>
         </li>
         <li>
-          <a href="/create-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/admin-teacher-add-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaVideo className="mr-4" />
             {isOpen && 'Live Classes'}
           </a>
