@@ -138,16 +138,7 @@ const StudyMaterials = () => {
                     </div>
                 )}
 
-                {/* PDF Images Preview */}
-                <div className="mt-6">
-                    {pdfImages.length > 0 && (
-                        <div className="flex flex-wrap justify-center gap-4">
-                            {pdfImages.map((image, index) => (
-                                <img key={index} src={image} alt={`PDF Page ${index + 1}`} className="max-w-xs" />
-                            ))}
-                        </div>
-                    )}
-                </div>
+              
 
                 {/* Pagination Controls */}
                 <div className="flex justify-center mt-6">

@@ -22,7 +22,7 @@ public class NoteBook {
    private String content;
    private String teacherId;
    private String courseId;
-   private String pdfFileUrl; // Changed to store the URL instead of byte[].
+   private String pdfFileUrl;
    @CreatedDate
    private LocalDateTime createdAt;
    @LastModifiedDate
