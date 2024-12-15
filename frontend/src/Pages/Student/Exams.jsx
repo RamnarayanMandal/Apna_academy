@@ -12,7 +12,8 @@ const Exams = () => {
   const studentId = localStorage.getItem('CurrentUserId'); 
   const BASE_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate(); // Initialize the navigate function
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
+
   // Fetch all the courses the student is enrolled in
   const fetchMyCourses = async () => {
     try {
@@ -40,14 +41,14 @@ const Exams = () => {
   };
 
   return (
-    <div className={`min-h-screen flex  lg:gap-20 w-full  ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'} transition-colors`}>
+    <div className={`min-h-screen flex lg:gap-20 w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'} transition-colors`}>
       {/* Sidebar */}
-      <div className="w-1/4 min-w-[250px]">
+      <div className="fixed z-40">
         <StudentSideBar />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 p-6 w-full lg:mx-12 ml-0">
+      <div className="flex-1 p-6 w-full lg:ml-64 ml-16">
         <div className="flex justify-start items-start w-full mt-5 p-2">
           {/* Search bar with search icon */}
           <div className="flex items-center bg-white shadow-md rounded-md p-3 w-full max-w-xl">
@@ -57,15 +58,15 @@ const Exams = () => {
               placeholder="Search Courses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="outline-none bg-transparent w-full text-lg" 
+              className="outline-none bg-transparent w-full text-lg"
             />
           </div>
         </div>
 
         {/* Courses table */}
         <div className="overflow-x-auto mt-8">
-          <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-md">
-            <thead className="bg-gray-200">
+          <table className={`min-w-full rounded-lg ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-gray-100 text-gray-900'}    shadow-md`}>
+            <thead className={` ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-400 text-gray-900'}`}>
               <tr>
                 <th className="px-6 py-3 text-left">Course Name</th>
                 <th className="px-6 py-3 text-left">Start Date</th>
@@ -76,13 +77,13 @@ const Exams = () => {
             <tbody>
               {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (
-                  <tr key={course.id} className="border-b border-gray-300">
+                  <tr key={course.id} className="border-b border-gray-300 hover:bg-gray-100">
                     <td className="px-6 py-4">{course.courseName}</td>
                     <td className="px-6 py-4">{course.startingDate}</td>
                     <td className="px-6 py-4">{course.endDate}</td>
                     <td className="px-6 py-4">
                       <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                         onClick={() => handleViewExams(course.id)} // Trigger the navigation
                       >
                         View Exams

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2"; // For success/error messages
+import { useTheme } from "../../ThemeProvider";
 
 const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
   const [exam, setExam] = useState({
@@ -13,13 +14,14 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
     passingScore: selectExam ? selectExam.passingScore : 0,
     instructions: selectExam ? selectExam.instructions : "",
     maximumMarks: selectExam ? selectExam.maximumMarks : 0,
-    feedback: selectExam ? selectExam.feedback : "",
+   
   });
 
   const [loading, setLoading] = useState(false); // Loading state
   const token = localStorage.getItem("token");
   const teacherId = localStorage.getItem("CurrentUserId");
   const BASE_URL = import.meta.env.VITE_API_URL;
+   const { isDarkMode } = useTheme();
 
   // Set exam data if an exam is selected for updating
   useEffect(() => {
@@ -43,34 +45,29 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Convert startTime and endTime to milliseconds if they are valid dates
+  
+    // Convert startTime and endTime to milliseconds
     const startTimeMillis = new Date(exam.startTime).getTime();
     const endTimeMillis = new Date(exam.endTime).getTime();
-
-    // Prepare form data for submission
-    const formData = new FormData();
-    Object.keys(exam).forEach((key) => {
-      if (Array.isArray(exam[key])) {
-        formData.append(key, JSON.stringify(exam[key]));
-      } else {
-        formData.append(key, exam[key]);
-      }
-    });
-
-    // Override startTime and endTime with the correct data type
-    formData.set("startTime", startTimeMillis);
-    formData.set("endTime", endTimeMillis);
-
+  
+    console.log("Start Time in Milliseconds:", startTimeMillis);
+    console.log("End Time in Milliseconds:", endTimeMillis);
+  
+    const requestData = {
+      ...exam,
+      startTime: startTimeMillis,
+      endTime: endTimeMillis,
+    };
+  
     setLoading(true); // Start loading
-
+  
     try {
       if (selectExam) {
         // Update existing exam
-        await axios.put(`${BASE_URL}/api/exams/${selectExam.id}`, formData, {
+        await axios.put(`${BASE_URL}/api/exams/${selectExam.id}`, requestData, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json", // Indicate it's JSON data
           },
         });
         Swal.fire({
@@ -80,10 +77,10 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
         });
       } else {
         // Add a new exam
-        await axios.post(`${BASE_URL}/api/exams?teacherId=${teacherId}`, formData, {
+        await axios.post(`${BASE_URL}/api/exams/${teacherId}`, requestData, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json", // Indicate it's JSON data
           },
         });
         Swal.fire({
@@ -92,7 +89,7 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
           text: "The exam was added successfully.",
         });
       }
-
+  
       setShowModal(false); // Close the modal after success
     } catch (error) {
       console.error("Error during exam submission:", error);
@@ -105,16 +102,22 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
       setLoading(false); // Stop loading
     }
   };
+  
+
 
   return (
-    <div className="container mx-auto p-4 w-full">
+    <div className={`container mx-auto p-4 w-full ${
+      isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+    }`}>
       <h1 className="text-2xl font-bold mb-4">
         {selectExam ? "Update Exam" : "Add Exam"}
       </h1>
       <form onSubmit={handleSubmit}>
         {/* Exam Name (still required for exam submission) */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1" htmlFor="examName">
+          <label className={`block text-sm font-medium mb-1 ${
+              isDarkMode ? "text-gray-300" : "text-gray-800"
+            }`} htmlFor="examName">
             Exam Name
           </label>
           <input
@@ -249,20 +252,8 @@ const AddExam = ({ selectExam, setShowModal, courseId, courseName }) => {
           ></textarea>
         </div>
 
-        {/* Feedback */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1" htmlFor="feedback">
-            Feedback
-          </label>
-          <textarea
-            id="feedback"
-            name="feedback"
-            value={exam.feedback}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-            rows="3"
-          ></textarea>
-        </div>
+    
+        
 
         {/* Submit Button */}
         <button

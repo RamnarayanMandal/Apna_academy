@@ -34,7 +34,7 @@ public class Course {
     private List<Video> video;
     private List<Review> review;
     private String adminId;
-    private List <Teacher> teacher ;
+    private List<Teacher> teacher;
     private String image;
     private List<Exam> exam;
     @CreatedDate
@@ -42,8 +42,8 @@ public class Course {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Course(String id,String adminId, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students,
-                  List<NoteBook> notebook, List<Video> video, List<Review> review,  List <Teacher> teacher, String image ,List<Exam> exam) {
+    public Course(String id, String adminId, String courseName, String courseCode, String description, String startingDate, String endDate,
+                  List<Student> students, List<NoteBook> notebook, List<Video> video, List<Review> review, List<Teacher> teacher, String image, List<Exam> exam) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -80,5 +80,10 @@ public class Course {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    // This method returns the exams list for the course
+    public List<Exam> getExams() {
+        return this.exam;
     }
 }

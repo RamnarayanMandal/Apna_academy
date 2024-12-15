@@ -9,6 +9,7 @@ import { TeacherSideBar } from '../Teacher/TeacherSideBar';
 import AddCourse from './AddCourse';
 import { IoMdCloseCircle } from 'react-icons/io';
 import Swal from 'sweetalert2';
+import { CourseReview } from '../../Component/CourseReview';
 
 const GetCourseByID = () => {
   const { isDarkMode } = useTheme(); // Using dark mode state from context or provider
@@ -166,7 +167,7 @@ const GetCourseByID = () => {
       className={`min-h-screen flex lg:gap-20 w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}
         transition-colors`}
     >
-      <div className="fixed">
+      <div className="fixed z-40">
         {role === "admin" ? (
           <AdminSidebar />
         ) : role === "teacher" ? (
@@ -215,7 +216,7 @@ const GetCourseByID = () => {
               {/* Update Button */}
 
 
-              {role === "admin" && (
+              {role === "admin" || role === "teacher"  && (
                 <>
                   <button
                     className={`flex items-center px-4 py-2 rounded-md font-semibold border ${isDarkMode
@@ -334,24 +335,7 @@ const GetCourseByID = () => {
 
 
 
-          <div className={`w-full shadow-md p-8 rounded-lg mt-8 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
-            <h2 className="text-2xl font-semibold mb-4">Feedback</h2>
-            <div className="mb-4">
-              <label htmlFor="feedback" className="block text-lg font-semibold mb-2">Your Feedback:</label>
-              <textarea
-                id="feedback"
-                rows="5"
-                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Write your feedback here..."
-              ></textarea>
-            </div>
-
-            <div className="text-right">
-              <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none">
-                Submit Feedback
-              </button>
-            </div>
-          </div>
+          <CourseReview courseId={id}/>
         </div>
 
         <div className={`w-full lg:w-[60%] shadow-md p-8 rounded-lg mt-8 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
