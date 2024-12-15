@@ -16,10 +16,8 @@ public class NoteBookService {
     @Autowired
     private NoteRepo noteRepo;
 
-    public NoteBook saveNoteBookWithPdf(NoteBook noteBook, MultipartFile pdfFile) throws IOException {
-        byte[] pdfContent = pdfFile.getBytes();  // Get the PDF content as bytes
-        noteBook.setPdfFile(pdfContent);      // Set PDF content to the NoteBook entity
-        return noteRepo.save(noteBook);          // Save the note in MongoDB
+    public NoteBook saveNoteBook(NoteBook noteBook) {
+        return noteRepo.save(noteBook);
     }
 
     public NoteBook getNoteById(String id) {

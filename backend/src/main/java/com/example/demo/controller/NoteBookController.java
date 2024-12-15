@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.NoteBook;
+import com.example.demo.service.CloudinaryService;
 import com.example.demo.service.service.NoteBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class NoteBookController {
     @Autowired
     private NoteBookService noteBookService;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @PostMapping("/upload")
     public ResponseEntity<NoteBook> uploadNoteBook(@RequestParam("pdfFile") MultipartFile pdfFile,
                                                    @RequestParam("title") String title,
@@ -25,22 +29,25 @@ public class NoteBookController {
                                                    @RequestParam("teacherId") String teacherId,
                                                    @RequestParam("courseId") String courseId) throws IOException {
 
+        // Upload the PDF to Cloudinary and get the URL
+        String pdfUrl = cloudinaryService.uploadFile(pdfFile);  // Upload the PDF to Cloudinary
+
         // Create a new NoteBook object and set values
         NoteBook noteBook = new NoteBook();
         noteBook.setTitle(title);
         noteBook.setDescription(description);
         noteBook.setContent(content);
-        noteBook.setTeacherId(teacherId);  // Set the teacherId
-        noteBook.setCourseId(courseId);    // Set the courseId
+        noteBook.setTeacherId(teacherId);
+        noteBook.setCourseId(courseId);
+        noteBook.setPdfFileUrl(pdfUrl);  // Set the PDF URL from Cloudinary
 
-        // Save the note with the PDF content
-        NoteBook savedNoteBook = noteBookService.saveNoteBookWithPdf(noteBook, pdfFile);
+        // Save the NoteBook entity to MongoDB
+        NoteBook savedNoteBook = noteBookService.saveNoteBook(noteBook);
 
-        // Return the saved note as a response
+        // Return the saved NoteBook object as a response
         return ResponseEntity.ok(savedNoteBook);
     }
 
-    // Endpoint to update an existing note with a PDF file (if provided)
     @PutMapping("/{id}")
     public ResponseEntity<NoteBook> updateNoteBook(@PathVariable("id") String id,
                                                    @RequestParam("pdfFile") MultipartFile pdfFile,
@@ -50,29 +57,33 @@ public class NoteBookController {
                                                    @RequestParam("teacherId") String teacherId,
                                                    @RequestParam("courseId") String courseId) throws IOException {
 
-        // Fetch the existing note by ID
+        // Fetch the existing NoteBook by ID
         NoteBook existingNoteBook = noteBookService.getNoteById(id);
 
         if (existingNoteBook == null) {
             return ResponseEntity.notFound().build();
         }
 
-        // Update the fields of the existing noteBook object
+        // If a new PDF is uploaded, update the PDF URL
+        String pdfUrl = null;
+        if (pdfFile != null && !pdfFile.isEmpty()) {
+            pdfUrl = cloudinaryService.uploadFile(pdfFile);  // Upload the new PDF to Cloudinary
+        }
+
+        // Update the fields of the existing NoteBook
         existingNoteBook.setTitle(title);
         existingNoteBook.setDescription(description);
         existingNoteBook.setContent(content);
         existingNoteBook.setTeacherId(teacherId);
         existingNoteBook.setCourseId(courseId);
-
-        // If a new PDF file is uploaded, update it
-        if (pdfFile != null && !pdfFile.isEmpty()) {
-            existingNoteBook.setPdfFile(pdfFile.getBytes());
+        if (pdfUrl != null) {
+            existingNoteBook.setPdfFileUrl(pdfUrl);  // Update the PDF URL
         }
 
-        // Save the updated note
-        NoteBook updatedNoteBook = noteBookService.saveNoteBookWithPdf(existingNoteBook, pdfFile);
+        // Save the updated NoteBook entity
+        NoteBook updatedNoteBook = noteBookService.saveNoteBook(existingNoteBook);
 
-        // Return the updated note as a response
+        // Return the updated NoteBook object as a response
         return ResponseEntity.ok(updatedNoteBook);
     }
 
