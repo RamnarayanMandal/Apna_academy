@@ -1,6 +1,8 @@
 package com.example.demo.service.service;
 
+import com.example.demo.entity.Course;
 import com.example.demo.entity.NoteBook;
+import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.NoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,32 @@ public class NoteBookService {
     @Autowired
     private NoteRepo noteRepo;
 
+    @Autowired
+    private CourseRepo courseRepo;
+
     public NoteBook saveNoteBook(NoteBook noteBook) {
-        return noteRepo.save(noteBook);
+        // Save the NoteBook first
+        NoteBook savedNoteBook = noteRepo.save(noteBook);
+
+        // Fetch the Course by the courseId associated with the NoteBook
+        Optional<Course> courseOptional = courseRepo.findById(noteBook.getCourseId());
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+
+            // Check if the NoteBook already exists in the Course's notebook list (based on a unique identifier like `id` or `title`)
+            boolean notebookExists = course.getNotebook().stream()
+                    .anyMatch(existingNoteBook -> existingNoteBook.getId().equals(savedNoteBook.getId()));
+
+            if (!notebookExists) {
+                // Add the NoteBook to the Course's notebook list if it doesn't already exist
+                course.getNotebook().add(savedNoteBook);
+                // Save the updated Course
+                courseRepo.save(course);
+            }
+        }
+
+        // Return the saved NoteBook
+        return savedNoteBook;
     }
 
     public NoteBook getNoteById(String id) {
