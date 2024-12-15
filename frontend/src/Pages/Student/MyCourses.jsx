@@ -73,7 +73,7 @@ const MyCourses = () => {
         </div>
 
         {/* Sorting Buttons */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-start items-center mb-6  gap-4">
           <button
             onClick={handleSortByAlphabet}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"

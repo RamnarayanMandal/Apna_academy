@@ -1,12 +1,8 @@
 package com.example.demo.service.service;
 
-import com.example.demo.entity.Course;
-import com.example.demo.entity.Exam;
-import com.example.demo.entity.Student;
-import com.example.demo.entity.Teacher;
-import com.example.demo.repo.CourseRepo;
-import com.example.demo.repo.StudentRepo;
-import com.example.demo.repo.TeacherRepo;
+import com.example.demo.dto.CourseDetailsResponse;
+import com.example.demo.entity.*;
+import com.example.demo.repo.*;
 import com.example.demo.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +26,40 @@ public class CourseService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    public Course getCourseById(String id) {
+    @Autowired
+    private ExamRepo examRepo;
+
+    @Autowired
+    private NoteRepo noteRepo;
+
+
+    @Autowired
+    private VideoRepo videoRepo;
+
+    public CourseDetailsResponse getCourseById(String id) {
         Optional<Course> course = courseRepo.findById(id);
         if (!course.isPresent()) {
             throw new RuntimeException("Course not found with ID: " + id);
         }
-        return course.get();
+
+        // Fetch related entities
+        List<Video> videos = videoRepo.getAllVideoByCourseId(id);
+
+        List<Exam> exams = examRepo.findByCourseId(id);
+
+        List<NoteBook> notebooks = noteRepo.findByCourseId(id);
+
+
+
+        // Create a response object
+        CourseDetailsResponse response = new CourseDetailsResponse();
+        response.setCourse(course.get());
+        response.setVideos(videos);
+        response.setExams(exams);
+        response.setNotebooks(notebooks);
+
+
+        return response;
     }
 
     public Course getCourseByName(String courseName) {
@@ -136,8 +160,7 @@ public class CourseService {
     public List<Course> getCoursesByStudentId(String studentId) {
                Student student = studentRepo.findById(studentId).orElseThrow(() ->
                 new RuntimeException("Student with ID " + studentId + " not found"));
-
-        List<Course> AllCourses = courseRepo.findByStudentsId(studentId);
+               List<Course> AllCourses = courseRepo.findByStudentsId(studentId);
 
         return AllCourses;
     }

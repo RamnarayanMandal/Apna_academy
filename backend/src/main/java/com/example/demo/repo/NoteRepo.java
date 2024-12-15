@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface NoteRepo extends MongoRepository<NoteBook, String> {
     List<NoteBook> findNotesByTeacherId (String teacherId);
+
+    List<NoteBook> findByCourseId(String id);
 }

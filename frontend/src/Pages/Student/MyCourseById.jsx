@@ -12,6 +12,7 @@ const MyCourseById = () => {
   const [videos, setVideos] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [AllDetailscourse,setAllDetailscourse] = useState(null);
   const navigate = useNavigate(); // For navigation (back button)
 
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -29,7 +30,9 @@ const MyCourseById = () => {
       const resp = await axios.get(`${BASE_URL}/api/course/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCourse(resp.data);
+      setCourse(resp.data.course);
+      setAllDetailscourse(resp.data);
+     
     } catch (error) {
       setError('Error fetching course details');
       console.error('Error fetching course details:', error);
@@ -78,6 +81,14 @@ const MyCourseById = () => {
     navigate(`/video/${id}`, { state: { data: videos } });
   };
 
+
+  const handleDownload = async () =>{
+
+    navigate(`/Get-Note`,{
+      state: { materials: AllDetailscourse.notebooks }
+    })
+
+  }
 
   return (
     <div
@@ -128,17 +139,17 @@ const MyCourseById = () => {
                     {/* Service Items */}
                     <div className="flex justify-between items-center text-lg font-semibold">
                       <p className="text-left">Videos</p>
-                      <p className="text-right text-blue-600">{course?.videos?.length || '0'}</p>
+                      <p className="text-right text-blue-600">{AllDetailscourse?.videos?.length || '0'}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-lg font-semibold">
                       <p className="text-left">Assignments</p>
-                      <p className="text-right text-blue-600">{course?.assignments?.length || '0'}</p>
+                      <p className="text-right text-blue-600">{AllDetailscourse.notebooks?.length || '0'}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-lg font-semibold">
                       <p className="text-left">Test</p>
-                      <p className="text-right text-blue-600">{course?.test?.length || '0'}</p>
+                      <p className="text-right text-blue-600">{AllDetailscourse?.exams?.length || '0'}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-lg font-semibold">
@@ -153,7 +164,7 @@ const MyCourseById = () => {
 
                     <div className="flex justify-between items-center text-lg font-semibold">
                       <p className="text-left">Class Notes</p>
-                      <p className="text-right text-blue-600">Download</p>
+                      <p className="text-right text-blue-600 cursor-pointer" onClick={handleDownload}>Download</p>
                     </div>
                   </div>
                 </div>

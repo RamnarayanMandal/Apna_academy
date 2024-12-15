@@ -18,6 +18,7 @@ const GetCourseByID = () => {
   const token = localStorage.getItem('token');
   const [showModel, setShowModal] = useState(false);
   const [selectCourse, setSelectCourse] = useState(null);
+  const [AllDetailscourse,setAllDetailscourse] = useState(null);
   const [myCourses, setMyCourses] = useState([]);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -26,6 +27,9 @@ const GetCourseByID = () => {
 
   const role = localStorage.getItem('role');
   const studentId = localStorage.getItem('CurrentUserId');
+
+
+  
 
   // Fetch course details
   useEffect(() => {
@@ -45,7 +49,8 @@ const GetCourseByID = () => {
       const resp = await axios.get(`${BASE_URL}/api/course/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCourse(resp.data);
+      setCourse(resp.data.course);
+      setAllDetailscourse(resp.data);
     } catch (error) {
       console.error('Error fetching course details:', error);
     }
@@ -56,7 +61,7 @@ const GetCourseByID = () => {
       const response = await axios.get(`${BASE_URL}/api/course/getAllCourses/${studentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setMyCourses(response.data || []);
+      setMyCourses(response.data.course || []);
     } catch (error) {
       console.error('Error fetching student courses:', error);
     }
@@ -269,7 +274,7 @@ const GetCourseByID = () => {
             </h2>
 
             <ul className="space-y-6">
-              {course.teacher.map((teacher) => (
+              {course?.teacher?.map((teacher) => (
                 <li
                   key={teacher.id}
                   className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
@@ -297,28 +302,28 @@ const GetCourseByID = () => {
               {/* Service Items */}
               <div className='flex justify-between items-center text-lg font-semibold'>
                 <p className='text-left'>Videos</p>
-                <p className='text-right text-blue-600'>{course?.viedeos?.length || "0"}</p>
+                <p className='text-right text-blue-600'>{AllDetailscourse?.videos?.length || "0"}</p>
               </div>
 
               <div className='flex justify-between items-center text-lg font-semibold'>
                 <p className='text-left'>Assignments</p>
-                <p className='text-right text-blue-600'>{course?.assignments?.length || " 0"}</p>
+                <p className='text-right text-blue-600'>{AllDetailscourse?.notebooks?.length || " 0"}</p>
               </div>
 
               <div className='flex justify-between items-center text-lg font-semibold'>
                 <p className='text-left'>Test</p>
-                <p className='text-right text-blue-600'>{course?.test?.length || " 0"}</p>
+                <p className='text-right text-blue-600'>{AllDetailscourse?.exams?.length || " 0"}</p>
               </div>
 
               <div className='flex justify-between items-center text-lg font-semibold'>
                 <p className='text-left'>Students</p>
-                <p className='text-right text-blue-600'>{course.students.length || "0"}</p>
+                <p className='text-right text-blue-600'>{course?.students?.length || "0"}</p>
               </div>
               <div className='flex justify-between items-center text-lg font-semibold'>
                 <p className='text-left'>Duration</p>
                 <p className="text-right text-blue-600">
                   {
-                    calculateDuration(course.startingDate, course.endDate)
+                    calculateDuration(course?.startingDate, course?.endDate)
                   } days
                 </p>
 

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CourseDetailsResponse;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repo.CourseRepo;
@@ -39,8 +40,8 @@ public class CourseController {
 
     // Get course by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable String id) {
-        Course course = courseService.getCourseById(id);
+    public ResponseEntity<?> getCourseById(@PathVariable String id) {
+        CourseDetailsResponse course = courseService.getCourseById(id);
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 
@@ -111,7 +112,7 @@ public class CourseController {
                                                @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
 
         // Fetch the existing course from the database
-        Course existingCourse = courseService.getCourseById(id);
+        Course existingCourse = courseService.getCourseById(id).getCourse();
 
         if (existingCourse == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Return 404 if course does not exist

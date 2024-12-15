@@ -28,6 +28,7 @@ import StudyMaterials from './Pages/Student/StudyMaterials'
 
 import ManageStudent from './Pages/Teacher/ManageStudent'
 import GetAllNotes from './Pages/Notes/GetAllNotes'
+import GetNoteByCourse from './Pages/Notes/GetNoteByCourse'
 
 
 
@@ -70,7 +71,9 @@ function App() {
 
             <Route path='/video/:id' element={<VideoDetails />} />          
             <Route path='/manage-students' element={<ManageStudent />} />          
-            <Route path='/manage-notes' element={<GetAllNotes />} />          
+            <Route path='/manage-notes' element={<GetAllNotes />} /> 
+
+            <Route path='/Get-Note' element={<GetNoteByCourse/>} />         
 
           </Routes>
         </BrowserRouter>
