@@ -25,6 +25,7 @@ import GetAllQuestion from './Pages/Exam/GetAllQuestion'
 
 import MyCourseById from './Pages/Student/MyCourseById'
 import VideoDetails from './Pages/Video/VideoDetails'
+import ManageStudent from './Pages/Teacher/ManageStudent'
 
 
 
@@ -60,6 +61,7 @@ function App() {
             <Route path='/student/courses/:id' element={<GetCourseByID />} /> 
             <Route path='/student/Mycourses/:id' element={<MyCourseById />} />
             <Route path='/video/:id' element={<VideoDetails />} />          
+            <Route path='/manage-students' element={<ManageStudent />} />          
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

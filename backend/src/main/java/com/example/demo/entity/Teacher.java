@@ -39,14 +39,15 @@ public class Teacher extends BaseUser {
         String id, 
         String name, 
         String password, 
-        String email, 
+        String email,
+		boolean block,
         String subjectSpecialization, 
         String phoneNo, 
         String address, 
         String qualification, 
         List<Course> courses
     ) {
-        super(id, name, password, email);
+        super(id, name, password, email,block);
         this.subjectSpecialization = subjectSpecialization;
         this.phoneNo = phoneNo;
         this.address = address;

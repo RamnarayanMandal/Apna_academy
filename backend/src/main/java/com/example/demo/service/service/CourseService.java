@@ -104,6 +104,34 @@ public class CourseService {
         return courseRepo.save(course);
     }
 
+    public Course removeStudentFromCourse(String studentId, String courseId) {
+        // Fetch the course by ID
+        Course course = courseRepo.findById(courseId).orElseThrow(() ->
+                new RuntimeException("Course with ID " + courseId + " not found"));
+
+        // Fetch the student by ID
+        Student student = studentRepo.findById(studentId).orElseThrow(() ->
+                new RuntimeException("Student with ID " + studentId + " not found"));
+
+        // Get the list of students enrolled in the course
+        List<Student> students = course.getStudents();
+
+        if (students != null && !students.isEmpty()) {
+            // Check if the student is in the course
+            boolean studentExists = students.stream().anyMatch(s -> s.getEmail().equals(student.getEmail()));
+
+            if (studentExists) {
+                // Remove the student from the list
+                students.removeIf(s -> s.getEmail().equals(student.getEmail()));
+                course.setStudents(students); // Update the course with the modified list
+            }
+        }
+
+        // Save the updated course
+        return courseRepo.save(course);
+    }
+
+
     public List<Course> getCoursesByStudentId(String studentId) {
                Student student = studentRepo.findById(studentId).orElseThrow(() ->
                 new RuntimeException("Student with ID " + studentId + " not found"));

@@ -65,7 +65,16 @@ const Login = ({ setShowModal }) => {
           params: { role: formData.type }, 
         }
       );
-      
+      //     // Check if the student account is blocked (backend should return this information)
+      if (response.data === "Your account is blocked. Please contact the administrator.") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Account Blocked',
+          text: 'Your account is blocked. Please contact the administrator.',
+        });
+        setLoading(false);
+        return;
+      }
       await localStorage.setItem("token", response.data);
       localStorage.setItem("role",formData.type)
 
@@ -99,6 +108,7 @@ const Login = ({ setShowModal }) => {
   };
   
 
+  
 
 
   

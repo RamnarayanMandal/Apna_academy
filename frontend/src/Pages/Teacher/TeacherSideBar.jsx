@@ -104,7 +104,7 @@ export const TeacherSideBar = () => {
           </a>
         </li>
         <li>
-          <a href="#assign" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/manage-students" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaUserCog className="mr-4" />
             {isOpen && 'Manage Students'}
           </a>

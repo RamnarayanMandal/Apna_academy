@@ -13,8 +13,8 @@ public class Admin extends BaseUser {
     private boolean superAdmin;
 
     // Constructor
-    public Admin(String id, String name, String password, String email, boolean superAdmin) {
-        super(id, name, password, email);
+    public Admin(String id, String name, String password, String email,Boolean block, boolean superAdmin) {
+        super(id, name, password, email,block);
         this.superAdmin = superAdmin;
     }
 
