@@ -16,7 +16,7 @@ export const StudentSideBar = () => {
   };
 
   return (
-    <div className={`h-screen shadow-lg  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
+    <div className={`h-screen shadow-lg m-4 rounded-t-xl  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} ${isOpen ? 'w-64' : 'w-20'} transition-all`}>
       {/* <StudentSideBar/> */}
       <div className="flex justify-between items-center p-4">
         <h2 className={`text-xl font-extrabold mb-6 ${isOpen ? 'block' : 'hidden'} font-sans tracking-wide`}>
@@ -48,7 +48,7 @@ export const StudentSideBar = () => {
       <li>
           <a
             href="/Student-Dashbord"
-            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            className="flex items-center p-4 hover:bg-gray-200 rounded font-semibold text-lg"
           >
             <FaUser   className="mr-4" />
             {isOpen && 'Student Dashbord'}
@@ -57,7 +57,7 @@ export const StudentSideBar = () => {
         {/* My Courses (collapsible) */}
         <li>
           <div
-            className="flex items-center p-4 cursor-pointer hover:bg-gray-600 rounded font-semibold text-lg"
+            className="flex items-center p-4 cursor-pointer hover:bg-gray-200 rounded font-semibold text-lg"
             onClick={() => setIsCoursesOpen(!isCoursesOpen)} // Toggle the courses menu
           >
             <FaChalkboardTeacher className="mr-4" />
@@ -109,7 +109,7 @@ export const StudentSideBar = () => {
         <li>
           <a
             href="/student-exam"
-            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            className="flex items-center p-4 hover:bg-gray-200 rounded font-semibold text-lg"
           >
             <FaTasks className="mr-4" />
             {isOpen && 'Assignments & Exams'}
@@ -120,7 +120,7 @@ export const StudentSideBar = () => {
         <li>
           <a
             href="#grades-progress"
-            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            className="flex items-center p-4 hover:bg-gray-200 rounded font-semibold text-lg"
           >
             <FaRegGrinStars className="mr-4" />
             {isOpen && 'Grades & Progress'}
@@ -130,8 +130,8 @@ export const StudentSideBar = () => {
         {/* Study Materials / Resources */}
         <li>
           <a
-            href="#study-materials"
-            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            href="/student-study-materails"
+            className="flex items-center p-4 hover:bg-gray-200 rounded font-semibold text-lg"
           >
             <FaBookOpen className="mr-4" />
             {isOpen && 'Study Materials'}
@@ -142,7 +142,7 @@ export const StudentSideBar = () => {
         <li>
           <a
             href={`/Student-profile/${StudentId}`}
-            className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+            className="flex items-center p-4 hover:bg-gray-200 rounded font-semibold text-lg"
           >
             <FaUserAlt className="mr-4" />
             {isOpen && 'Profile / Settings'}
@@ -153,7 +153,7 @@ export const StudentSideBar = () => {
         <div className="mt-auto p-4">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full p-4 hover:bg-gray-600 rounded font-semibold text-lg text-red-500"
+            className="flex items-center w-full p-4 hover:bg-gray-200 rounded font-semibold text-lg text-red-500"
           >
             <FaSignOutAlt className="mr-4" />
             {isOpen && 'Logout'}
@@ -164,7 +164,7 @@ export const StudentSideBar = () => {
       {/* Theme Toggle Button */}
       <button
         onClick={toggleTheme}
-        className="absolute bottom-4 left-4 bg-blue-500 text-white p-2 rounded-full"
+        className="absolute bottom-10 left-8 bg-blue-500 text-white p-2 rounded-full"
       >
         {isDarkMode ? '🌞' : '🌙'}
       </button>

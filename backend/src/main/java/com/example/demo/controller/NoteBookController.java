@@ -105,4 +105,19 @@ public class NoteBookController {
     public ResponseEntity<String> deleteById(@PathVariable String id){
         return new ResponseEntity<>(noteBookService.deleteNote(id),HttpStatus.OK);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getAllNoteBooks() {
+        try {
+            List<NoteBook> noteBooks = noteBookService.getAllNote();
+            if (noteBooks.isEmpty()) {
+                return new ResponseEntity<>("No notes found", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(noteBooks, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception for debugging (optional if using a logger)
+            System.err.println("Error occurred while fetching notes: " + e.getMessage());
+            return new ResponseEntity<>("Something went wrong while getting all notes: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

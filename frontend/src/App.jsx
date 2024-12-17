@@ -23,8 +23,12 @@ import AssignmentDashboard from './Pages/Exam/AssignmentDashboard'
 import GetAllQuestion from './Pages/Exam/GetAllQuestion'
 import MyCourseById from './Pages/Student/MyCourseById'
 import VideoDetails from './Pages/Video/VideoDetails'
+
+import StudyMaterials from './Pages/Student/StudyMaterials'
+
 import ManageStudent from './Pages/Teacher/ManageStudent'
 import GetAllNotes from './Pages/Notes/GetAllNotes'
+
 
 
 
@@ -60,9 +64,14 @@ function App() {
             <Route path='/student-exam-portal/:courseId' element={<StudentExamPortal/>} />           
             <Route path='/student/courses/:id' element={<GetCourseByID />} /> 
             <Route path='/student/Mycourses/:id' element={<MyCourseById />} />
+
+            <Route path='/video/:id' element={<VideoDetails />} /> 
+            <Route path='/student-study-materails' element={<StudyMaterials />} />           
+
             <Route path='/video/:id' element={<VideoDetails />} />          
             <Route path='/manage-students' element={<ManageStudent />} />          
             <Route path='/manage-notes' element={<GetAllNotes />} />          
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

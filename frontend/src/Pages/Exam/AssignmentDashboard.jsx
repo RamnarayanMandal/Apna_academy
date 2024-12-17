@@ -73,12 +73,12 @@ const AssignmentDashboard = () => {
     <div
       className={`min-h-screen flex flex-col lg:flex-row ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}
     >
-      {/* Sidebar */}
-      <TeacherSideBar />
-
+     <div className="fixed z-40">
+             < TeacherSideBar/>
+           </div>
       {/* Main Content Area */}
       <div
-        className={`flex-1 p-6 overflow-y-auto lg:ml-64 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-200 text-gray-900'}`}
+        className={`flex-1 p-6 overflow-y-auto lg:ml-64 ml-20 lg:mt-20 `}
       >
         {/* Grid Container for Boxes */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

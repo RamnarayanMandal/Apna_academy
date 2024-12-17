@@ -20,27 +20,27 @@ public class NoteBookService {
         return noteRepo.save(noteBook);
     }
 
-    // Method to get a note by its ID
     public NoteBook getNoteById(String id) {
         Optional<NoteBook> noteBook = noteRepo.findById(id);
-        return noteBook.orElse(null);  // Return null if the note is not found
+        return noteBook.orElse(null); // Fallback to null if not present
     }
 
-    public NoteBook getNote(String id){
-        return noteRepo.findById(id).get();
+    public NoteBook getNote(String id) {
+        return noteRepo.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Note with ID " + id + " not found.")
+        );
     }
 
-    public List<NoteBook> getAllNote(){
+    public List<NoteBook> getAllNote() {
         return noteRepo.findAll();
     }
 
-    public String deleteNote(String id){
+    public String deleteNote(String id) {
         noteRepo.deleteById(id);
-        return "Note with deleted successfully" ;
+        return "Note deleted successfully";
     }
 
-    public List<NoteBook> getAllNotesByTeacherId(String teacherId){
+    public List<NoteBook> getAllNotesByTeacherId(String teacherId) {
         return noteRepo.findNotesByTeacherId(teacherId);
     }
-
 }

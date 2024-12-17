@@ -1,6 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.entity.Course;
+import com.example.demo.entity.Exam;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repo.CourseRepo;
@@ -169,6 +170,81 @@ public class CourseService {
 
     public long totalCourses(){
         return courseRepo.count();
+    }
+
+    public Exam UpdateExam(String id, Exam updatedExam) {
+
+        Optional<Course> existingCourse = courseRepo.findById(updatedExam.getCourseId());
+
+
+
+        if (!existingCourse.isPresent()) {
+            throw new IllegalArgumentException("Course not found");
+        }
+
+        Course course = existingCourse.get();
+
+        // Step 2: Find the existing exam within the course's exam list
+        Optional<Exam> existingExamOptional = course.getExams().stream()
+                .filter(exam -> exam.getId().equals(id))
+                .findFirst();
+
+        if (!existingExamOptional.isPresent()) {
+            throw new IllegalArgumentException("Exam not found");
+        }
+
+        Exam existingExam = existingExamOptional.get();
+
+        // Step 3: Update the exam details
+        existingExam.setExamName(updatedExam.getExamName());
+        existingExam.setStartTime(updatedExam.getStartTime());
+        existingExam.setEndTime(updatedExam.getEndTime());
+        existingExam.setDuration(updatedExam.getDuration());
+        existingExam.setExamType(updatedExam.getExamType());
+        existingExam.setPassingScore(updatedExam.getPassingScore());
+        existingExam.setInstructions(updatedExam.getInstructions());
+        existingExam.setMaximumMarks(updatedExam.getMaximumMarks());
+        existingExam.setFeedback(updatedExam.getFeedback());
+
+        // Step 4: Save the updated course with the modified exam
+        courseRepo.save(course);  // Save the course (this implicitly saves the updated exam)
+
+        // Step 5: Return the updated exam
+        return existingExam;
+    }
+
+
+
+    public Course updateExamInCourse(Exam exam) {
+        // Fetch the course associated with the exam's courseId
+        Optional<Course> existingCourseOpt = courseRepo.findById(exam.getCourseId());
+
+        // Check if the course exists
+        if (existingCourseOpt.isEmpty()) {
+            throw new IllegalArgumentException("Course not found with ID: " + exam.getCourseId());
+        }
+
+        Course existingCourse = existingCourseOpt.get();
+
+        // Find and update the exam in the course
+        List<Exam> exams = existingCourse.getExam();
+        boolean examFound = false;
+        for (int i = 0; i < exams.size(); i++) {
+            if (exams.get(i).getId().equals(exam.getId())) {
+                exams.set(i, exam); // Update the exam
+                examFound = true;
+                break;
+            }
+        }
+
+        if (!examFound) {
+            throw new IllegalArgumentException("Exam not found with ID: " + exam.getId());
+        }
+
+        // Save the updated course
+        Course updatedCourse = courseRepo.save(existingCourse);
+
+        return updatedCourse;
     }
 
 }

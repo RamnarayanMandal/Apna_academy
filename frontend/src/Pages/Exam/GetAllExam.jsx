@@ -93,7 +93,7 @@ const GetAllExam = ({ courseId, courseName }) => {
 
   return (
     <div
-      className={`p-6 w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}
+      className={`p-6 w-full ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}
     >
       <div className="flex justify-between items-center w-full mb-6">
         {/* Sort Buttons Container */}
@@ -122,10 +122,10 @@ const GetAllExam = ({ courseId, courseName }) => {
       </div>
 
       {/* Exams Table */}
-      <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
+      <div className="overflow-x-auto shadow-lg rounded-lg ">
         <table className="min-w-full table-auto border-collapse text-sm">
           <thead>
-            <tr className={`bg-${isDarkMode ? 'gray-700' : 'gray-100'} text-left text-gray`}>
+            <tr className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'} text-left text-gray`}>
               <th className="px-6 py-3 font-semibold">Exam Name</th>
               <th className="px-6 py-3 font-semibold">Start Time</th>
               <th className="px-6 py-3 font-semibold">End Time</th>
@@ -134,7 +134,7 @@ const GetAllExam = ({ courseId, courseName }) => {
           </thead>
           <tbody>
             {paginatedExams.map((exam) => (
-              <tr key={exam.id} className={`hover:bg-${isDarkMode ? 'gray-800' : 'blue-50'} transition-all duration-200`}>
+              <tr key={exam.id} className={`hover:bg-${isDarkMode ? 'bg-gray-800' : 'bg-blue-50'} transition-all duration-200`}>
                 <td className="px-6 py-4">{exam.examName}</td>
                 <td className="px-6 py-4">{new Date(exam.startTime).toLocaleString()}</td>
                 <td className="px-6 py-4">{new Date(exam.endTime).toLocaleString()}</td>
@@ -190,7 +190,7 @@ const GetAllExam = ({ courseId, courseName }) => {
       {/* Add Exam Modal */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-96 relative">
+          <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'} p-6 rounded-lg w-96 relative`}>
             <button
               onClick={() => setShowModal(false)} // Close the modal when cross icon is clicked
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"

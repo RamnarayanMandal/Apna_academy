@@ -233,6 +233,7 @@ public class ExamService {
     public Exam updateExam(String examId, Exam updatedExam) {
         // Find the exam by ID
         Optional<Exam> existingExamOpt = examRepo.findById(examId);
+        System.out.println("exam service"+existingExamOpt);
         if (!existingExamOpt.isPresent()) {
             throw new RuntimeException("Exam not found with id " + examId);
         }

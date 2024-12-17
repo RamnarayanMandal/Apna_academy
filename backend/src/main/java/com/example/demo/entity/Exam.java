@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "exams")
@@ -25,22 +26,43 @@ public class Exam {
 
     @DBRef
     private List<Question> questions;
-    private Long startTime;  // Exam start time (in milliseconds)
-    private Long endTime;  // Exam end time (in milliseconds)
+    private Long startTime;
+    private Long endTime;
 
-    private List<StudentExamResult> studentExamResults;  // List of student exam results
+    private List<StudentExamResult> studentExamResults;
 
-    private Long duration;  // Duration of the exam in minutes
-    private String examType;  // Type of exam (e.g., MCQ, Essay)
-    private Double passingScore;  // Minimum passing score
-    private String instructions;  // Instructions for the exam
-    private Double maximumMarks;  // Maximum possible marks for the exam
-    private List<Teacher> teacher;
+    private Long duration;
+    private String examType;
+    private Double passingScore;
+    private String instructions;
+    private Double maximumMarks;
+
+    @DBRef
+    private List<Teacher> teacher = new ArrayList<>();  
+
     @CreatedDate
-    private LocalDateTime createdAt;  // Created timestamp
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;  // Last modified timestamp
+    private LocalDateTime updatedAt;
 
-    private String feedback;  // Feedback/comments on the exam
+    private String feedback;
+
+    // Method to get the ID of the first teacher
+    public String getTeacherId() {
+        if (teacher != null && !teacher.isEmpty()) {
+            return teacher.get(0).getId();
+        }
+        return null;
+    }
+
+    // Method to get IDs of all teachers
+    public List<String> getTeacherIds() {
+        if (teacher != null) {
+            return teacher.stream()
+                    .map(Teacher::getId)
+                    .toList();
+        }
+        return List.of();
+    }
 }

@@ -3,16 +3,14 @@ package com.example.demo.controller;
 import com.example.demo.entity.*;
 import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.TeacherRepo;
+import com.example.demo.service.service.CourseService;
 import com.example.demo.service.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/exams")
@@ -24,78 +22,68 @@ public class ExamController {
     private TeacherRepo teacherRepo;
     @Autowired
     private CourseRepo courseRepo;
+
+    @Autowired
+    private CourseService courseService;
     @PostMapping()
-    public ResponseEntity<Exam> createExam(
-            @RequestParam("examName") String examName,
-            @RequestParam("courseId") String courseId,
-            @RequestParam("startTime") Long startTime,
-            @RequestParam("endTime") Long endTime,
-            @RequestParam("duration") Long duration,
-            @RequestParam("examType") String examType,
-            @RequestParam("passingScore") Double passingScore,
-            @RequestParam("maximumMarks") Double maximumMarks,
-            @RequestParam("instructions") String instructions,
-            @RequestParam("feedback") String feedback,
-            @RequestParam String teacherId
-    ) {
+    public ResponseEntity<?> createExam(@RequestBody Exam exam) {
         try {
-            // Fetch the teacher using the teacherId
-            Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
-                    new RuntimeException("Teacher with ID " + teacherId + " not found"));
+          Exam Updateexam =  examService.createExam(exam);
 
-            // Fetch the course by courseId
-            Course course = courseRepo.findById(courseId).orElseThrow(() ->
-                    new RuntimeException("Course with ID " + courseId + " not found"));
+          Course updateCourse = courseService.updateExamInCourse(exam);
 
-            // Create a new Exam instance with the provided data
-            Exam exam = new Exam();
-            exam.setExamName(examName);
-            exam.setCourseId(courseId); // Set courseId
-            exam.setStartTime(startTime);
-            exam.setEndTime(endTime);
-            exam.setDuration(duration);
-            exam.setExamType(examType);
-            exam.setPassingScore(passingScore);
-            exam.setMaximumMarks(maximumMarks);
-            exam.setInstructions(instructions);
-            exam.setFeedback(feedback);
+          if(Updateexam==null && updateCourse == null){
+              return new ResponseEntity<>("course and exam is not found ",HttpStatus.NOT_FOUND);
+          }
 
-            // Associate the teacher with the exam
-            List<Teacher> currentTeachers = exam.getTeacher();
-            if (currentTeachers == null) {
-                currentTeachers = new ArrayList<>();
-            }
+          return new ResponseEntity<>(Updateexam ,HttpStatus.OK);
 
-            // Check if the teacher is already in the list
-            boolean teacherExists = currentTeachers.stream().anyMatch(existingTeacher -> existingTeacher.getId().equals(teacherId));
-            if (!teacherExists) {
-                // If teacher is not in the list, add the teacher
-                currentTeachers.add(teacher);
-            }
-
-            // Set the updated list of teachers to the exam
-            exam.setTeacher(currentTeachers);
-
-            // Create and save the exam
-            Exam createdExam = examService.createExam(exam);
-
-            // Add the newly created exam to the course's exam list
-            List<Exam> courseExams = course.getExam();
-            if (courseExams == null) {
-                courseExams = new ArrayList<>();
-            }
-            courseExams.add(createdExam);
-
-            // Set the updated exam list to the course and save the course
-            course.setExam(courseExams);
-            courseRepo.save(course); // Save the course with the updated exam list
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdExam);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+        }catch (Exception e){
+            return new ResponseEntity<>("smothing is wrong while crating the exam:"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/{teacherId}")
+    public ResponseEntity<?> createExamThroughTeacher(@RequestBody Exam exam, @PathVariable String teacherId) {
+        try {
+
+            if (exam == null) {
+                return new ResponseEntity<>("Exam data is missing", HttpStatus.BAD_REQUEST);
+            }
+
+
+
+            Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+
+            // Check if the teacher exists
+            if (teacher == null) {
+                return new ResponseEntity<>("Teacher not found", HttpStatus.NOT_FOUND);
+            }
+
+            // Set the teacher for the exam (assuming 'setTeacher' expects a list of teachers)
+            exam.setTeacher(Collections.singletonList(teacher));
+
+            // Create the exam
+            Exam createdExam = examService.createExam(exam);
+
+            // Update the course with the newly created exam
+            Course updatedCourse = courseService.updateExamInCourse(exam);
+
+            // Check if either exam creation or course update failed
+            if (createdExam == null || updatedCourse == null) {
+                return new ResponseEntity<>("Failed to create exam or update course", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Return the created exam in the response
+            return new ResponseEntity<>(createdExam, HttpStatus.OK);
+
+        } catch (Exception e) {
+            // Handle any unexpected errors
+            return new ResponseEntity<>("Something went wrong while creating the exam: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 
     @PutMapping("/exam/{examId}/student/{studentId}")
@@ -159,35 +147,25 @@ public class ExamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exam> updateExam(
-            @PathVariable String id,
-            @RequestParam String examName,
-            @RequestParam String courseId,
-            @RequestParam Long startTime,
-            @RequestParam Long endTime,
-            @RequestParam Long duration,
-            @RequestParam String examType,
-            @RequestParam Double passingScore,
-            @RequestParam String instructions,
-            @RequestParam Double maximumMarks,
-            @RequestParam(required = false) String feedback) {
+    public ResponseEntity<?> updateExam(@PathVariable String id, @RequestBody Exam exam) {
+        System.out.println(id);
+        System.out.println("exam cntroller"+exam);
 
         try {
-            Exam updatedExam = new Exam();
-            updatedExam.setExamName(examName);
-            updatedExam.setCourseId(courseId);
-            updatedExam.setStartTime(startTime);
-            updatedExam.setEndTime(endTime);
-            updatedExam.setDuration(duration);
-            updatedExam.setExamType(examType);
-            updatedExam.setPassingScore(passingScore);
-            updatedExam.setInstructions(instructions);
-            updatedExam.setMaximumMarks(maximumMarks);
-            updatedExam.setFeedback(feedback);
-            Exam exam = examService.updateExam(id, updatedExam); // Call ExamService
-            return ResponseEntity.ok(exam);
+          Exam Updateexam = examService.updateExam(id,exam);
+
+          Exam updateCourse = courseService.UpdateExam(id,exam);
+
+          if(updateCourse == null){
+              return  new ResponseEntity<>("exam is not found",HttpStatus.NOT_FOUND);
+          }
+
+          return new ResponseEntity<>(updateCourse,HttpStatus.OK);
+
+
+
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return new ResponseEntity <>("somethng is wrong while updating the exam:"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
