@@ -22,6 +22,7 @@ public class NoteBook {
    private String content;
    private String teacherId;
    private String courseId;
+   private byte[] pdfFile;
    @CreatedDate
    private LocalDateTime createdAt;
    @LastModifiedDate

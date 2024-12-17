@@ -4,8 +4,11 @@ import com.example.demo.entity.NoteBook;
 import com.example.demo.repo.NoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteBookService {
@@ -13,9 +16,16 @@ public class NoteBookService {
     @Autowired
     private NoteRepo noteRepo;
 
+    public NoteBook saveNoteBookWithPdf(NoteBook noteBook, MultipartFile pdfFile) throws IOException {
+        byte[] pdfContent = pdfFile.getBytes();  // Get the PDF content as bytes
+        noteBook.setPdfFile(pdfContent);      // Set PDF content to the NoteBook entity
+        return noteRepo.save(noteBook);          // Save the note in MongoDB
+    }
 
-    public NoteBook createNote(NoteBook noteBook){
-        return noteRepo.save(noteBook);
+    // Method to get a note by its ID
+    public NoteBook getNoteById(String id) {
+        Optional<NoteBook> noteBook = noteRepo.findById(id);
+        return noteBook.orElse(null);  // Return null if the note is not found
     }
 
     public NoteBook getNote(String id){
@@ -27,16 +37,12 @@ public class NoteBookService {
     }
 
     public String deleteNote(String id){
+        noteRepo.deleteById(id);
         return "Note with deleted successfully" ;
     }
 
-    public NoteBook updateNote(String id, NoteBook noteBook) {
-        NoteBook existingNote = noteRepo.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
-        existingNote.setTitle(noteBook.getTitle());
-        existingNote.setDescription(noteBook.getDescription());
-        existingNote.setContent(noteBook.getContent());
-        existingNote.setTeacherId(noteBook.getTeacherId());
-        existingNote.setCourseId(noteBook.getCourseId());
-        return noteRepo.save(existingNote);
+    public List<NoteBook> getAllNotesByTeacherId(String teacherId){
+        return noteRepo.findNotesByTeacherId(teacherId);
     }
+
 }
