@@ -50,7 +50,7 @@ public class NoteBookController {
 
     @PutMapping("/{id}")
     public ResponseEntity<NoteBook> updateNoteBook(@PathVariable("id") String id,
-                                                   @RequestParam("pdfFile") MultipartFile pdfFile,
+                                                   @RequestParam(value = "pdfFile", required = false) MultipartFile pdfFile,
                                                    @RequestParam("title") String title,
                                                    @RequestParam("description") String description,
                                                    @RequestParam("content") String content,

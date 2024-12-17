@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,7 +31,8 @@ public class Course {
     private String endDate;
     @DBRef
     private List<Student> students;
-    private List<NoteBook> notebook;
+    @DBRef
+    private List<NoteBook> notebook=new ArrayList<>(); ;
     private List<Video> video;
     private List<Review> review;
     private String adminId;
@@ -42,8 +44,10 @@ public class Course {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Course(String id, String adminId, String courseName, String courseCode, String description, String startingDate, String endDate,
-                  List<Student> students, List<NoteBook> notebook, List<Video> video, List<Review> review, List<Teacher> teacher, String image, List<Exam> exam) {
+
+    public Course(String id, String courseName, String courseCode, String description, String startingDate, String endDate, List<Student> students,
+                  List<NoteBook> notebook, List<Video> video, List<Review> review,
+                  String adminId, List<Teacher> teacher, String image, List<Exam> exam, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.courseName = courseName;
         this.courseCode = courseCode;
@@ -54,10 +58,12 @@ public class Course {
         this.notebook = notebook;
         this.video = video;
         this.review = review;
+        this.adminId = adminId;
         this.teacher = teacher;
         this.image = image;
-        this.adminId = adminId;
         this.exam = exam;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     @Override
