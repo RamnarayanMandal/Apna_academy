@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.StudentExamResultDTO;
 import com.example.demo.service.service.StudentExamResultService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.StudentExamResult;
 import java.util.List;
 
@@ -19,5 +17,10 @@ public class StudentExamResultController {
     @GetMapping("/{studentId}/{examId}")
     public List<StudentExamResult> getStudentResult(@PathVariable String studentId, @PathVariable String examId) {
         return studentExamResultService.getStudentExamResults(studentId,examId);
+    }
+
+    @GetMapping("/student-results/{courseId}")
+    public List<StudentExamResultDTO> getStudentResultsByCourseId(@PathVariable String courseId) {
+        return studentExamResultService.getResult(courseId);
     }
 }

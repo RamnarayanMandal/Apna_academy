@@ -98,7 +98,7 @@ export const TeacherSideBar = () => {
           )}
         </li>
         <li>
-          <a href="#add-video" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
+          <a href="/teacher-grade-assigment" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
             <FaClipboardList className="mr-4" />
             {isOpen && 'Grade Assignments'}
           </a>
@@ -121,18 +121,8 @@ export const TeacherSideBar = () => {
             {isOpen && 'Live Classes'}
           </a>
         </li>
-        <li>
-          <a href="#inquiry" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-            <FaQuestionCircle className="mr-4" />
-            {isOpen && 'Discussions & Feedback'}
-          </a>
-        </li>
-        <li>
-          <a href="#admin" className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg">
-            <FaUpload className="mr-4" />
-            {isOpen && 'Upload Resources'}
-          </a>
-        </li>
+        
+        
       </ul>
       {/* Logout button */}
       <div className="mt-auto p-4 flex justify-between gap-4">

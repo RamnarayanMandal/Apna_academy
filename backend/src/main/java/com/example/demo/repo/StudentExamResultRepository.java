@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface StudentExamResultRepository extends MongoRepository<StudentExamResult, String> {
     List<StudentExamResult> findByStudentId(String studentId);
-    List<StudentExamResult> findByStudentIdAndExamId(String studentId, String examId);
+    List<StudentExamResult> findByStudentIdAndExamId(String studentId,  String examId);
+    List<StudentExamResult> findByCourseId(String courseId);
 }

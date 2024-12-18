@@ -29,7 +29,7 @@ public class Exam {
     private Long startTime;
     private Long endTime;
 
-    private List<StudentExamResult> studentExamResults;
+    private List<StudentExamResult> studentExamResults =  new ArrayList<>();
 
     private Long duration;
     private String examType;
