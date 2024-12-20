@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Id;
@@ -32,12 +34,18 @@ public class Course {
     @DBRef
     private List<Student> students;
     @DBRef
-    private List<NoteBook> notebook=new ArrayList<>(); ;
+    @JsonIgnore
+    private List<NoteBook> notebook=new ArrayList<>();
+    @JsonIgnore
     private List<Video> video;
+    @JsonIgnore
     private List<Review> review;
     private String adminId;
+    @JsonManagedReference
+    @DBRef
     private List<Teacher> teacher;
     private String image;
+    @JsonIgnore
     private List<Exam> exam;
     @CreatedDate
     private LocalDateTime createdAt;

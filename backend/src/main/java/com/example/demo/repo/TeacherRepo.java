@@ -5,6 +5,4 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface TeacherRepo extends MongoRepository<Teacher, String> {
     public Teacher findByEmail(String email);
-
-	
 }

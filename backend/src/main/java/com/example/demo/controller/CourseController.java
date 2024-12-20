@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CourseDetailsResponse;
+import com.example.demo.dto.TeacherStudentCourseDTO;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repo.CourseRepo;
@@ -187,6 +188,17 @@ public class CourseController {
 
         }
     }
+    @DeleteMapping("/{courseId}/removeTeacher/{teacherId}")
+    public ResponseEntity<String> removeTeacherFromCourse(@PathVariable String courseId,
+                                                          @PathVariable String teacherId) {
+        try {
+            Course updatedCourse = courseService.removeTeacherFromCourse(teacherId, courseId);
+            return ResponseEntity.ok("Teacher removed from course successfully.");
+        } catch (RuntimeException e) {
+            // Handle the error (e.g., course or Teacher not found)
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/teacher/getAllCourses/{teacherId}")
     public ResponseEntity<List<Course>> getTeacherCourses(@PathVariable String teacherId) {
@@ -195,6 +207,20 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(courses);
+    }
+
+    @GetMapping("/teacher-student")
+    public ResponseEntity<List<TeacherStudentCourseDTO>> getAllCoursesForTeacherAndStudent() {
+        // Fetch the list of TeacherStudentCourseDTO from the service
+        List<TeacherStudentCourseDTO> courseDTOList = courseService.getAllCoursesForTeacherAndStudent();
+
+        // Return the list wrapped in ResponseEntity with HTTP status 200 (OK)
+        if (courseDTOList != null && !courseDTOList.isEmpty()) {
+            return ResponseEntity.ok(courseDTOList);
+        } else {
+            // Return an empty list with HTTP status 404 (Not Found) if no courses found
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/total-course")

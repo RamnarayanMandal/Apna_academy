@@ -1,6 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.dto.CourseDetailsResponse;
+import com.example.demo.dto.TeacherStudentCourseDTO;
 import com.example.demo.entity.*;
 import com.example.demo.repo.*;
 import com.example.demo.service.CloudinaryService;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -166,26 +168,58 @@ public class CourseService {
     }
 
     public Course addTeacherToCourse(String teacherId, String courseId) {
-
+        // Fetch the course and teacher from the repository
         Course course = courseRepo.findById(courseId).orElseThrow(() ->
                 new RuntimeException("Course with ID " + courseId + " not found"));
 
         Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
                 new RuntimeException("Teacher with ID " + teacherId + " not found"));
 
+        // Update the list of teachers for the course
         List<Teacher> teachers = course.getTeacher();
         if (teachers == null) {
             teachers = new ArrayList<>();
         }
 
-        boolean teacherExists = teachers.stream().anyMatch(t->t.getEmail().equals(teacher.getEmail()));
+        // Check if the teacher already exists in the list (based on their email or id)
+        boolean teacherExists = teachers.stream().anyMatch(t -> t.getEmail().equals(teacher.getEmail()));
         if (!teacherExists) {
             teachers.add(teacher);
             course.setTeacher(teachers);
         }
+        // Save both the updated course and teacher back to the database
+        courseRepo.save(course);
+
+        return course;
+    }
+
+    public Course removeTeacherFromCourse(String teacherId, String courseId) {
+        // Fetch the course by ID
+        Course course = courseRepo.findById(courseId).orElseThrow(() ->
+                new RuntimeException("Course with ID " + courseId + " not found"));
+
+        // Fetch the Teacher by ID
+        Teacher teacher = teacherRepo.findById(teacherId).orElseThrow(() ->
+                new RuntimeException("Teacher with ID " + teacherId + " not found"));
+
+        // Get the list of teacher in the course
+        List<Teacher> teachers = course.getTeacher();
+
+        if (teachers != null && !teachers.isEmpty()) {
+            // Check if the teacher is in the course
+            boolean teachersExists = teachers.stream().anyMatch(s -> s.getEmail().equals(teacher.getEmail()));
+
+            if (teachersExists) {
+                // Remove the teacher from the list
+                teachers.removeIf(s -> s.getEmail().equals(teacher.getEmail()));
+                course.setTeacher(teachers); // Update the course with the modified list
+            }
+        }
 
         return courseRepo.save(course);
     }
+
+
 
     public List<Course> getCoursesByTeacherId(String teacherId){
         return courseRepo.findByTeacherId(teacherId);
@@ -268,6 +302,27 @@ public class CourseService {
         Course updatedCourse = courseRepo.save(existingCourse);
 
         return updatedCourse;
+    }
+
+    public List<TeacherStudentCourseDTO> getAllCoursesForTeacherAndStudent() {
+        // Fetch all courses from the repository
+        List<Course> courses = courseRepo.findAll();
+
+        // Map each course to a TeacherStudentCourseDTO
+        return courses.stream().map(course -> {
+            List<Student> students = course.getStudents();  // Get students associated with the course
+            List<Teacher> teachers = course.getTeacher();   // Get teachers associated with the course
+            String image = course.getImage();                // Get image associated with the course
+
+            // Return a new TeacherStudentCourseDTO for each course
+            return new TeacherStudentCourseDTO(
+                    course.getId(),
+                    course.getCourseName(),
+                    students,
+                    teachers,
+                    image
+            );
+        }).collect(Collectors.toList());
     }
 
 }

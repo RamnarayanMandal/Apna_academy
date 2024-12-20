@@ -92,12 +92,12 @@ const AdminSidebar = () => {
           {menuState.manageUsers && isOpen && (
             <ul className="pl-8 space-y-2">
               <li>
-                <a href="#teachers" className="hover:text-blue-500">
+                <a href="/manage-teachers" className="hover:text-blue-500">
                   Teachers
                 </a>
               </li>
               <li>
-                <a href="#students" className="hover:text-blue-500">
+                <a href="/manage-students" className="hover:text-blue-500">
                   Students
                 </a>
               </li>

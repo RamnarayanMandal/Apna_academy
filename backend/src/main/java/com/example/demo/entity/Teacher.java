@@ -2,19 +2,16 @@ package com.example.demo.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
-@Document(collection = "teachers") // Collection name in MongoDB
-public class Teacher extends BaseUser {
+@Document(collection = "teachers")
+public class  Teacher extends BaseUser {
 
     @Field("subject_specialization")
     @NotNull(message = "Subject specialization cannot be null")
@@ -31,10 +28,6 @@ public class Teacher extends BaseUser {
     @Field("qualification")
     private String qualification;
 
-    @Field("courses")
-    private List<Course> courses; // A list of courses taught by the teacher
-
-    // Full Constructor
     public Teacher(
         String id, 
         String name, 
@@ -52,19 +45,9 @@ public class Teacher extends BaseUser {
         this.phoneNo = phoneNo;
         this.address = address;
         this.qualification = qualification;
-        this.courses = courses;
+
     }
 
-    // Utility methods for adding and removing courses
-    public void addCourse(Course course) {
-        this.courses.add(course);
-    }
-
-    public void removeCourse(Course course) {
-        this.courses.remove(course);
-    }
-    
-    
 
 	public String getSubjectSpecialization() {
 		return subjectSpecialization;
@@ -98,17 +81,9 @@ public class Teacher extends BaseUser {
 		this.qualification = qualification;
 	}
 
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
-	}
-
 	@Override
 	public String toString() {
 		return "Teacher [subjectSpecialization=" + subjectSpecialization + ", phoneNo=" + phoneNo + ", address="
-				+ address + ", qualification=" + qualification + ", courses=" + courses + "]";
+				+ address + ", qualification=" + qualification + " ]";
 	}
 }

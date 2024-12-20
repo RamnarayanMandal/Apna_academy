@@ -30,6 +30,7 @@ import ManageStudent from './Pages/Teacher/ManageStudent'
 import GetAllNotes from './Pages/Notes/GetAllNotes'
 import GetNoteByCourse from './Pages/Notes/GetNoteByCourse'
 import GradeAssignment from './Pages/Teacher/GradeAssignment'
+import ManageTeacher from './Pages/Admin/ManageTeacher'
 
 
 
@@ -75,6 +76,7 @@ function App() {
             <Route path='/manage-notes' element={<GetAllNotes />} /> 
             <Route path='/Get-Note' element={<GetNoteByCourse/>} /> 
             <Route path='/teacher-grade-assigment' element={<GradeAssignment/>} /> 
+            <Route path='/manage-teachers' element={<ManageTeacher />} />   
                    
 
           </Routes>

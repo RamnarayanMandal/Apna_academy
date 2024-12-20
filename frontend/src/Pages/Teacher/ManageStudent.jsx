@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { TeacherSideBar } from './TeacherSideBar';
 import Swal from 'sweetalert2'; 
 import AddRemoveStudentFromCourse from './AddRemoveStudentFromCourse'; // Import the modal component
+import AdminSidebar from '../Admin/AdminSidebar';
 
 const ManageStudent = () => {
     const { isDarkMode } = useTheme();
@@ -18,7 +19,7 @@ const ManageStudent = () => {
     const [selectedStudent, setSelectedStudent] = useState(null); // Store selected student
     const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
     const navigate = useNavigate();
-
+    const role = localStorage.getItem('role');
     // Fetching all students from the API
     const fetchAllStudents = async () => {
         try {
@@ -89,7 +90,8 @@ const ManageStudent = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setStudents((prevStudents) => prevStudents.filter(student => student.id !== studentId));
+            setStudents((prevStudents) => prevStudents.
+            filter(student => student.id !== studentId));
             Swal.fire({
                 icon: 'success',
                 title: 'Student Deleted!',
@@ -150,7 +152,9 @@ const ManageStudent = () => {
         <div className={`flex ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'}`}>
             {/* Sidebar */}
             <div className={`w-64 min-h-screen`}>
-                <TeacherSideBar />
+                {/* <TeacherSideBar /> */}
+                {role === "teacher" ? <TeacherSideBar /> : <AdminSidebar />}
+
             </div>
 
             {/* Main content */}

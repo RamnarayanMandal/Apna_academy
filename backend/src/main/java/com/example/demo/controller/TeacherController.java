@@ -2,6 +2,9 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.dto.StudentDTO;
+import com.example.demo.dto.TeacherDTO;
+import com.example.demo.repo.TeacherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ public class TeacherController {
 
     @Autowired
     private TeacherService service;
+
+    @Autowired
+    private TeacherRepo teacherRepo;
 
     @GetMapping("/")
     public ResponseEntity<?> getAllTeachers() {
@@ -73,5 +79,30 @@ public class TeacherController {
     @GetMapping("/total-teachers")
     public ResponseEntity<Long> getTotalTeachers(){
         return ResponseEntity.ok(service.totalTeacher());
+    }
+
+    @GetMapping("/with-courses")
+    public List<TeacherDTO> getAllTeachersWithCourses() {
+        return service.getAllTeachersWithCourses();
+    }
+
+    @PutMapping("/{id}/block")
+    public ResponseEntity<String> blockTeacher(@PathVariable String id) {
+        return toggleBlockStatus(id, true);
+    }
+
+    @PutMapping("/{id}/unblock")
+    public ResponseEntity<String> unblockTeacher(@PathVariable String id) {
+        return toggleBlockStatus(id, false);
+    }
+
+    private ResponseEntity<String> toggleBlockStatus(String id, boolean blockStatus) {
+        return teacherRepo.findById(id)
+                .map(teacher -> {
+                    teacher.setBlock(blockStatus);
+                    teacherRepo.save(teacher);
+                    return ResponseEntity.ok("teacher " + (blockStatus ? "blocked" : "unblocked") + " successfully.");
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
