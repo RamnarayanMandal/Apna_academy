@@ -9,7 +9,7 @@ export const TeacherSideBar = () => {
   const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // State to toggle "Assignments"
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate(); // For navigation
-
+  const teacherId = localStorage.getItem('CurrentUserId');
   const handleLogout = () => {
     // Clear any session or authentication data here, if applicable
     localStorage.removeItem('authToken'); // Example for clearing authToken
@@ -47,6 +47,15 @@ export const TeacherSideBar = () => {
         </div>
       </div>
       <ul className="space-y-4">
+      <li>
+      <a 
+      href={`/teacher-profile/${teacherId}`} 
+      className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+    >
+      <FaClipboardList className="mr-4" />
+      {isOpen && 'Profile'}  {/* Render 'Profile' text only if isOpen is true */}
+    </a>
+        </li>
         <li>
           <a
             href="#create-manage-courses"

@@ -1,15 +1,17 @@
 package com.example.demo.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 
 @NoArgsConstructor
+@Setter
+@Getter
 @Document(collection = "teachers")
 public class  Teacher extends BaseUser {
 
@@ -28,62 +30,32 @@ public class  Teacher extends BaseUser {
     @Field("qualification")
     private String qualification;
 
-    public Teacher(
-        String id, 
-        String name, 
-        String password, 
-        String email,
-		boolean block,
-        String subjectSpecialization, 
-        String phoneNo, 
-        String address, 
-        String qualification, 
-        List<Course> courses
-    ) {
-        super(id, name, password, email,block);
-        this.subjectSpecialization = subjectSpecialization;
-        this.phoneNo = phoneNo;
-        this.address = address;
-        this.qualification = qualification;
+	private String profilePicture;
+	private String dateOfBirth;
+	private String gender;
 
-    }
-
-
-	public String getSubjectSpecialization() {
-		return subjectSpecialization;
-	}
-
-	public void setSubjectSpecialization(String subjectSpecialization) {
+	public Teacher(String id, String name, String password, String email, Boolean block, String subjectSpecialization,
+				   String phoneNo, String address, String qualification, String profilePicture, String dateOfBirth, String gender) {
+		super(id, name, password, email, block);
 		this.subjectSpecialization = subjectSpecialization;
-	}
-
-	public String getPhoneNo() {
-		return phoneNo;
-	}
-
-	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getQualification() {
-		return qualification;
-	}
-
-	public void setQualification(String qualification) {
 		this.qualification = qualification;
+		this.profilePicture = profilePicture;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
 	}
 
 	@Override
 	public String toString() {
-		return "Teacher [subjectSpecialization=" + subjectSpecialization + ", phoneNo=" + phoneNo + ", address="
-				+ address + ", qualification=" + qualification + " ]";
+		return "Teacher{" +
+				"subjectSpecialization='" + subjectSpecialization + '\'' +
+				", phoneNo='" + phoneNo + '\'' +
+				", address='" + address + '\'' +
+				", qualification='" + qualification + '\'' +
+				", profilePicture='" + profilePicture + '\'' +
+				", dateOfBirth='" + dateOfBirth + '\'' +
+				", gender='" + gender + '\'' +
+				'}';
 	}
 }
