@@ -208,13 +208,8 @@ const AdminSidebar = () => {
           </div>
           {menuState.notifications && isOpen && (
             <ul className="pl-8 space-y-2">
-              <li>
-                <a href="#send-announcements" className="hover:text-blue-500">
-                  Send Announcements
-                </a>
-              </li>
-              <li>
-                <a href="#view-notifications" className="hover:text-blue-500">
+               <li>
+                <a href="/get-announcement" className="hover:text-blue-500">
                   View Notifications
                 </a>
               </li>

@@ -32,6 +32,8 @@ import GetNoteByCourse from './Pages/Notes/GetNoteByCourse'
 import GradeAssignment from './Pages/Teacher/GradeAssignment'
 import ManageTeacher from './Pages/Admin/ManageTeacher'
 import TeacherProfile from './Pages/Teacher/TeacherProfile'
+import AddAnnouncement from './Pages/Admin/Announcement/AddAnnouncement'
+import GetAllAnnouncement from './Pages/Admin/Announcement/GetAllAnnouncement'
 
 
 
@@ -79,6 +81,7 @@ function App() {
             <Route path='/teacher-grade-assigment' element={<GradeAssignment/>} /> 
             <Route path='/manage-teachers' element={<ManageTeacher />} />   
             <Route path='/teacher-profile/:id' element={<TeacherProfile />} />   
+            <Route path='/get-announcement' element={<GetAllAnnouncement />} />   
                    
 
           </Routes>
