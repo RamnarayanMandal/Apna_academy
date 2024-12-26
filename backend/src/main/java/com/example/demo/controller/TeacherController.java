@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.demo.dto.StudentDTO;
 import com.example.demo.dto.TeacherDTO;
 import com.example.demo.repo.TeacherRepo;
+import com.example.demo.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.Teacher;
 import com.example.demo.service.service.TeacherService;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin("http://localhost:5173")
 @RestController
@@ -24,6 +27,9 @@ public class TeacherController {
     @Autowired
     private TeacherRepo teacherRepo;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @GetMapping("/")
     public ResponseEntity<?> getAllTeachers() {
         try {
@@ -31,6 +37,20 @@ public class TeacherController {
             return ResponseEntity.ok(teachers);
         } catch (Exception e) {
             return new ResponseEntity<>("Error while fetching teachers: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTeacherById(@PathVariable String id) {
+        try {
+            // Calling service layer to delete the teacher by ID
+            String result = service.deleteTeacherById(id);
+
+            // Return success message with HTTP 200 status
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            // Return error message with HTTP 500 status in case of exception
+            return new ResponseEntity<>("Error while deleting teacher by ID: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -62,18 +82,45 @@ public class TeacherController {
         }
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTeacherById(@PathVariable String id, @RequestBody Teacher teacher) {
-        try {
-            Teacher updatedTeacher = service.updateTeacherById(id, teacher);
-            if (updatedTeacher != null) {
-                return ResponseEntity.ok(updatedTeacher);
-            } else {
-                return new ResponseEntity<>("Teacher with ID " + id + " not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error while updating teacher: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> updateTeacherById(
+            @PathVariable String id,
+            @RequestParam("name") String name,
+            @RequestParam("phoneNo") String phoneNo,
+            @RequestParam("address") String address,
+            @RequestParam(value = "dateOfBirth", required = false) String dateOfBirth,  // Optional
+            @RequestParam("gender") String gender,
+            @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture
+    ) throws IOException {
+
+        // Fetch the existing teacher
+        Teacher existingTeacher = teacherRepo.findById(id).get();
+
+        if (existingTeacher == null) {
+            return new ResponseEntity<>("Teacher with ID " + id + " not found", HttpStatus.NOT_FOUND);  // 404 if not found
         }
+
+        // Update the teacher fields
+        existingTeacher.setName(name);
+        existingTeacher.setPhoneNo(phoneNo);
+        existingTeacher.setAddress(address);
+        existingTeacher.setGender(gender);
+
+        // Handle the optional dateOfBirth
+        if (dateOfBirth != null && !dateOfBirth.isEmpty()) {
+            existingTeacher.setDateOfBirth(dateOfBirth);  // Handle date format conversion if necessary
+        }
+
+        // Handle the profile picture update
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadFile(profilePicture);  // Assuming a service method to handle file upload
+            existingTeacher.setProfilePicture(imageUrl);
+        }
+        // Save the updated teacher
+        Teacher updatedTeacher = service.updateTeacherById(id, existingTeacher);
+
+        return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);  // Return the updated teacher with 200 status
     }
 
     @GetMapping("/total-teachers")

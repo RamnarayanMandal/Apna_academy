@@ -69,7 +69,7 @@ const ManageTeacher = () => {
         deleteTeacher(teacherId);
         break;
       case 'view':
-        navigate(`/Teacher-profile/${teacherId}`);
+        navigate(`/teacher-profile/${teacherId}`);
         break;
       case 'block':
         blockOrUnblockTeacher(teacherId, 'block');

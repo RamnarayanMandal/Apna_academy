@@ -1,15 +1,17 @@
 package com.example.demo.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 
 @NoArgsConstructor
+@Setter
+@Getter
 @Document(collection = "teachers")
 public class  Teacher extends BaseUser {
 
@@ -55,35 +57,24 @@ public class  Teacher extends BaseUser {
 
 	public void setSubjectSpecialization(String subjectSpecialization) {
 		this.subjectSpecialization = subjectSpecialization;
-	}
-
-	public String getPhoneNo() {
-		return phoneNo;
-	}
-
-	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getQualification() {
-		return qualification;
-	}
-
-	public void setQualification(String qualification) {
 		this.qualification = qualification;
+		this.profilePicture = profilePicture;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
 	}
 
 	@Override
 	public String toString() {
-		return "Teacher [subjectSpecialization=" + subjectSpecialization + ", phoneNo=" + phoneNo + ", address="
-				+ address + ", qualification=" + qualification + " ]";
+		return "Teacher{" +
+				"subjectSpecialization='" + subjectSpecialization + '\'' +
+				", phoneNo='" + phoneNo + '\'' +
+				", address='" + address + '\'' +
+				", qualification='" + qualification + '\'' +
+				", profilePicture='" + profilePicture + '\'' +
+				", dateOfBirth='" + dateOfBirth + '\'' +
+				", gender='" + gender + '\'' +
+				'}';
 	}
 }

@@ -54,6 +54,15 @@ export const TeacherSideBar = () => {
         </div>
       </div>
       <ul className="space-y-4">
+      <li>
+      <a 
+      href={`/teacher-profile/${teacherId}`} 
+      className="flex items-center p-4 hover:bg-gray-600 rounded font-semibold text-lg"
+    >
+      <FaClipboardList className="mr-4" />
+      {isOpen && 'Profile'}  {/* Render 'Profile' text only if isOpen is true */}
+    </a>
+        </li>
         <li>
           <a
             href="#create-manage-courses"

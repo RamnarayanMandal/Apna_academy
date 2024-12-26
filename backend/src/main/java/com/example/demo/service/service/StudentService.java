@@ -81,27 +81,7 @@ public class StudentService {
         }).collect(Collectors.toList());
     }
 
-//    public StudentDTO findById(String id) {
-//        Optional<Student> optionalStudent = studentRepo.findById(id);
-//        if (optionalStudent.isPresent()) {
-//            Student student = optionalStudent.get();
-//            List<Course> courses = courseRepo.findByStudents(student);
-//            StudentDTO studentDTO = new StudentDTO();
-//            studentDTO.setId(student.getId());
-//            studentDTO.setName(student.getName());
-//            studentDTO.setEmail(student.getEmail());
-//            studentDTO.setPhone(student.getPhone());
-//            studentDTO.setAddress(student.getAddress());
-//            studentDTO.setProfilePicture(student.getProfilePicture());
-//            studentDTO.setDateOfBirth(student.getDateOfBirth());
-//            studentDTO.setGender(student.getGender());
-//            studentDTO.setBlock(student.getBlock());
-//            studentDTO.setCourse(courses);
-//            return studentDTO;
-//        } else {
-//            return null;
-//        }
-//    }
+
 
     @Transactional
     public Student blockStudent(String studentId) {
