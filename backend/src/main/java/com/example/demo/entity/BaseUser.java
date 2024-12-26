@@ -44,16 +44,21 @@ public abstract class BaseUser {
 
 	private Boolean block=false;
 
+	private Boolean isActive = false;
+
     // Constructor
-    public BaseUser(String id, String name, String password, String email ,Boolean block) {
+    public BaseUser(String id, String name, String password, String email ,Boolean block, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
 		this.block = block;
+		this.isActive = isActive;
     }
 
-   
+	public BaseUser(String id, String name, String password, String email, Boolean block) {
+	}
+
 
 	public String getId() {
 		return id;
@@ -109,6 +114,10 @@ public abstract class BaseUser {
 		this.block = block;
 	}
 
+	public Boolean getIsActive() {
+        return isActive;
+    }
+
 	@Override
 	public String toString() {
 		return "BaseUser{" +
@@ -117,6 +126,7 @@ public abstract class BaseUser {
 				", password='" + password + '\'' +
 				", email='" + email + '\'' +
 				", block=" + block +
+				", isActive=" + isActive +
 				'}';
 	}
 }

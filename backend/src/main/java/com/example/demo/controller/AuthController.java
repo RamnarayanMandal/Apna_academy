@@ -4,6 +4,8 @@ import com.example.demo.entity.UserPrincipal;
 import com.example.demo.service.CloudinaryService;
 import com.example.demo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +48,19 @@ public class AuthController {
     @GetMapping("/profile")
     public BaseUser getUserProfile(@AuthenticationPrincipal UserPrincipal userDetails) {
         return  userDetails.getUser();
+    }
+
+    @PostMapping("/logout/{id}")
+    public ResponseEntity<?> logout(@PathVariable String id,@RequestParam String role) {
+        System.out.println(id + role);
+
+        try {
+         BaseUser logoutUser  = authService.logout(id,role);
+         return new ResponseEntity<>("logout successfully", HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("some is wrong while logout user:"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

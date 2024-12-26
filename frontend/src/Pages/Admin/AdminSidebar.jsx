@@ -13,11 +13,13 @@ import {
   FaSignOutAlt,
   FaUserGraduate,
 } from 'react-icons/fa';
+import { logout } from '../../Component/Logut';
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
 
   // Menu toggle states
   const [menuState, setMenuState] = useState({
@@ -36,9 +38,16 @@ const AdminSidebar = () => {
     }));
   };
 
-  const handleLogout = () => {
-    console.log('Logged out');
-    navigate('/login');
+  const handleLogout = async() => {
+
+    try {
+      await logout();
+      navigate('/login'); 
+      
+    } catch (error) {
+        console.error('Error logging out:', error);
+  
+    }
   };
 
   return (

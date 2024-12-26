@@ -2,18 +2,25 @@ import React, { useState } from 'react';
 import { FaBook, FaVideo, FaClipboardList, FaChartLine, FaComments, FaQuestionCircle, FaUpload, FaUserCog, FaCogs, FaSignOutAlt, FaPlus, FaMinus } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { logout } from '../../Component/Logut';
 
 export const TeacherSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false); // State to toggle "Create & Manage Courses"
   const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // State to toggle "Assignments"
   const { isDarkMode, toggleTheme } = useTheme();
-  const navigate = useNavigate(); // For navigation
+   const navigate = useNavigate();
+  
 
-  const handleLogout = () => {
-    // Clear any session or authentication data here, if applicable
-    localStorage.removeItem('authToken'); // Example for clearing authToken
-    navigate('/login'); // Use navigate instead of history.push
+  const handleLogout = async () => {
+   try {
+         await logout();
+         navigate('/login'); 
+         
+       } catch (error) {
+           console.error('Error logging out:', error);
+     
+       }
   };
 
   const toggleCourses = () => {

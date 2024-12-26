@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { FaChalkboardTeacher, FaTasks, FaRegGrinStars, FaBookOpen, FaUserAlt, FaSignOutAlt, FaUser  , FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
 import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { logout } from '../../Component/Logut';
 
 export const StudentSideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);  // State to control "My Courses" collapse/expand
   const { isDarkMode, toggleTheme } = useTheme();
-  const navigate = useNavigate(); // For navigation
   const StudentId = localStorage.getItem('CurrentUserId');
+  
   const handleLogout = () => {
-    // Clear any session or authentication data here, if applicable
-    localStorage.removeItem('authToken'); // Example for clearing authToken
-    navigate('/login'); // Use navigate instead of history.push
+     logout();
   };
 
   return (

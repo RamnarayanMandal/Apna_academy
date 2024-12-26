@@ -76,32 +76,82 @@ public class UserService {
 //            return ResponseEntity.status(401).body("Invalid credentials");
 //        }
 //    }
+
+
 public String login(String email, String password, String role) {
     System.out.println("Attempting login for user: " + email);
 
-    if(role.equals("student")) {
-        Student student = studentRepo.findByEmail(email);
-        if (student != null) {
-            System.out.println("Student found: " + student.getEmail() + ", Block status: " + student.getBlock());
-        }
+    BaseUser user = null;
 
-        // If blocked, return the blocked message
-        if (student != null && student.getBlock() && "student".equals(role)) {
-            return "Your account is blocked. Please contact the administrator.";
+    if (role.equalsIgnoreCase("student")) {
+        user = studentRepo.findByEmail(email);
+        if (user != null) {
+            System.out.println("Student found: " + user.getEmail() + ", Block status: " + ((Student) user).getBlock());
+            // Check if the student is blocked
+            if (((Student) user).getBlock()) {
+                return "Your account is blocked. Please contact the administrator.";
+            }
         }
+    } else if (role.equalsIgnoreCase("teacher")) {
+        user = teacherRepo.findByEmail(email);
+    } else if (role.equalsIgnoreCase("admin")) {
+        user = adminRepo.findByEmail(email);
     }
 
-    // Proceed with authentication if not blocked
+    if (user == null) {
+        throw new RuntimeException("User not found with email: " + email);
+    }
+
+    // Proceed with authentication
     Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password)
     );
 
     if (authentication.isAuthenticated()) {
+        // Set isActive to true and update the user in the repository
+        user.setIsActive(true);
+
+        if (user instanceof Student) {
+            studentRepo.save((Student) user);
+        } else if (user instanceof Teacher) {
+            teacherRepo.save((Teacher) user);
+        } else if (user instanceof Admin) {
+            adminRepo.save((Admin) user);
+        }
+
+        // Generate and return JWT token
         return jwtService.generateToken(email);
     } else {
         throw new RuntimeException("Invalid credentials");
     }
 }
+
+    public BaseUser logout(String id, String role) {
+        BaseUser user = switch (role.toLowerCase()) {
+            case "student" ->
+                    studentRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+            case "teacher" ->
+                    teacherRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+            case "admin" ->
+                    adminRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+            default -> throw new RuntimeException("Invalid role: " + role);
+        };
+
+        // Set isActive to false and save the updated user in the corresponding repository
+        user.setIsActive(false);
+
+        if (user instanceof Student) {
+            studentRepo.save((Student) user);
+        } else if (user instanceof Teacher) {
+            teacherRepo.save((Teacher) user);
+        } else {
+            adminRepo.save((Admin) user);
+        }
+
+        return user;
+    }
+
+
 
 
 }

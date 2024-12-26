@@ -242,8 +242,20 @@ const GetAllCourse = () => {
                 </button>
               )}
 
-              {/* Explore Now Button */}
-              <button
+              {
+                role === 'student' && (
+                  <button
+                    className={`flex items-center px-4 py-2 rounded-md font-semibold ${isDarkMode
+                     ? 'bg-blue-500 text-white hover:bg-blue-400'
+                      : 'bg-blue-600 text-white hover:bg-blue-500'
+                      }`}
+                    onClick={() => alert(`Enroll in ${course.courseName}`)}
+                  >
+                    Enroll Now
+                  </button>
+                )
+              }
+              {/* <button
                 className={`flex items-center px-4 py-2 rounded-md font-semibold ${isDarkMode
                   ? 'bg-blue-500 text-white hover:bg-blue-400'
                   : 'bg-blue-600 text-white hover:bg-blue-500'
@@ -251,7 +263,7 @@ const GetAllCourse = () => {
                 onClick={() => alert(`Explore ${course.courseName}`)}
               >
                 Explore Now
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

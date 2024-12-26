@@ -33,8 +33,8 @@ public class Student extends BaseUser {
     // Constructor to initialize Student with the required fields
 
 
-    public Student(String id, String name, String password, String email, Boolean block, String phone, String address, String profilePicture, String dateOfBirth, String gender, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, name, password, email, block);
+    public Student(String id, String name, String password,Boolean isActive, String email, Boolean block, String phone, String address, String profilePicture, String dateOfBirth, String gender, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, name, password, email, block,isActive);
         this.phone = phone;
         this.address = address;
         this.profilePicture = profilePicture;
