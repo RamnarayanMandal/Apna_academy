@@ -83,45 +83,45 @@ public class TeacherController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateTeacherById(
-            @PathVariable String id,
-            @RequestParam("name") String name,
-            @RequestParam("phoneNo") String phoneNo,
-            @RequestParam("address") String address,
-            @RequestParam(value = "dateOfBirth", required = false) String dateOfBirth,  // Optional
-            @RequestParam("gender") String gender,
-            @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture
-    ) throws IOException {
-
-        // Fetch the existing teacher
-        Teacher existingTeacher = teacherRepo.findById(id).get();
-
-        if (existingTeacher == null) {
-            return new ResponseEntity<>("Teacher with ID " + id + " not found", HttpStatus.NOT_FOUND);  // 404 if not found
-        }
-
-        // Update the teacher fields
-        existingTeacher.setName(name);
-        existingTeacher.setPhoneNo(phoneNo);
-        existingTeacher.setAddress(address);
-        existingTeacher.setGender(gender);
-
-        // Handle the optional dateOfBirth
-        if (dateOfBirth != null && !dateOfBirth.isEmpty()) {
-            existingTeacher.setDateOfBirth(dateOfBirth);  // Handle date format conversion if necessary
-        }
-
-        // Handle the profile picture update
-        if (profilePicture != null && !profilePicture.isEmpty()) {
-            String imageUrl = cloudinaryService.uploadFile(profilePicture);  // Assuming a service method to handle file upload
-            existingTeacher.setProfilePicture(imageUrl);
-        }
-        // Save the updated teacher
-        Teacher updatedTeacher = service.updateTeacherById(id, existingTeacher);
-
-        return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);  // Return the updated teacher with 200 status
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateTeacherById(
+//            @PathVariable String id,
+//            @RequestParam("name") String name,
+//            @RequestParam("phoneNo") String phoneNo,
+//            @RequestParam("address") String address,
+//            @RequestParam(value = "dateOfBirth", required = false) String dateOfBirth,  // Optional
+//            @RequestParam("gender") String gender,
+//            @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture
+//    ) throws IOException {
+//
+//        // Fetch the existing teacher
+//        Teacher existingTeacher = teacherRepo.findById(id).get();
+//
+//        if (existingTeacher == null) {
+//            return new ResponseEntity<>("Teacher with ID " + id + " not found", HttpStatus.NOT_FOUND);  // 404 if not found
+//        }
+//
+//        // Update the teacher fields
+//        existingTeacher.setName(name);
+//        existingTeacher.setPhoneNo(phoneNo);
+//        existingTeacher.setAddress(address);
+//        existingTeacher.setGender(gender);
+//
+//        // Handle the optional dateOfBirth
+//        if (dateOfBirth != null && !dateOfBirth.isEmpty()) {
+//            existingTeacher.setDateOfBirth(dateOfBirth);  // Handle date format conversion if necessary
+//        }
+//
+//        // Handle the profile picture update
+//        if (profilePicture != null && !profilePicture.isEmpty()) {
+//            String imageUrl = cloudinaryService.uploadFile(profilePicture);  // Assuming a service method to handle file upload
+//            existingTeacher.setProfilePicture(imageUrl);
+//        }
+//        // Save the updated teacher
+//        Teacher updatedTeacher = service.updateTeacherById(id, existingTeacher);
+//
+//        return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);  // Return the updated teacher with 200 status
+//    }
 
     @GetMapping("/total-teachers")
     public ResponseEntity<Long> getTotalTeachers(){

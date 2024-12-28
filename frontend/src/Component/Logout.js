@@ -8,7 +8,7 @@ const token = localStorage.getItem("token");
 
 
 export const logout = async () => {
-
+ console.log("role....",role)
     if (!role || !id || !token) {
         Swal.fire({
             icon: "warning",
@@ -21,11 +21,8 @@ export const logout = async () => {
 
     try {
         const resp = await axios.post(
-            `${BASE_URL}/api/auth/logout/${id}`,
-            
-            {
-                params: { role:role }, 
-              },
+            `${BASE_URL}/api/auth/logout/${id}?role=${role}`,
+      {},
            
             
         );

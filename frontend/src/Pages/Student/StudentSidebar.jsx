@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaChalkboardTeacher, FaTasks, FaRegGrinStars, FaBookOpen, FaUserAlt, FaSignOutAlt, FaUser  , FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useTheme } from '../../ThemeProvider';
 import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
-import { logout } from '../../Component/Logut';
+import { logout } from '../../Component/Logout';
 
 export const StudentSideBar = () => {
   const [isOpen, setIsOpen] = useState(true);

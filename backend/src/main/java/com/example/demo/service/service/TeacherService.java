@@ -38,41 +38,41 @@ public class TeacherService {
 		return repo.findByEmail(email);
 	}
 
-	public Teacher updateTeacherById(String id, Teacher updatedTeacher) {
-		return repo.findById(id).map(existingTeacher -> {
-			// Update only the fields that are not null in the provided object
-			if (updatedTeacher.getName() != null) {
-				existingTeacher.setName(updatedTeacher.getName());
-			}
-			if (updatedTeacher.getEmail() != null) {
-				existingTeacher.setEmail(updatedTeacher.getEmail());
-			}
-			if (updatedTeacher.getSubjectSpecialization() != null) {
-				existingTeacher.setSubjectSpecialization(updatedTeacher.getSubjectSpecialization());
-			}
-			if (updatedTeacher.getPhoneNo() != null) {
-				existingTeacher.setPhoneNo(updatedTeacher.getPhoneNo());
-			}
-			if (updatedTeacher.getAddress() != null) {
-				existingTeacher.setAddress(updatedTeacher.getAddress());
-			}
-			if (updatedTeacher.getQualification() != null) {
-				existingTeacher.setQualification(updatedTeacher.getQualification());
-			}
-			if (updatedTeacher.getProfilePicture() != null) {
-				existingTeacher.setProfilePicture(updatedTeacher.getProfilePicture());
-			}
-			if (updatedTeacher.getDateOfBirth() != null) {
-				existingTeacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
-			}
-			if (updatedTeacher.getGender() != null) {
-				existingTeacher.setGender(updatedTeacher.getGender());
-			}
-
-			// Save the updated teacher entity to the database
-			return repo.save(existingTeacher);
-		}).orElse(null);  // Return null if the teacher with the given ID doesn't exist
-	}
+//	public Teacher updateTeacherById(String id, Teacher updatedTeacher) {
+//		return repo.findById(id).map(existingTeacher -> {
+//			// Update only the fields that are not null in the provided object
+//			if (updatedTeacher.getName() != null) {
+//				existingTeacher.setName(updatedTeacher.getName());
+//			}
+//			if (updatedTeacher.getEmail() != null) {
+//				existingTeacher.setEmail(updatedTeacher.getEmail());
+//			}
+//			if (updatedTeacher.getSubjectSpecialization() != null) {
+//				existingTeacher.setSubjectSpecialization(updatedTeacher.getSubjectSpecialization());
+//			}
+//			if (updatedTeacher.getPhoneNo() != null) {
+//				existingTeacher.setPhoneNo(updatedTeacher.getPhoneNo());
+//			}
+//			if (updatedTeacher.getAddress() != null) {
+//				existingTeacher.setAddress(updatedTeacher.getAddress());
+//			}
+//			if (updatedTeacher.getQualification() != null) {
+//				existingTeacher.setQualification(updatedTeacher.getQualification());
+//			}
+//			if (updatedTeacher.getProfilePicture() != null) {
+//				existingTeacher.setProfilePicture(updatedTeacher.getProfilePicture());
+//			}
+//			if (updatedTeacher.getDateOfBirth() != null) {
+//				existingTeacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
+//			}
+//			if (updatedTeacher.getGender() != null) {
+//				existingTeacher.setGender(updatedTeacher.getGender());
+//			}
+//
+//			// Save the updated teacher entity to the database
+//			return repo.save(existingTeacher);
+//		}).orElse(null);  // Return null if the teacher with the given ID doesn't exist
+//	}
 
 
 	public long totalTeacher(){

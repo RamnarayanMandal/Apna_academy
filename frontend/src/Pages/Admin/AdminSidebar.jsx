@@ -13,7 +13,7 @@ import {
   FaSignOutAlt,
   FaUserGraduate,
 } from 'react-icons/fa';
-import { logout } from '../../Component/Logut';
+import { logout } from '../../Component/Logout';
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
