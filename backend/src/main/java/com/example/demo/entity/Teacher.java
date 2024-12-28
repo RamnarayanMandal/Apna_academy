@@ -31,6 +31,10 @@ public class  Teacher extends BaseUser {
     @Field("qualification")
     private String qualification;
 
+    private String profilePicture;
+    private String dateOfBirth;
+    private String gender;
+
     public Teacher(
         String id, 
         String name, 
@@ -56,26 +60,26 @@ public class  Teacher extends BaseUser {
 		return subjectSpecialization;
 	}
 
-//	public void setSubjectSpecialization(String subjectSpecialization) {
-//		this.subjectSpecialization = subjectSpecialization;
-//		this.phoneNo = phoneNo;
-//		this.address = address;
-//		this.qualification = qualification;
-//		this.profilePicture = profilePicture;
-//		this.dateOfBirth = dateOfBirth;
-//		this.gender = gender;
-//	}
+	public void setSubjectSpecialization(String subjectSpecialization) {
+		this.subjectSpecialization = subjectSpecialization;
+		this.phoneNo = phoneNo;
+		this.address = address;
+		this.qualification = qualification;
+		this.profilePicture = profilePicture;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "Teacher{" +
-//				"subjectSpecialization='" + subjectSpecialization + '\'' +
-//				", phoneNo='" + phoneNo + '\'' +
-//				", address='" + address + '\'' +
-//				", qualification='" + qualification + '\'' +
-//				", profilePicture='" + profilePicture + '\'' +
-//				", dateOfBirth='" + dateOfBirth + '\'' +
-//				", gender='" + gender + '\'' +
-//				'}';
-//	}
+	@Override
+	public String toString() {
+		return "Teacher{" +
+				"subjectSpecialization='" + subjectSpecialization + '\'' +
+				", phoneNo='" + phoneNo + '\'' +
+				", address='" + address + '\'' +
+				", qualification='" + qualification + '\'' +
+				", profilePicture='" + profilePicture + '\'' +
+				", dateOfBirth='" + dateOfBirth + '\'' +
+				", gender='" + gender + '\'' +
+				'}';
+	}
 }
