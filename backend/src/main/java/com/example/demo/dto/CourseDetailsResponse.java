@@ -14,38 +14,22 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class CourseDetailsResponse {
+    // Getters and Setters
     private Course course;
     private List<Video> videos;
     private List<Exam> exams;
     private List<NoteBook> notebooks;
 
-    // Getters and Setters
-    public Course getCourse() {
-        return course;
-    }
-
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public List<Video> getVideos() {
-        return videos;
     }
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
     }
 
-    public List<Exam> getExams() {
-        return exams;
-    }
-
     public void setExams(List<Exam> exams) {
         this.exams = exams;
-    }
-
-    public List<NoteBook> getNotebooks() {
-        return notebooks;
     }
 
     public void setNotebooks(List<NoteBook> notebooks) {
