@@ -16,7 +16,7 @@ public class WebConfig  {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("https://apnacollage.ramnarayan.shop", "http://localhost:5173")); // Allow frontend URL
+        config.setAllowedOrigins(Arrays.asList("https://apnaacademy.ramnarayan.shop", "http://localhost:5173")); // Allow frontend URL
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS")); // Allow methods
         config.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
         config.setAllowCredentials(true); // Allow credentials like cookies or authorization headers
