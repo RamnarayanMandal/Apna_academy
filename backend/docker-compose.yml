@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     ports:
-      - "8080:8080"
+      - "8080:8081"
     environment:
       MONGODB_URI: mongodb+srv://ramnarayan:Ram1234@cluster0.hk4ehir.mongodb.net/UserService
+      BASE_DOMAIN: https://apnacollage.api.ramnarayan.shop
