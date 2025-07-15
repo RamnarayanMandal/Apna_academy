@@ -140,7 +140,7 @@ const Login = ({ setShowModal }) => {
 
     
   return (
-    <div className={`min-h-screen flex items-center justify-center px-4 relative ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className="min-h-screen flex items-center justify-center px-4 relative">
       <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-lg w-full max-w-md relative`}>
         <button
           onClick={() => setShowModal(false)}

@@ -61,7 +61,7 @@ const Registration = ({setShowModal}) => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className="min-h-screen flex items-center justify-center" >
       <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-md w-full max-w-lg relative`}>
       <button
           onClick={() => setShowModal(false)}
