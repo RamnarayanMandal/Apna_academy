@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useTheme } from '../../ThemeProvider';
 
 const Registration = () => {
   // State to hold form data
@@ -18,6 +19,8 @@ const Registration = () => {
   // State for error messages
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const { isDarkMode } = useTheme();
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -106,8 +109,8 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-lg w-full max-w-md`}>
         <h2 className="text-2xl font-semibold text-center mb-6">Teacher Registration</h2>
         
         {/* Display general error message */}

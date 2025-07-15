@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../ThemeProvider';
 
 const Login = ({ setShowModal }) => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Login = ({ setShowModal }) => {
   const [error, setError] = useState(''); 
   const [token, setToken] = useState(null);
   const BASE_URL = import.meta.env.VITE_API_URL;
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -138,8 +140,8 @@ const Login = ({ setShowModal }) => {
 
     
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
+    <div className={`min-h-screen flex items-center justify-center px-4 relative ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-lg w-full max-w-md relative`}>
         <button
           onClick={() => setShowModal(false)}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"

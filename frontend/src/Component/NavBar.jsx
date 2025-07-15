@@ -9,6 +9,7 @@ export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [RegistershowModal, setShowModalRegister] = useState(false);
+  
 
   const { isDarkMode, toggleTheme } = useTheme();
 
@@ -108,7 +109,16 @@ export const NavBar = () => {
                 }}
                 className="hover:text-gray-500"
               >
-                Login/Register
+                Register
+              </button>
+              <button
+                onClick={() => {
+                  toggleMenu();
+                  handleRegister();
+                }}
+                className="hover:text-gray-500"
+              >
+                Register
               </button>
             </div>
           </div>

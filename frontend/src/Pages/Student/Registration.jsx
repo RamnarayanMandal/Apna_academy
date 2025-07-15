@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { useTheme } from '../../ThemeProvider';
 const BASE_URL = import.meta.env.VITE_API_URL;
 const Registration = ({setShowModal}) => {
   // State to hold form data
@@ -15,6 +16,8 @@ const Registration = ({setShowModal}) => {
 
   // State for error messages
   const [errors, setErrors] = useState({});
+
+  const { isDarkMode } = useTheme();
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -58,8 +61,8 @@ const Registration = ({setShowModal}) => {
   };
 
   return (
-    <div className="min-h-screen  flex items-center justify-center ">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg relative">
+    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-md w-full max-w-lg relative`}>
       <button
           onClick={() => setShowModal(false)}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
