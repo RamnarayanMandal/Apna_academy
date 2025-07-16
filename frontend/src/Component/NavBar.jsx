@@ -38,16 +38,16 @@ export const NavBar = () => {
 
         {/* Links Section for Desktop */}
         <div className={`hidden lg:flex space-x-5 ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-          <a href="#home" className="hover:text-yellow-400">
+          <a href="/" className="hover:text-yellow-400">
             Home
           </a>
-          <a href="#about" className="hover:text-yellow-400">
+          <a href="https://portfolio.ramnarayan.shop/#about" className="hover:text-yellow-400">
             About
           </a>
-          <a href="#blog" className="hover:text-yellow-400">
+          <a href="https://portfolio.ramnarayan.shop/#blogs" className="hover:text-yellow-400">
             Blogs
           </a>
-          <a href="#contact" className="hover:text-yellow-400">
+          <a href="https://portfolio.ramnarayan.shop/#contact" className="hover:text-yellow-400">
             Contact
           </a>
         </div>
@@ -109,7 +109,7 @@ export const NavBar = () => {
                 }}
                 className="hover:text-gray-500"
               >
-                Register
+                login
               </button>
               <button
                 onClick={() => {

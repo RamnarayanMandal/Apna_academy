@@ -10,6 +10,7 @@ export const TeacherSideBar = () => {
   const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // State to toggle "Assignments"
   const { isDarkMode, toggleTheme } = useTheme();
    const navigate = useNavigate();
+   const teacherId = localStorage.getItem("CurrentUserId")
   
 
   const handleLogout = async () => {

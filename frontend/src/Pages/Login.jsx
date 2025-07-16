@@ -175,7 +175,7 @@ const Login = ({ setShowModal }) => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-group">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium ">
               Email
             </label>
             <input
@@ -185,13 +185,13 @@ const Login = ({ setShowModal }) => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
               aria-required="true"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium ">
               Password
             </label>
             <input
@@ -201,7 +201,7 @@ const Login = ({ setShowModal }) => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
               aria-required="true"
             />
           </div>

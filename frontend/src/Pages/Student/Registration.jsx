@@ -3,15 +3,16 @@ import axios from 'axios';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { useTheme } from '../../ThemeProvider';
 const BASE_URL = import.meta.env.VITE_API_URL;
-const Registration = ({setShowModal}) => {
+import Swal from 'sweetalert2';
+const Registration = ({ setShowModal }) => {
   // State to hold form data
   const [formData, setFormData] = useState({
     type: "student",
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: ''
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
   });
 
   // State for error messages
@@ -24,7 +25,7 @@ const Registration = ({setShowModal}) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -32,9 +33,12 @@ const Registration = ({setShowModal}) => {
   const validateForm = () => {
     const errors = {};
     if (!formData.name) errors.name = "Name is required";
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) errors.email = "Valid email is required";
-    if (!formData.password || formData.password.length < 6) errors.password = "Password must be at least 6 characters";
-    if (!formData.phone || formData.phone.length < 10) errors.phone = "Phone number must be at least 10 digits";
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
+      errors.email = "Valid email is required";
+    if (!formData.password || formData.password.length < 6)
+      errors.password = "Password must be at least 6 characters";
+    if (!formData.phone || formData.phone.length < 10)
+      errors.phone = "Phone number must be at least 10 digits";
     if (!formData.address) errors.address = "Address is required";
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -45,37 +49,53 @@ const Registration = ({setShowModal}) => {
     e.preventDefault();
     if (validateForm()) {
       // Sending data to the backend with role as a query parameter
-      axios.post(`${BASE_URL}/api/auth/register`, formData, {
-        params: {
-          role: 'student'  // Adding the query parameter 'role'
-        }
-      })
+      axios
+        .post(`${BASE_URL}/api/auth/register`, formData, {
+          params: {
+            role: "student", // Adding the query parameter 'role'
+          },
+        })
         .then((response) => {
-          console.log('Registration Successful:', response.data);
-          // Handle success (e.g., redirect to login page or show success message)
+          setShowModal(false);
+          Swal.fire({
+            icon: "success",
+            title: "Registration is sucessfull",
+            text: "Please login.",
+          });
         })
         .catch((error) => {
-          console.error('Error during registration:', error);
+          console.error("Error during registration:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error during registration",
+            text: "Please check your credentials.",
+          });
         });
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" >
-      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-8 rounded-lg shadow-md w-full max-w-lg relative`}>
-      <button
+    <div className="min-h-screen flex items-center justify-center">
+      <div
+        className={`${
+          isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+        } p-8 rounded-lg shadow-md w-full max-w-lg relative`}
+      >
+        <button
           onClick={() => setShowModal(false)}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
           aria-label="Close modal"
         >
           <IoMdCloseCircle className="text-2xl" />
         </button>
-        <h2 className="text-2xl font-semibold text-center mb-6">Student Registration</h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">
+          Student Registration
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-6 ">
-           
-        
           <div className="form-group">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-medium ">
+              Full Name
+            </label>
             <input
               type="text"
               id="name"
@@ -83,14 +103,18 @@ const Registration = ({setShowModal}) => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
           </div>
 
           {/* Email Field */}
           <div className="form-group">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium ">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -98,14 +122,21 @@ const Registration = ({setShowModal}) => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           {/* Password Field */}
           <div className="form-group">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium "
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -113,14 +144,18 @@ const Registration = ({setShowModal}) => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           {/* Phone Field */}
           <div className="form-group">
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+            <label htmlFor="phone" className="block text-sm font-medium ">
+              Phone Number
+            </label>
             <input
               type="text"
               id="phone"
@@ -128,27 +163,36 @@ const Registration = ({setShowModal}) => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="Enter your phone number"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
           </div>
 
           {/* Address Field */}
           <div className="form-group">
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+            <label htmlFor="address" className="block text-sm font-medium ">
+              Address
+            </label>
             <textarea
               id="address"
               name="address"
               value={formData.address}
               onChange={handleChange}
               placeholder="Enter your address"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] ${isDarkMode ? 'bg-gray-900 text-white border-gray-700 placeholder-gray-400' : 'bg-white text-gray-900 border-gray-300 placeholder-gray-400'}`}
             ></textarea>
-            {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+            {errors.address && (
+              <p className="text-red-500 text-sm">{errors.address}</p>
+            )}
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+          >
             Register
           </button>
         </form>

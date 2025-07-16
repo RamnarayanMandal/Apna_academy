@@ -19,6 +19,7 @@ const Registration = () => {
   // State for error messages
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const { isDarkMode } = useTheme();
 
@@ -89,7 +90,7 @@ const Registration = () => {
 
     try {
       // Send data to the backend API
-      const response = await axios.post('http://localhost:8081/api/auth/register', formData, {
+      const response = await axios.post(`${BASE_URL}/api/auth/register`, formData, {
         params: {
           role: formData.type,  // Use the formData.type (which could be 'student' or 'teacher')
         }
