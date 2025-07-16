@@ -138,7 +138,7 @@ const GetAllCourse = () => {
   return (
     <div
       id="Courses"
-      className={`p-6 w-full lg:mx-40 ml-20 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900'
+      className={`flex-1 pl-24 p-2 sm:p-4 md:p-6 
         }`}
     >
       {/* Search and Add Button */}
@@ -270,7 +270,7 @@ const GetAllCourse = () => {
       </div>
 
       {showModel && (
-        <div className="fixed top-0 left-0 w-full h-screen z-50 bg-black opacity-90 flex items-center justify-center">
+        <div className="fixed top-0 left-0 w-full h-screen z-50 bg-black opacity-90 flex items-center justify-center overflow-y-auto">
           <div className="p-4 w-full max-w-sm mx-auto bg-white rounded-md shadow-md relative">
             <button
               onClick={() => setShowModal(false)}

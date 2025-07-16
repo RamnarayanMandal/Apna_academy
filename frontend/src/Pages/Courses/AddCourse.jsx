@@ -128,7 +128,7 @@ const AddCourse = ({ selectCourse, setShowModal }) => {
   };
 
   return (
-    <div className="container  p-4 w-full max-h-screen overflow-y-auto m-5">
+    <div className="container  p-4 w-full  m-5 text-black">
       <h1 className="text-2xl font-bold mb-4">
         {selectCourse ? "Update Course" : "Add Course"}
       </h1>

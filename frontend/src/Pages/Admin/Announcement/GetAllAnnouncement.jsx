@@ -72,12 +72,12 @@ const GetAllAnnouncement = () => {
       {/* Main content area */}
       <div className="flex-1 p-6 relative">
         {/* Back button */}
-        <button
+        {/* <button
           onClick={() => navigate(-1)} // Navigate back to the previous page
           className={`${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-500 text-white'} absolute top-4 left-4 px-4 py-2 rounded hover:bg-gray-700`}
         >
           Back
-        </button>
+        </button> */}
 
         {/* Button to trigger Add Announcement modal */}
         <button
