@@ -8,4 +8,4 @@ services:
       - "8082:8082"
     environment:
       MONGODB_URI: mongodb+srv://ramnarayan:Ram1234@cluster0.hk4ehir.mongodb.net/UserService
-      BASE_DOMAIN: https://apnaacademy.api.ramnarayan.shop
+      BASE_DOMAIN: https://polite-gingersnap-42b1cc.netlify.app
